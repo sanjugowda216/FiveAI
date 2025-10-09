@@ -1,12 +1,8 @@
-/* 
-utils/api.js
-------------
-Central place for API calls to the backend.
+// frontend/src/utils/api.js
+export const API_URL = "http://localhost:5000";
 
-🧩 Responsibilities:
-- Define functions like getQuestion(course, topic), gradeFRQ(), etc.
-- Use axios or fetch to communicate with backend endpoints.
-- Handle errors gracefully.
-
-➡️ Keeps your network requests organized and reusable.
-*/
+export async function getTestMessage() {
+  const res = await fetch(`${API_URL}/`); // <-- note the /
+  const data = await res.text();
+  return data;
+}
