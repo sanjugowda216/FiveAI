@@ -10,9 +10,18 @@ export default function Login({ onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      // ✅ 1. Attempt Firebase login
       await signInWithEmailAndPassword(auth, email, password);
+
+      // ✅ 2. Let App.jsx know login succeeded
+      if (onLoginSuccess) onLoginSuccess();
+
+      // ✅ 3. Optional feedback for user
       setMsg("Login successful! 🎉");
-      onLoginSuccess();
+
+      // ✅ 4. Optional: clear fields
+      setEmail("");
+      setPassword("");
     } catch (err) {
       setMsg(err.message);
     }
