@@ -1,14 +1,17 @@
-/* Full-page blue background and center the card */
-html, body, #root, .app-container {
+html, body, #root {
   margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
   font-family: sans-serif;
-  background-color: #0078C8; /* full-page blue */
+  background-color: #E2E8F0;
+  width: 100%;
+}
+
+.login-screen {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #0078C8;
 }
 
 /* Card styling */
@@ -84,4 +87,35 @@ html, body, #root, .app-container {
   color: #0078C8;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.dashboard-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #E2E8F0;
+  width: 100%;
+}
+
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  align-items: center;
+  padding: 2.5rem 3rem 3.5rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 960px) {
+  .dashboard-content {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-content {
+    padding: 1.5rem;
+  }
 }

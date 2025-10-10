@@ -6,37 +6,16 @@ export default function APCourse({ onSelectCourse }) {
   const courses = ["AP Calculus", "AP Physics", "AP Biology", "AP Chemistry"];
 
   return (
-    <div
-      style={{
-        backgroundColor: "#FFFFFF",
-        padding: "2rem",
-        borderRadius: "1rem",
-        width: "350px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-        textAlign: "center",
-        margin: "2rem auto",
-      }}
-    >
-      <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#000000", marginBottom: "1rem" }}>
-        Choose Your AP Course
-      </h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <div style={styles.wrapper}>
+      <h2 style={styles.heading}>Choose Your AP Course</h2>
+      <div style={styles.grid}>
         {courses.map((course) => (
           <button
             key={course}
             onClick={() => onSelectCourse(course)}
-            style={{
-              padding: "0.75rem",
-              backgroundColor: "#0078C8",
-              color: "#FFFFFF",
-              border: "none",
-              borderRadius: "0.5rem",
-              fontWeight: "bold",
-              cursor: "pointer",
-              transition: "background 0.2s",
-            }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#005fa3")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "#0078C8")}
+            style={styles.card}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0D8ADB")}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#0078C8")}
           >
             {course}
           </button>
@@ -45,3 +24,34 @@ export default function APCourse({ onSelectCourse }) {
     </div>
   );
 }
+
+const styles = {
+  wrapper: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.5rem",
+  },
+  heading: {
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    color: "#0F172A",
+    margin: 0,
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "1rem",
+  },
+  card: {
+    padding: "1rem 1.25rem",
+    backgroundColor: "#0078C8",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.75rem",
+    fontWeight: 700,
+    cursor: "pointer",
+    transition: "background 0.2s ease",
+    textAlign: "left",
+  },
+};
