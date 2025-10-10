@@ -1,62 +1,27 @@
 // frontend/src/App.jsx
-import { useEffect, useState } from "react";
-import Signup from "./components/Signup";
+import { useState } from "react";
 import Login from "./components/Login";
-import { getTestMessage } from "./utils/api";
-import { auth } from "./firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import Signup from "./components/Signup";
 import "./App.css";
 
 function App() {
-  const [msg, setMsg] = useState("");
-  const [user, setUser] = useState(null);
-
-  // 🔹 Load backend test message
-  useEffect(() => {
-    getTestMessage().then(setMsg);
-  }, []);
-
-  // 🔹 Listen for Firebase login/logout
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  // 🔹 Logout handler
-  const handleLogout = async () => {
-    await signOut(auth);
-    setUser(null);
-  };
+  const [showLogin, setShowLogin] = useState(true);
 
   return (
-    <div className="p-10 text-center">
-      <h1 className="text-3xl font-bold mb-6">FiveAI 🔥</h1>
+    <div className="app-container">
+      <div className="card">
+        <h1 className="title">FiveAI</h1>
 
-      {/* Backend test message */}
-      <p className="mb-6 text-xl">{msg || "Loading backend..."}</p>
+        {showLogin ? <Login onLoginSuccess={() => {}} /> : <Signup />}
 
-      {user ? (
-        // ✅ What logged-in users see
-        <div className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">
-            Welcome, {user.email}! 🎉
-          </h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded"
-          >
-            Logout
-          </button>
+        <div className="switch">
+          {showLogin ? (
+            <span onClick={() => setShowLogin(false)}>Go to Sign Up</span>
+          ) : (
+            <span onClick={() => setShowLogin(true)}>Go to Login</span>
+          )}
         </div>
-      ) : (
-        // 🧩 What logged-out users see
-        <div className="flex flex-col md:flex-row justify-center gap-10">
-          <Signup />
-          <Login onLoginSuccess={() => setUser(auth.currentUser)} />
-        </div>
-      )}
+      </div>
     </div>
   );
 }
