@@ -2,17 +2,22 @@ import React from "react";
 import APCourse from "../components/APCourse";
 
 export default function Courses({ selectedCourse, onSelectCourse }) {
+  const selectedCourseName = selectedCourse?.name ?? "";
+
   return (
     <section style={styles.wrapper}>
       <div style={styles.header}>
         <h1 style={styles.title}>AP Courses</h1>
         <p style={styles.subtitle}>
-          {selectedCourse
-            ? `Currently focusing on ${selectedCourse}. Pick another course to switch.`
+          {selectedCourseName
+            ? `Currently focusing on ${selectedCourseName}. Pick another course to switch.`
             : "Select an AP subject to tailor practice questions for that topic."}
         </p>
       </div>
-      <APCourse onSelectCourse={onSelectCourse} />
+      <APCourse
+        selectedCourseId={selectedCourse?.id}
+        onSelectCourse={onSelectCourse}
+      />
     </section>
   );
 }
