@@ -52,6 +52,9 @@ const styles = {
     backgroundColor: "#FFFFFF",
     borderBottom: "1px solid rgba(0,0,0,0.08)",
     boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+    position: "sticky",
+    top: 0,
+    zIndex: 50,
   },
   inner: {
     width: "100%",

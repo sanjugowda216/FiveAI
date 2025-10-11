@@ -22,6 +22,7 @@ export default function Signup({ onSignupSuccess }) {
         email: user.email ?? email,
         selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
+        favoriteCourses: [],
         createdAt: serverTimestamp(),
       };
 
@@ -32,6 +33,7 @@ export default function Signup({ onSignupSuccess }) {
         email: user.email ?? email,
         selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
+        favoriteCourses: [],
       };
 
       if (onSignupSuccess) onSignupSuccess(profileForState);

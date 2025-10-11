@@ -21,6 +21,10 @@ const gridStyle = {
   gap: "1rem",
 };
 
+const cardWrapperStyle = {
+  position: "relative",
+};
+
 const subjectSectionStyle = {
   display: "flex",
   flexDirection: "column",
@@ -67,12 +71,57 @@ const emptyStateStyle = {
   fontSize: "0.95rem",
 };
 
+const favoriteToggleStyle = {
+  position: "absolute",
+  top: "0.75rem",
+  right: "0.75rem",
+  width: "1.75rem",
+  height: "1.75rem",
+  borderRadius: "0.5rem",
+  border: "1px solid rgba(15,23,42,0.15)",
+  backgroundColor: "#FFFFFF",
+  color: "#64748B",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "1rem",
+  fontWeight: 700,
+  cursor: "pointer",
+  transition: "all 0.18s ease",
+  boxShadow: "0 6px 12px rgba(15, 23, 42, 0.08)",
+  zIndex: 2,
+};
+
+const favoriteToggleActiveStyle = {
+  borderColor: "#0078C8",
+  backgroundColor: "#0078C8",
+  color: "#FFFFFF",
+  boxShadow: "0 8px 18px rgba(0,120,200,0.35)",
+};
+
+const pinnedBadgeStyle = {
+  alignSelf: "flex-start",
+  padding: "0.25rem 0.6rem",
+  borderRadius: "999px",
+  backgroundColor: "#E0F2FE",
+  color: "#0369A1",
+  fontSize: "0.75rem",
+  fontWeight: 700,
+  marginTop: "0.35rem",
+};
+
 const submissionModeLabels = {
   essay: "Typed FRQ or essay response",
   upload: "Image/PDF-based submission",
 };
 
-export default function APCourse({ onSelectCourse, selectedCourseId, courses = apCourses }) {
+export default function APCourse({
+  onSelectCourse,
+  selectedCourseId,
+  courses = apCourses,
+  favoriteCourseIds = [],
+  onToggleFavorite,
+}) {
   const groupedCourses = useMemo(() => {
     const buckets = new Map();
     const order = [];
@@ -107,35 +156,68 @@ export default function APCourse({ onSelectCourse, selectedCourseId, courses = a
           <div style={gridStyle}>
             {subjectCourses.map((course) => {
               const isActive = course.id === selectedCourseId;
+              const isPinned = favoriteCourseIds.includes(course.id);
+              const activeShadow = "0 12px 28px rgba(0,120,200,0.25)";
+              const pinnedShadow = "0 12px 24px rgba(16,185,129,0.25)";
+              const restingShadow = isActive
+                ? activeShadow
+                : isPinned
+                ? pinnedShadow
+                : cardBaseStyle.boxShadow;
+              const restingBorder = isActive
+                ? "#0078C8"
+                : isPinned
+                ? "#10B981"
+                : cardBaseStyle.border;
+
               return (
-                <button
-                  type="button"
-                  key={course.id}
-                  style={{
-                    ...cardBaseStyle,
-                    borderColor: isActive ? "#0078C8" : cardBaseStyle.border,
-                    boxShadow: isActive
-                      ? "0 12px 28px rgba(0,120,200,0.25)"
-                      : cardBaseStyle.boxShadow,
-                  }}
-                  onClick={() => onSelectCourse?.(course)}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-4px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 14px 32px rgba(15, 23, 42, 0.12)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = isActive
-                      ? "0 12px 28px rgba(0,120,200,0.25)"
-                      : cardBaseStyle.boxShadow;
-                  }}
-                >
-                  <p style={labelStyle}>{course.name}</p>
-                  <p style={detailStyle}>
-                    {submissionModeLabels[course.submissionMode] ?? "Mixed-format FRQs"}
-                  </p>
-                </button>
+                <div key={course.id} style={cardWrapperStyle}>
+                  <button
+                    type="button"
+                    style={{
+                      ...cardBaseStyle,
+                      borderColor: restingBorder,
+                      boxShadow: restingShadow,
+                    }}
+                    onClick={() => onSelectCourse?.(course)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      e.currentTarget.style.boxShadow = isPinned
+                        ? "0 16px 32px rgba(16,185,129,0.3)"
+                        : "0 14px 32px rgba(15, 23, 42, 0.12)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = restingShadow;
+                    }}
+                  >
+                    <p style={labelStyle}>{course.name}</p>
+                    <p style={detailStyle}>
+                      {submissionModeLabels[course.submissionMode] ?? "Mixed-format FRQs"}
+                    </p>
+                    {isPinned && <span style={pinnedBadgeStyle}>Pinned</span>}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={
+                      isPinned
+                        ? `Remove ${course.name} from My AP Dashboard`
+                        : `Add ${course.name} to My AP Dashboard`
+                    }
+                    aria-pressed={isPinned}
+                    style={{
+                      ...favoriteToggleStyle,
+                      ...(isPinned ? favoriteToggleActiveStyle : {}),
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onToggleFavorite?.(course);
+                    }}
+                  >
+                    {isPinned ? "✓" : ""}
+                  </button>
+                </div>
               );
             })}
           </div>
