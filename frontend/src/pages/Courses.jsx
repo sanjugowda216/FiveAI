@@ -2,9 +2,15 @@ import React, { useMemo, useState } from "react";
 import APCourse from "../components/APCourse";
 import { apCourses } from "../data/apCourses";
 
-export default function Courses({ selectedCourse, onSelectCourse }) {
+export default function Courses({
+  selectedCourse,
+  onSelectCourse,
+  favoriteCourseIds = [],
+  onToggleFavorite,
+}) {
   const selectedCourseName = selectedCourse?.name ?? "";
   const [searchTerm, setSearchTerm] = useState("");
+  const pinnedCount = favoriteCourseIds.length;
 
   const filteredCourses = useMemo(() => {
     const trimmed = searchTerm.trim().toLowerCase();
@@ -46,13 +52,22 @@ export default function Courses({ selectedCourse, onSelectCourse }) {
           </button>
         )}
       </div>
-      <p style={styles.resultMeta}>
-        Showing {filteredCourses.length} course{filteredCourses.length === 1 ? "" : "s"}
-      </p>
+      <div style={styles.metaRow}>
+        <p style={styles.resultMeta}>
+          Showing {filteredCourses.length} course{filteredCourses.length === 1 ? "" : "s"}
+        </p>
+        <p style={styles.pinnedMeta}>
+          {pinnedCount
+            ? `${pinnedCount} pinned for My AP Dashboard`
+            : "Use the checkbox to pin courses"}
+        </p>
+      </div>
       <APCourse
         selectedCourseId={selectedCourse?.id}
         onSelectCourse={onSelectCourse}
         courses={filteredCourses}
+        favoriteCourseIds={favoriteCourseIds}
+        onToggleFavorite={onToggleFavorite}
       />
     </section>
   );
@@ -110,6 +125,20 @@ const styles = {
   resultMeta: {
     fontSize: "0.95rem",
     color: "#6B7280",
-    margin: "0 0 1.5rem",
+    margin: 0,
+  },
+  metaRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+    marginBottom: "1.5rem",
+    gap: "1rem",
+    flexWrap: "wrap",
+  },
+  pinnedMeta: {
+    margin: 0,
+    fontSize: "0.9rem",
+    color: "#94A3B8",
+    fontWeight: 600,
   },
 };

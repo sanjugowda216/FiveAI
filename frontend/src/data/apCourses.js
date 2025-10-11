@@ -157,3 +157,23 @@ export function findCourseByName(name) {
 
   return null;
 }
+
+export function sanitizeFavoriteCourseIds(values) {
+  if (!Array.isArray(values)) return [];
+  const orderedIds = [];
+  const seen = new Set();
+
+  values.forEach((value) => {
+    const candidateId =
+      typeof value === "string" ? value : value?.id ?? value?.courseId;
+    if (!candidateId) return;
+
+    const course = getCourseById(candidateId);
+    if (course && !seen.has(course.id)) {
+      seen.add(course.id);
+      orderedIds.push(course.id);
+    }
+  });
+
+  return orderedIds;
+}

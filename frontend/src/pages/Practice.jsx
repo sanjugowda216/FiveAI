@@ -11,14 +11,16 @@ export default function Practice({
   const { courseId } = useParams();
 
   const courseFromRoute = courseId ? getCourseById(courseId) : null;
+  const selectedCourseId = selectedCourse?.id ?? null;
+  const routeCourseId = courseFromRoute?.id ?? null;
   const activeCourse = courseFromRoute ?? selectedCourse ?? null;
   const courseName = activeCourse?.name ?? "your AP course";
 
   useEffect(() => {
-    if (courseFromRoute && onEnsureCourseSelection) {
-      onEnsureCourseSelection(courseFromRoute);
-    }
-  }, [courseFromRoute, onEnsureCourseSelection]);
+    if (!courseFromRoute || !onEnsureCourseSelection) return;
+    if (selectedCourseId === routeCourseId) return;
+    onEnsureCourseSelection(courseFromRoute);
+  }, [courseFromRoute, onEnsureCourseSelection, selectedCourseId, routeCourseId]);
 
   return (
     <section style={styles.wrapper}>

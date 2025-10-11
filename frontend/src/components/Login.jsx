@@ -2,7 +2,11 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { findCourseByName, getCourseById } from "../data/apCourses";
+import {
+  findCourseByName,
+  getCourseById,
+  sanitizeFavoriteCourseIds,
+} from "../data/apCourses";
 
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
@@ -44,12 +48,16 @@ export default function Login({ onLoginSuccess }) {
         const normalizedSelection = normalizeSelectedCourse(
           data.selectedCourse
         );
+        const favoriteCourses = sanitizeFavoriteCourseIds(
+          data.favoriteCourses
+        );
 
         const mergedProfile = {
           uid: user.uid,
           email: data.email ?? user.email ?? email,
           selectedCourse: normalizedSelection,
           stats: data.stats ?? defaultStats,
+          favoriteCourses,
         };
 
         const updates = {};
@@ -64,6 +72,13 @@ export default function Login({ onLoginSuccess }) {
         ) {
           updates.selectedCourse = normalizedSelection;
         }
+        if (
+          !Array.isArray(data.favoriteCourses) ||
+          JSON.stringify(favoriteCourses) !==
+            JSON.stringify(data.favoriteCourses ?? [])
+        ) {
+          updates.favoriteCourses = favoriteCourses;
+        }
         if (Object.keys(updates).length) {
           await setDoc(userRef, updates, { merge: true });
         }
@@ -74,6 +89,7 @@ export default function Login({ onLoginSuccess }) {
           email: user.email ?? email,
           selectedCourse: null,
           stats: defaultStats,
+          favoriteCourses: [],
           createdAt: serverTimestamp(),
         };
         await setDoc(userRef, defaultProfile);
@@ -82,6 +98,7 @@ export default function Login({ onLoginSuccess }) {
           email: defaultProfile.email,
           selectedCourse: null,
           stats: defaultStats,
+          favoriteCourses: [],
         };
       }
 

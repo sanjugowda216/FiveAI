@@ -6,12 +6,14 @@ const featuredCourses = apCourses.slice(0, 4);
 export default function Dashboard({
   userEmail,
   selectedCourse,
+  pinnedCourses = [],
   onStartPractice,
   onBrowseCourses,
   onOpenCourse,
 }) {
   const hasCourseSelected = Boolean(selectedCourse?.id);
   const selectedCourseName = selectedCourse?.name ?? "an AP course";
+  const hasPinnedCourses = pinnedCourses.length > 0;
 
   return (
     <section style={styles.wrapper}>
@@ -51,6 +53,63 @@ export default function Dashboard({
           Start Practice
         </button>
       </div>
+
+      <section style={styles.pinnedSection}>
+        <div style={styles.pinnedHeader}>
+          <p style={styles.pinnedEyebrow}>My AP Dashboard</p>
+          <p style={styles.pinnedCopy}>
+            {hasPinnedCourses
+              ? "Quick launch your pinned courses."
+              : "Pin courses on the AP Courses page to build your personal list."}
+          </p>
+        </div>
+        {hasPinnedCourses ? (
+          <div style={styles.pinnedGrid}>
+            {pinnedCourses.map((course) => (
+              <button
+                key={course.id}
+                type="button"
+                style={{
+                  ...styles.pinnedCard,
+                  ...(selectedCourse?.id === course.id
+                    ? styles.activePinnedCard
+                    : {}),
+                }}
+                onClick={() => onOpenCourse?.(course)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 14px 32px rgba(15, 23, 42, 0.12)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    selectedCourse?.id === course.id
+                      ? styles.activePinnedCard.boxShadow
+                      : styles.pinnedCard.boxShadow;
+                }}
+              >
+                <div style={styles.pinnedCardHeader}>
+                  <p style={styles.cardLabel}>{course.name}</p>
+                  <span style={styles.cardPill}>{course.subject}</span>
+                </div>
+                <p style={styles.pinnedMeta}>
+                  {course.submissionMode === "essay"
+                    ? "Typed + image FRQs"
+                    : "Image/PDF FRQ uploads"}
+                </p>
+                <span style={styles.pinnedActionHint}>
+                  Open workspace →
+                </span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p style={styles.pinnedEmpty}>
+            Nothing pinned yet. Use the checkbox on each AP card to add it here.
+          </p>
+        )}
+      </section>
 
       <section>
         <p style={styles.featureTitle}>Popular AP Tracks</p>
@@ -155,6 +214,76 @@ const styles = {
     marginBottom: 0,
     maxWidth: "560px",
     lineHeight: 1.6,
+  },
+  pinnedSection: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "1rem",
+    padding: "1.75rem",
+    boxShadow: "0 10px 24px rgba(15, 23, 42, 0.08)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.25rem",
+  },
+  pinnedHeader: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.35rem",
+  },
+  pinnedEyebrow: {
+    margin: 0,
+    fontSize: "0.9rem",
+    fontWeight: 700,
+    color: "#475569",
+    textTransform: "uppercase",
+    letterSpacing: "0.08em",
+  },
+  pinnedCopy: {
+    margin: 0,
+    fontSize: "1rem",
+    color: "#1F2937",
+  },
+  pinnedGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: "1rem",
+  },
+  pinnedCard: {
+    position: "relative",
+    padding: "1.5rem",
+    borderRadius: "1rem",
+    border: "1px solid rgba(15,23,42,0.08)",
+    backgroundColor: "#F8FAFC",
+    boxShadow: "0 6px 16px rgba(15, 23, 42, 0.08)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.65rem",
+    textAlign: "left",
+    cursor: "pointer",
+    transition: "transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease",
+  },
+  activePinnedCard: {
+    borderColor: "#0078C8",
+    boxShadow: "0 12px 28px rgba(0,120,200,0.25)",
+  },
+  pinnedCardHeader: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+  },
+  pinnedMeta: {
+    margin: 0,
+    color: "#4B5563",
+    fontSize: "0.95rem",
+  },
+  pinnedActionHint: {
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    color: "#0078C8",
+  },
+  pinnedEmpty: {
+    margin: 0,
+    color: "#64748B",
+    fontSize: "0.95rem",
   },
   primaryCta: {
     padding: "0.9rem 1.9rem",

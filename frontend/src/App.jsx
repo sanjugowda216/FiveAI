@@ -11,7 +11,11 @@ import CourseOptions from "./pages/CourseOptions";
 import Practice from "./pages/Practice";
 import Stats from "./pages/Stats";
 import { auth, db } from "./firebase";
-import { findCourseByName, getCourseById } from "./data/apCourses";
+import {
+  findCourseByName,
+  getCourseById,
+  sanitizeFavoriteCourseIds,
+} from "./data/apCourses";
 import "./App.css";
 
 const DEFAULT_STATS = { totalQuestions: 0, correct: 0, streak: 0 };
@@ -61,12 +65,16 @@ function App() {
         if (snapshot.exists()) {
           const data = snapshot.data();
           const normalizedSelection = normalizeSelectedCourse(data.selectedCourse);
+          const favoriteCourses = sanitizeFavoriteCourseIds(
+            data.favoriteCourses
+          );
 
           profileData = {
             uid: user.uid,
             email: data.email ?? fallbackEmail,
             selectedCourse: normalizedSelection,
             stats: data.stats ?? DEFAULT_STATS,
+            favoriteCourses,
           };
 
           const updates = {};
@@ -81,6 +89,13 @@ function App() {
           ) {
             updates.selectedCourse = normalizedSelection;
           }
+          if (
+            !Array.isArray(data.favoriteCourses) ||
+            JSON.stringify(favoriteCourses) !==
+              JSON.stringify(data.favoriteCourses ?? [])
+          ) {
+            updates.favoriteCourses = favoriteCourses;
+          }
 
           if (Object.keys(updates).length) {
             await setDoc(userRef, updates, { merge: true });
@@ -90,6 +105,7 @@ function App() {
             email: fallbackEmail,
             selectedCourse: null,
             stats: DEFAULT_STATS,
+            favoriteCourses: [],
             createdAt: serverTimestamp(),
           };
           await setDoc(userRef, defaultProfile);
@@ -98,6 +114,7 @@ function App() {
             email: defaultProfile.email,
             selectedCourse: null,
             stats: DEFAULT_STATS,
+            favoriteCourses: [],
           };
         }
 
@@ -121,10 +138,28 @@ function App() {
   }, []);
 
   const selectedCourse = userProfile?.selectedCourse ?? null;
+  const favoriteCourseIds = userProfile?.favoriteCourses;
+  const pinnedCourses = useMemo(
+    () =>
+      (favoriteCourseIds ?? [])
+        .map((id) => getCourseById(id))
+        .filter(Boolean),
+    [favoriteCourseIds]
+  );
 
   const handleAuthSuccess = useCallback(
     (profile) => {
-      setUserProfile(profile);
+      const favoriteCourses = sanitizeFavoriteCourseIds(
+        profile?.favoriteCourses
+      );
+      setUserProfile(
+        profile
+          ? {
+              ...profile,
+              favoriteCourses,
+            }
+          : profile
+      );
       setLoggedIn(true);
       setIsAuthReady(true);
       navigate("/dashboard", { replace: true });
@@ -169,6 +204,39 @@ function App() {
       }
     },
     [userProfile?.uid, userProfile?.selectedCourse?.id]
+  );
+
+  const ensureCourseSelectionNoPersist = useCallback(
+    (course) => syncCourseSelection(course, { persist: false }),
+    [syncCourseSelection]
+  );
+
+  const toggleFavoriteCourse = useCallback(
+    async (course) => {
+      if (!course || !userProfile?.uid) return;
+
+      const currentFavorites = userProfile.favoriteCourses ?? [];
+      const isPinned = currentFavorites.includes(course.id);
+      const nextFavorites = isPinned
+        ? currentFavorites.filter((id) => id !== course.id)
+        : [...currentFavorites, course.id];
+
+      setUserProfile((prev) =>
+        prev ? { ...prev, favoriteCourses: nextFavorites } : prev
+      );
+
+      try {
+        await updateDoc(doc(db, "users", userProfile.uid), {
+          favoriteCourses: nextFavorites,
+        });
+      } catch (err) {
+        console.error("Failed to update favorite courses:", err);
+        setUserProfile((prev) =>
+          prev ? { ...prev, favoriteCourses: currentFavorites } : prev
+        );
+      }
+    },
+    [userProfile?.uid, userProfile?.favoriteCourses]
   );
 
   const handleFeaturedCourseOpen = useCallback(
@@ -243,6 +311,7 @@ function App() {
               <Dashboard
                 userEmail={userProfile?.email}
                 selectedCourse={selectedCourse}
+                pinnedCourses={pinnedCourses}
                 onStartPractice={() => {
                   const course = practiceFallbackCourse;
                   if (course?.id) {
@@ -262,6 +331,8 @@ function App() {
               <Courses
                 selectedCourse={selectedCourse}
                 onSelectCourse={handleCourseSelectFromGrid}
+                favoriteCourseIds={favoriteCourseIds ?? []}
+                onToggleFavorite={toggleFavoriteCourse}
               />
             }
           />
@@ -279,9 +350,7 @@ function App() {
             element={
               <Practice
                 selectedCourse={selectedCourse}
-                onEnsureCourseSelection={(course) =>
-                  syncCourseSelection(course, { persist: false })
-                }
+                onEnsureCourseSelection={ensureCourseSelectionNoPersist}
                 onBackToDashboard={() => navigate("/dashboard")}
               />
             }
@@ -291,7 +360,7 @@ function App() {
             element={
               <Practice
                 selectedCourse={selectedCourse}
-                onEnsureCourseSelection={(course) => syncCourseSelection(course)}
+                onEnsureCourseSelection={syncCourseSelection}
                 onBackToDashboard={() => navigate("/dashboard")}
               />
             }
