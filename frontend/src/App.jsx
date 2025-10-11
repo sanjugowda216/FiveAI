@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
@@ -11,14 +11,114 @@ import CourseOptions from "./pages/CourseOptions";
 import Practice from "./pages/Practice";
 import Stats from "./pages/Stats";
 import { auth, db } from "./firebase";
-import { getCourseById } from "./data/apCourses";
+import { findCourseByName, getCourseById } from "./data/apCourses";
 import "./App.css";
+
+const DEFAULT_STATS = { totalQuestions: 0, correct: 0, streak: 0 };
+
+const normalizeSelectedCourse = (raw) => {
+  if (!raw) return null;
+  if (typeof raw === "object" && raw.id && raw.name) return raw;
+  if (typeof raw === "string") {
+    const trimmed = raw.trim();
+    if (!trimmed) return null;
+    const fromId = getCourseById(trimmed);
+    if (fromId) return { id: fromId.id, name: fromId.name };
+    const fromName = findCourseByName(trimmed);
+    if (fromName) return { id: fromName.id, name: fromName.name };
+    return { id: "", name: trimmed };
+  }
+  return null;
+};
 
 function App() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isAuthReady, setIsAuthReady] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!isMounted) return;
+
+      if (!user) {
+        setLoggedIn(false);
+        setUserProfile(null);
+        setIsLogin(true);
+        setIsAuthReady(true);
+        return;
+      }
+
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const snapshot = await getDoc(userRef);
+        const fallbackEmail = user.email ?? "";
+        let profileData;
+
+        if (snapshot.exists()) {
+          const data = snapshot.data();
+          const normalizedSelection = normalizeSelectedCourse(data.selectedCourse);
+
+          profileData = {
+            uid: user.uid,
+            email: data.email ?? fallbackEmail,
+            selectedCourse: normalizedSelection,
+            stats: data.stats ?? DEFAULT_STATS,
+          };
+
+          const updates = {};
+          if (!data.email && fallbackEmail) updates.email = fallbackEmail;
+          if (!data.stats) updates.stats = DEFAULT_STATS;
+          if (
+            data.selectedCourse === undefined ||
+            typeof data.selectedCourse === "string" ||
+            (data.selectedCourse &&
+              typeof data.selectedCourse === "object" &&
+              (!data.selectedCourse.id || !data.selectedCourse.name))
+          ) {
+            updates.selectedCourse = normalizedSelection;
+          }
+
+          if (Object.keys(updates).length) {
+            await setDoc(userRef, updates, { merge: true });
+          }
+        } else {
+          const defaultProfile = {
+            email: fallbackEmail,
+            selectedCourse: null,
+            stats: DEFAULT_STATS,
+            createdAt: serverTimestamp(),
+          };
+          await setDoc(userRef, defaultProfile);
+          profileData = {
+            uid: user.uid,
+            email: defaultProfile.email,
+            selectedCourse: null,
+            stats: DEFAULT_STATS,
+          };
+        }
+
+        if (isMounted) {
+          setUserProfile(profileData);
+          setLoggedIn(true);
+        }
+      } catch (error) {
+        console.error("Failed to hydrate profile after auth change:", error);
+      } finally {
+        if (isMounted) {
+          setIsAuthReady(true);
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   const selectedCourse = userProfile?.selectedCourse ?? null;
 
@@ -26,6 +126,7 @@ function App() {
     (profile) => {
       setUserProfile(profile);
       setLoggedIn(true);
+      setIsAuthReady(true);
       navigate("/dashboard", { replace: true });
     },
     [navigate]
@@ -90,6 +191,17 @@ function App() {
     if (!selectedCourse?.id) return null;
     return getCourseById(selectedCourse.id) ?? selectedCourse;
   }, [selectedCourse]);
+
+  if (!isAuthReady) {
+    return (
+      <div className="login-screen">
+        <div className="card">
+          <h1 className="title">FiveAI 🔥</h1>
+          <p className="msg">Checking your session…</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!loggedIn) {
     return (

@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../firebase";
+import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../firebase";
 import { getCourseById } from "../data/apCourses";
+
+const MAX_UPLOAD_SIZE = 25 * 1024 * 1024; // 25 MB
 
 export default function CourseOptions({ userProfile, onSelectCourse }) {
   const navigate = useNavigate();
@@ -11,8 +14,11 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
 
   const [essayResponse, setEssayResponse] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [essayAttachment, setEssayAttachment] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const essayFileInputRef = useRef(null);
+  const uploadInputRef = useRef(null);
 
   useEffect(() => {
     if (course && onSelectCourse) {
@@ -46,33 +52,94 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
     ? collection(db, "users", userProfile.uid, "submissions")
     : null;
 
+  const uploadAttachment = async (file) => {
+    if (!file) return null;
+    if (!storage) {
+      throw new Error("File storage is not configured.");
+    }
+    if (!userProfile?.uid) {
+      throw new Error("You need to be logged in to upload files.");
+    }
+    if (file.size > MAX_UPLOAD_SIZE) {
+      throw new Error("Uploads must be 25 MB or smaller.");
+    }
+
+    const normalizedName = file.name
+      .toLowerCase()
+      .replace(/[^a-z0-9.\-_]+/g, "-")
+      .replace(/-+/g, "-");
+    const uniqueSuffix = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const path = `users/${userProfile.uid}/submissions/${course.id}/${uniqueSuffix}-${normalizedName}`;
+    const fileReference = storageRef(storage, path);
+    await uploadBytes(fileReference, file);
+    const downloadURL = await getDownloadURL(fileReference);
+
+    return {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      storagePath: path,
+      downloadURL,
+    };
+  };
+
   const handleEssaySubmit = async () => {
     if (!submissionCollection) {
       setStatusMessage("You need to be logged in to submit work.");
       return;
     }
-    if (!essayResponse.trim()) {
-      setStatusMessage("Add your response before submitting.");
+
+    const trimmedEssay = essayResponse.trim();
+    if (!trimmedEssay && !essayAttachment) {
+      setStatusMessage("Add your response or attach an image before submitting.");
       return;
     }
 
     setIsSubmitting(true);
     try {
+      let attachmentMeta = null;
+      if (essayAttachment) {
+        attachmentMeta = await uploadAttachment(essayAttachment);
+      }
+
+      const wordCount = trimmedEssay
+        ? trimmedEssay.split(/\s+/).filter(Boolean).length
+        : 0;
+
       await addDoc(submissionCollection, {
         courseId: course.id,
         courseName: course.name,
         submissionType: "essay",
-        essay: essayResponse.trim(),
+        submissionFormat: attachmentMeta
+          ? trimmedEssay
+            ? "hybrid"
+            : "image-only"
+          : "text",
+        essay: trimmedEssay || null,
+        wordCount,
+        attachments: attachmentMeta ? [attachmentMeta] : [],
+        storagePath: attachmentMeta?.storagePath ?? null,
+        downloadURL: attachmentMeta?.downloadURL ?? null,
         createdAt: serverTimestamp(),
         reviewStatus: "pending-ai-feedback",
       });
+
       setEssayResponse("");
+      setEssayAttachment(null);
+      if (essayFileInputRef.current) {
+        essayFileInputRef.current.value = "";
+      }
+
       setStatusMessage(
-        "Saved! AI scoring with the official rubric is coming soon."
+        attachmentMeta
+          ? "Saved! Your typed response and image are ready for upcoming rubric grading."
+          : "Saved! AI scoring with the official rubric is coming soon."
       );
     } catch (err) {
       console.error("Failed to save essay submission", err);
-      setStatusMessage("We couldn't save that right now. Try again in a minute.");
+      setStatusMessage(
+        err?.message ?? "We couldn't save that right now. Try again in a minute."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -87,27 +154,40 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
       setStatusMessage("Select a file or image before submitting.");
       return;
     }
+    if (selectedFile.size > MAX_UPLOAD_SIZE) {
+      setStatusMessage("Uploads must be 25 MB or smaller.");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
+      const attachmentMeta = await uploadAttachment(selectedFile);
+
       await addDoc(submissionCollection, {
         courseId: course.id,
         courseName: course.name,
         submissionType: "file-upload",
+        attachments: attachmentMeta ? [attachmentMeta] : [],
         fileName: selectedFile.name,
         fileSize: selectedFile.size,
         fileType: selectedFile.type,
+        storagePath: attachmentMeta?.storagePath ?? null,
+        downloadURL: attachmentMeta?.downloadURL ?? null,
         createdAt: serverTimestamp(),
-        storagePath: null, // Placeholder until Storage integration lands.
-        reviewStatus: "pending-upload",
+        reviewStatus: "pending-ai-feedback",
       });
+
       setSelectedFile(null);
-      setStatusMessage(
-        "Upload noted! You'll be able to send this to GPT/Claude for scoring soon."
-      );
+      if (uploadInputRef.current) {
+        uploadInputRef.current.value = "";
+      }
+
+      setStatusMessage("Upload saved! AI rubric grading is coming soon.");
     } catch (err) {
-      console.error("Failed to save upload metadata", err);
-      setStatusMessage("We couldn't capture that upload. Try again shortly.");
+      console.error("Failed to save upload", err);
+      setStatusMessage(
+        err?.message ?? "We couldn't capture that upload. Try again shortly."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -151,7 +231,7 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
           <h2 style={styles.cardTitle}>Submit FRQ / Essay</h2>
           <p style={styles.cardBody}>
             {isEssayFlow
-              ? "Paste your draft or typed response. We’ll store it and soon route it through rubric-based AI graders."
+              ? "Paste your typed response and optionally attach a photo of handwritten work. We’ll store it and soon route it through rubric-based AI graders."
               : "Upload images or PDFs of your written work. We’ll keep a record so you can request AI review when it’s ready."}
           </p>
 
@@ -159,11 +239,50 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
             <>
               <textarea
                 value={essayResponse}
-                onChange={(e) => setEssayResponse(e.target.value)}
+                onChange={(e) => {
+                  setEssayResponse(e.target.value);
+                  if (statusMessage) setStatusMessage("");
+                }}
                 placeholder="Paste or type your essay/response here..."
                 style={styles.textarea}
                 rows={8}
               />
+              <div style={styles.attachmentStack}>
+                <label style={styles.uploadLabel}>
+                  <input
+                    ref={essayFileInputRef}
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg"
+                    style={styles.fileInput}
+                    onChange={(e) => {
+                      setEssayAttachment(e.target.files?.[0] ?? null);
+                      if (statusMessage) setStatusMessage("");
+                    }}
+                  />
+                  <span>
+                    {essayAttachment
+                      ? `Attached: ${essayAttachment.name}`
+                      : "Attach a work image (optional)"}
+                  </span>
+                </label>
+                {essayAttachment && (
+                  <button
+                    type="button"
+                    style={styles.removeAttachment}
+                    onClick={() => {
+                      setEssayAttachment(null);
+                      if (essayFileInputRef.current) {
+                        essayFileInputRef.current.value = "";
+                      }
+                    }}
+                  >
+                    Remove attachment
+                  </button>
+                )}
+                <p style={styles.attachmentHint}>
+                  Supports PDF, PNG, JPG up to 25 MB.
+                </p>
+              </div>
               <button
                 style={styles.primaryButton}
                 onClick={handleEssaySubmit}
@@ -176,10 +295,14 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
             <>
               <label style={styles.uploadLabel}>
                 <input
+                  ref={uploadInputRef}
                   type="file"
                   accept=".pdf,.png,.jpg,.jpeg"
                   style={styles.fileInput}
-                  onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
+                  onChange={(e) => {
+                    setSelectedFile(e.target.files?.[0] ?? null);
+                    if (statusMessage) setStatusMessage("");
+                  }}
                 />
                 <span>
                   {selectedFile
@@ -187,12 +310,29 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                     : "Upload your FRQ or work image"}
                 </span>
               </label>
+              {selectedFile && (
+                <button
+                  type="button"
+                  style={styles.removeAttachment}
+                  onClick={() => {
+                    setSelectedFile(null);
+                    if (uploadInputRef.current) {
+                      uploadInputRef.current.value = "";
+                    }
+                  }}
+                >
+                  Remove file
+                </button>
+              )}
+              <p style={styles.attachmentHint}>
+                Supports PDF, PNG, JPG up to 25 MB.
+              </p>
               <button
                 style={styles.primaryButton}
                 onClick={handleUploadSubmit}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Saving..." : "Save Upload Metadata"}
+                {isSubmitting ? "Saving..." : "Submit for Grading"}
               </button>
             </>
           )}
@@ -326,6 +466,25 @@ const styles = {
   },
   fileInput: {
     display: "none",
+  },
+  attachmentStack: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+  },
+  removeAttachment: {
+    alignSelf: "flex-start",
+    background: "transparent",
+    border: "none",
+    color: "#EF4444",
+    fontWeight: 600,
+    cursor: "pointer",
+    padding: 0,
+  },
+  attachmentHint: {
+    margin: 0,
+    fontSize: "0.85rem",
+    color: "#64748B",
   },
   helperText: {
     margin: 0,
