@@ -20,7 +20,7 @@ export default function Signup({ onSignupSuccess }) {
 
       const defaultProfile = {
         email: user.email ?? email,
-        selectedCourse: "",
+        selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
         createdAt: serverTimestamp(),
       };
@@ -30,7 +30,7 @@ export default function Signup({ onSignupSuccess }) {
       const profileForState = {
         uid: user.uid,
         email: user.email ?? email,
-        selectedCourse: "",
+        selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
       };
 

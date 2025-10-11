@@ -2,11 +2,27 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { findCourseByName, getCourseById } from "../data/apCourses";
 
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
+
+  const normalizeSelectedCourse = (raw) => {
+    if (!raw) return null;
+    if (typeof raw === "object" && raw.id && raw.name) return raw;
+    if (typeof raw === "string") {
+      const trimmed = raw.trim();
+      if (!trimmed) return null;
+      const fromId = getCourseById(trimmed);
+      if (fromId) return { id: fromId.id, name: fromId.name };
+      const fromName = findCourseByName(trimmed);
+      if (fromName) return { id: fromName.id, name: fromName.name };
+      return { id: "", name: trimmed };
+    }
+    return null;
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,16 +41,29 @@ export default function Login({ onLoginSuccess }) {
 
       if (snapshot.exists()) {
         const data = snapshot.data();
+        const normalizedSelection = normalizeSelectedCourse(
+          data.selectedCourse
+        );
+
         const mergedProfile = {
           uid: user.uid,
           email: data.email ?? user.email ?? email,
-          selectedCourse: data.selectedCourse ?? "",
+          selectedCourse: normalizedSelection,
           stats: data.stats ?? defaultStats,
         };
 
         const updates = {};
         if (!data.email && user.email) updates.email = user.email;
         if (!data.stats) updates.stats = defaultStats;
+        if (
+          data.selectedCourse === undefined ||
+          typeof data.selectedCourse === "string" ||
+          (data.selectedCourse &&
+            typeof data.selectedCourse === "object" &&
+            (!data.selectedCourse.id || !data.selectedCourse.name))
+        ) {
+          updates.selectedCourse = normalizedSelection;
+        }
         if (Object.keys(updates).length) {
           await setDoc(userRef, updates, { merge: true });
         }
@@ -43,7 +72,7 @@ export default function Login({ onLoginSuccess }) {
       } else {
         const defaultProfile = {
           email: user.email ?? email,
-          selectedCourse: "",
+          selectedCourse: null,
           stats: defaultStats,
           createdAt: serverTimestamp(),
         };
@@ -51,7 +80,7 @@ export default function Login({ onLoginSuccess }) {
         profileData = {
           uid: user.uid,
           email: defaultProfile.email,
-          selectedCourse: "",
+          selectedCourse: null,
           stats: defaultStats,
         };
       }

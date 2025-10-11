@@ -1,32 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCourseById } from "../data/apCourses";
 
-export default function Practice({ selectedCourse, onBackToDashboard }) {
+export default function Practice({
+  selectedCourse,
+  onEnsureCourseSelection,
+  onBackToDashboard,
+}) {
+  const navigate = useNavigate();
+  const { courseId } = useParams();
+
+  const courseFromRoute = courseId ? getCourseById(courseId) : null;
+  const activeCourse = courseFromRoute ?? selectedCourse ?? null;
+  const courseName = activeCourse?.name ?? "your AP course";
+
+  useEffect(() => {
+    if (courseFromRoute && onEnsureCourseSelection) {
+      onEnsureCourseSelection(courseFromRoute);
+    }
+  }, [courseFromRoute, onEnsureCourseSelection]);
+
   return (
     <section style={styles.wrapper}>
       <div style={styles.header}>
         <h1 style={styles.title}>Practice Hub</h1>
-        {selectedCourse ? (
+        {activeCourse ? (
           <p style={styles.subtitle}>
-            We'll pull fresh questions for <strong>{selectedCourse}</strong> the
-            moment you press start.
+            We are prepping custom question sets for <strong>{courseName}</strong>.
+            Choose your mode below, then get feedback in “My Stats”.
           </p>
         ) : (
           <p style={styles.subtitle}>
-            Pick a course before jumping into practice. Head to AP Courses to
-            get set up.
+            Pick a course before jumping into practice. Head to AP Courses to get
+            set up, or open a course workspace to start.
           </p>
         )}
       </div>
 
       <div style={styles.body}>
         <p style={styles.placeholder}>
-          The interactive practice experience is on the roadmap. For now, use
-          this space to shape what you want to see: timed drills, flashcards,
-          FRQs with rubrics, or something else?
+          The interactive practice experience is on the roadmap. For now, use this
+          space to shape what you want to see: timed drills, flashcards, FRQs with
+          rubrics, or something else? Drop your wishlist so we can wire up the AI
+          flows next.
         </p>
-        <button style={styles.backButton} onClick={onBackToDashboard}>
-          Back to Dashboard
-        </button>
+
+        <div style={styles.buttonRow}>
+          <button
+            style={{
+              ...styles.primaryButton,
+              ...(activeCourse ? {} : styles.disabledButton),
+            }}
+            onClick={() =>
+              activeCourse ? navigate(`/course/${activeCourse.id}`) : null
+            }
+            disabled={!activeCourse}
+          >
+            Open Course Workspace
+          </button>
+          <button style={styles.secondaryButton} onClick={onBackToDashboard}>
+            Back to Dashboard
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -70,14 +105,33 @@ const styles = {
     color: "#475569",
     lineHeight: 1.6,
   },
-  backButton: {
+  buttonRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "1rem",
+  },
+  primaryButton: {
     alignSelf: "flex-start",
-    padding: "0.75rem 1.5rem",
+    padding: "0.85rem 1.75rem",
     backgroundColor: "#0078C8",
     color: "#FFFFFF",
     border: "none",
     borderRadius: "0.75rem",
     fontWeight: 600,
     cursor: "pointer",
+  },
+  secondaryButton: {
+    padding: "0.75rem 1.5rem",
+    backgroundColor: "#CBD5F5",
+    color: "#0F172A",
+    border: "none",
+    borderRadius: "0.75rem",
+    fontWeight: 600,
+    cursor: "pointer",
+  },
+  disabledButton: {
+    backgroundColor: "#94A3B8",
+    cursor: "not-allowed",
+    opacity: 0.7,
   },
 };

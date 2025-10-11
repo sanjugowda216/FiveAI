@@ -1,32 +1,41 @@
 import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 
 const navItems = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "courses", label: "AP Courses" },
-  { id: "stats", label: "My Stats" },
-  { id: "practice", label: "Practice" },
+  { path: "/dashboard", label: "Dashboard" },
+  { path: "/courses", label: "AP Courses" },
+  { path: "/stats", label: "My Stats" },
+  { path: "/practice", label: "Practice" },
 ];
 
-export default function Navbar({ activePage, onNavigate, onLogout }) {
+export default function Navbar({ onLogout }) {
+  const location = useLocation();
+
   return (
     <header style={styles.container}>
       <div style={styles.inner}>
-        <button style={styles.brand} onClick={() => onNavigate("dashboard")}>
+        <NavLink to="/dashboard" style={styles.brand}>
           FiveAI 🔥
-        </button>
+        </NavLink>
         <nav style={styles.nav}>
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              style={{
-                ...styles.link,
-                ...(activePage === item.id ? styles.activeLink : {}),
-              }}
-              onClick={() => onNavigate(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map((item) => {
+            const isActive =
+              location.pathname === item.path ||
+              (item.path === "/practice" &&
+                location.pathname.startsWith("/practice"));
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                style={{
+                  ...styles.link,
+                  ...(isActive ? styles.activeLink : {}),
+                }}
+              >
+                {item.label}
+              </NavLink>
+            );
+          })}
         </nav>
         <button style={styles.logout} onClick={onLogout}>
           Logout
@@ -55,27 +64,23 @@ const styles = {
     boxSizing: "border-box",
   },
   brand: {
-    background: "none",
-    border: "none",
     color: "#0078C8",
     fontSize: "1.25rem",
     fontWeight: 700,
-    cursor: "pointer",
+    textDecoration: "none",
   },
   nav: {
     display: "flex",
     gap: "1.5rem",
   },
   link: {
-    background: "none",
-    border: "none",
     color: "#4B5563",
     fontSize: "1rem",
     fontWeight: 600,
-    cursor: "pointer",
     paddingBottom: "0.25rem",
     borderBottom: "2px solid transparent",
     transition: "color 0.2s ease, border-color 0.2s ease",
+    textDecoration: "none",
   },
   activeLink: {
     color: "#0078C8",
