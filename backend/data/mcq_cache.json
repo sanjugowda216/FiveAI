@@ -473,6 +473,72 @@
       ],
       "generatedAt": "2025-10-12T05:14:26.312Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-8": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the primary motivation for imperialism in the late 19th century?",
+          "options": [
+            "A) The desire to spread democracy and freedom",
+            "B) The quest for new markets and resources",
+            "C) The need to protect national borders",
+            "D) The pursuit of cultural exchange"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The primary motivation for imperialism during this period was the quest for new markets and resources to fuel industrial growth, rather than ideals of democracy or cultural exchange."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant consequence of industrialization in the 19th century?",
+          "options": [
+            "A) A decrease in urban populations",
+            "B) The establishment of labor unions",
+            "C) Reduced global trade",
+            "D) A decline in technological innovation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Industrialization led to the establishment of labor unions as workers sought to improve their conditions and rights in response to the harsh realities of factory work."
+        },
+        {
+          "id": "q3",
+          "question": "How did the concept of nationalism influence global conflicts in the early 20th century?",
+          "options": [
+            "A) It promoted international cooperation and peace",
+            "B) It led to the dissolution of empires and the rise of nation-states",
+            "C) It decreased tensions between ethnic groups within empires",
+            "D) It encouraged the spread of communism worldwide"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Nationalism fueled desires for self-determination, leading to the dissolution of empires and the establishment of new nation-states, which often resulted in conflict."
+        },
+        {
+          "id": "q4",
+          "question": "What was one effect of the Cold War on global politics?",
+          "options": [
+            "A) The establishment of a multipolar world order",
+            "B) The increase of political neutrality among nations",
+            "C) The division of Europe into Eastern and Western blocs",
+            "D) The elimination of colonial powers"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Cold War resulted in the division of Europe into Eastern (communist) and Western (capitalist) blocs, significantly shaping global political dynamics."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following was a common characteristic of revolutions in the late 18th and 19th centuries?",
+          "options": [
+            "A) They were all successful in establishing democratic governments",
+            "B) They were primarily driven by the working class",
+            "C) They often incorporated Enlightenment ideas about rights and governance",
+            "D) They occurred in isolation, with no global influence"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Many revolutions of this period were influenced by Enlightenment ideas, emphasizing individual rights, liberty, and self-governance."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:53:03.735Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
     }
   }
 }
