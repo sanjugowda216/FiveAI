@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import CourseOptions from "./pages/CourseOptions";
 import Practice from "./pages/Practice";
@@ -273,29 +274,46 @@ function App() {
 
   if (!loggedIn) {
     return (
-      <div className="login-screen">
-        <div className="card">
-          <h1 className="title">FiveAI 🔥</h1>
-          {isLogin ? (
-            <Login onLoginSuccess={handleAuthSuccess} />
-          ) : (
-            <Signup onSignupSuccess={handleAuthSuccess} />
-          )}
-          <p className="switch">
-            {isLogin ? (
-              <>
-                Don't have an account?{" "}
-                <span onClick={() => setIsLogin(false)}>Sign Up</span>
-              </>
-            ) : (
-              <>
-                Already have an account?{" "}
-                <span onClick={() => setIsLogin(true)}>Login</span>
-              </>
-            )}
-          </p>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route 
+          path="/login" 
+          element={
+            <div className="login-screen">
+              <div className="card">
+                <h1 className="title">FiveAI 🔥</h1>
+                {isLogin ? (
+                  <Login onLoginSuccess={handleAuthSuccess} />
+                ) : (
+                  <Signup onSignupSuccess={handleAuthSuccess} />
+                )}
+                <p className="switch">
+                  {isLogin ? (
+                    <>
+                      Don't have an account?{" "}
+                      <span onClick={() => setIsLogin(false)}>Sign Up</span>
+                    </>
+                  ) : (
+                    <>
+                      Already have an account?{" "}
+                      <span onClick={() => setIsLogin(true)}>Login</span>
+                    </>
+                  )}
+                </p>
+                <div className="text-center mt-4">
+                  <button
+                    onClick={() => navigate("/")}
+                    className="text-blue-600 hover:text-blue-800 text-sm underline bg-transparent border-none cursor-pointer"
+                  >
+                    ← Back to Home
+                  </button>
+                </div>
+              </div>
+            </div>
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     );
   }
 
