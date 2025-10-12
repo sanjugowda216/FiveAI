@@ -1,0 +1,478 @@
+{
+  "ap-world-history": {
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the primary function of the Silk Roads during the period from c. 1200 to c. 1450?",
+          "options": [
+            "A. To facilitate the spread of Christianity",
+            "B. To enable the exchange of goods and culture across Eurasia",
+            "C. To establish military alliances between empires",
+            "D. To serve as a route for European exploration of the Americas"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Silk Roads connected various civilizations, allowing for the exchange of not only goods but also cultural practices and ideas."
+        },
+        {
+          "id": "q2",
+          "question": "What was one significant outcome of the maritime trade networks established during the period c. 1200 to c. 1450?",
+          "options": [
+            "A. The decline of land-based empires in Asia",
+            "B. The rise of the Mongol Empire",
+            "C. The increased spread of the bubonic plague",
+            "D. The establishment of new trading cities along coastlines"
+          ],
+          "correctAnswer": "D",
+          "explanation": "Maritime trade networks led to the establishment of vibrant trading cities, particularly along the coasts of Africa and Asia."
+        },
+        {
+          "id": "q3",
+          "question": "Which technological innovation had the greatest impact on trade in the Indian Ocean during this period?",
+          "options": [
+            "A. The compass",
+            "B. The astrolabe",
+            "C. The lateen sail",
+            "D. The steam engine"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The lateen sail allowed ships to navigate more effectively against the wind, facilitating trade across the Indian Ocean."
+        },
+        {
+          "id": "q4",
+          "question": "The term 'Dar al-Islam' during the period c. 1200 to c. 1450 refers to which of the following?",
+          "options": [
+            "A. The lands under Christian rule",
+            "B. Regions where Islam was the dominant religion",
+            "C. The trade routes of the Mongol Empire",
+            "D. The areas of Africa that resisted Islamic influence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Dar al-Islam refers to regions where Islam was practiced and where Islamic law was upheld."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following was a key factor in the growth of cities along the trans-Saharan trade routes?",
+          "options": [
+            "A. The introduction of the printing press",
+            "B. The establishment of democratic governments",
+            "C. The availability of camels for transportation",
+            "D. The discovery of gold in Europe"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The use of camels allowed for more efficient transportation across the Sahara, leading to the growth of trade cities."
+        },
+        {
+          "id": "q6",
+          "question": "What was one effect of the exchange of goods and ideas along the networks of exchange from c. 1200 to c. 1450?",
+          "options": [
+            "A. Decreased cultural diversity",
+            "B. The spread of religious beliefs",
+            "C. The isolation of civilizations",
+            "D. The decline of trade routes"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The exchange networks facilitated the spread of religious beliefs, such as Buddhism and Islam, across different regions."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following statements best describes the role of women in the trade networks during c. 1200 to c. 1450?",
+          "options": [
+            "A. Women had no roles in trade and commerce.",
+            "B. Women were primarily responsible for long-distance trade.",
+            "C. Women often managed household production and local markets.",
+            "D. Women were only involved in trade in Europe."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Women played important roles in managing local economies and household production, contributing to trade indirectly."
+        },
+        {
+          "id": "q8",
+          "question": "What was a significant reason for the expansion of the Mongol Empire in the 13th century?",
+          "options": [
+            "A. The establishment of the Silk Roads",
+            "B. The use of superior military technology",
+            "C. The decline of the Byzantine Empire",
+            "D. The spread of Islam"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Mongol Empire expanded largely due to their highly organized and technologically advanced military strategies."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:09:10.342Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the concept of the 'Global Tapestry' as introduced in Unit 1?",
+          "options": [
+            "A network of trade routes connecting different empires.",
+            "A way to understand the interconnectedness of cultural, political, and economic developments across regions.",
+            "A series of revolutions that led to the rise of modern nation-states.",
+            "A framework for analyzing the impact of industrialization on global societies."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The 'Global Tapestry' refers to the interconnectedness of various cultural, political, and economic developments around the world during the period from 1200 to 1450."
+        },
+        {
+          "id": "q2",
+          "question": "Which of the following developments is most closely associated with the period of c. 1200 to c. 1450?",
+          "options": [
+            "The establishment of transoceanic trade routes.",
+            "The rise of land-based empires.",
+            "The spread of the Enlightenment across Europe.",
+            "The onset of the Industrial Revolution."
+          ],
+          "correctAnswer": "B",
+          "explanation": "During the period of c. 1200 to c. 1450, land-based empires such as the Mongol Empire and the Ottoman Empire expanded significantly."
+        },
+        {
+          "id": "q3",
+          "question": "Which technological innovation had a significant impact on trade networks during the Global Tapestry period?",
+          "options": [
+            "The steam engine",
+            "The compass",
+            "The telegraph",
+            "The airplane"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The compass was a crucial technology that improved navigation, enhancing maritime trade and travel during this period."
+        },
+        {
+          "id": "q4",
+          "question": "What was a primary consequence of the increased interactions between different cultures during the Global Tapestry?",
+          "options": [
+            "The isolation of most civilizations.",
+            "The spread of diseases like the Black Death.",
+            "The development of unique cultural identities.",
+            "The rise of authoritarian governments."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Increased interactions through trade and conquest often led to the spread of diseases, such as the Black Death, which had devastating impacts on populations."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following best characterizes the governance structures of empires during the Global Tapestry period?",
+          "options": [
+            "Most empires relied solely on democratic principles.",
+            "Centralized bureaucracies were common in many empires.",
+            "All empires had the same administrative techniques.",
+            "Governance was primarily based on local tribal councils."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Many empires during this period developed centralized bureaucracies to manage their vast territories and diverse populations effectively."
+        },
+        {
+          "id": "q6",
+          "question": "How did cultural interactions during the Global Tapestry influence societal structures?",
+          "options": [
+            "They led to the complete dominance of one culture over others.",
+            "They resulted in the blending of traditions and practices.",
+            "They isolated societies from external influences.",
+            "They maintained strict social hierarchies without change."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Cultural interactions often resulted in syncretism, where different traditions and practices blended, influencing societal structures and norms."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:11:11.280Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-5": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following revolutions is characterized by the rise of Enlightenment ideas and resulted in the establishment of a constitutional monarchy in its country?",
+          "options": [
+            "A) The American Revolution",
+            "B) The Haitian Revolution",
+            "C) The Industrial Revolution",
+            "D) The French Revolution"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The French Revolution was significantly influenced by Enlightenment ideas, leading to the establishment of a constitutional monarchy after the overthrow of the monarchy."
+        },
+        {
+          "id": "q2",
+          "question": "What was one major consequence of the revolutions that occurred between 1750 and 1900?",
+          "options": [
+            "A) The spread of feudalism in Europe",
+            "B) The decline of monarchies in favor of republics",
+            "C) An increase in global trade networks",
+            "D) The rise of agrarian societies"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The revolutions led to the decline of absolute monarchies and the rise of republics and democratic governments in many parts of the world."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following best describes how the Industrial Revolution impacted social structures in the 19th century?",
+          "options": [
+            "A) It resulted in a more rigid caste system.",
+            "B) It led to the emergence of a middle class.",
+            "C) It decreased urbanization significantly.",
+            "D) It strengthened the power of feudal lords."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Industrial Revolution facilitated the growth of a middle class comprised of industrialists and urban workers, altering traditional social hierarchies."
+        },
+        {
+          "id": "q4",
+          "question": "What was a significant factor that contributed to the spread of revolutions in the late 18th and 19th centuries?",
+          "options": [
+            "A) The dominance of monarchies across the globe",
+            "B) The influence of Enlightenment ideas",
+            "C) The lack of communication technology",
+            "D) The stability of empires"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Enlightenment ideas emphasizing liberty, equality, and democracy inspired many revolutionary movements during this period."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following revolutions directly led to the end of slavery in its territory as a result of a successful slave uprising?",
+          "options": [
+            "A) The American Revolution",
+            "B) The Haitian Revolution",
+            "C) The French Revolution",
+            "D) The Latin American Wars of Independence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Haitian Revolution successfully ended slavery in Haiti and established it as the first independent black-led nation."
+        },
+        {
+          "id": "q6",
+          "question": "How did the American and French Revolutions differ in their outcomes regarding governance?",
+          "options": [
+            "A) Both resulted in absolute monarchies.",
+            "B) The American Revolution led to a stable republic, while the French Revolution resulted in political turmoil.",
+            "C) Both established democratic governments immediately.",
+            "D) The American Revolution led to a dictatorship, while the French Revolution established a monarchy."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The American Revolution resulted in a stable republic, while the French Revolution led to significant political instability and radical changes before settling into a more stable government."
+        },
+        {
+          "id": "q7",
+          "question": "What role did women play during the revolutions of the late 18th and 19th centuries?",
+          "options": [
+            "A) Women were completely excluded from revolutionary activities.",
+            "B) Women organized and participated in protests but gained little political power afterwards.",
+            "C) Women were the primary leaders of all revolutionary movements.",
+            "D) Women were solely responsible for the success of the revolutions."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Women were actively involved in revolutionary activities and protests, but they often did not achieve significant political power or rights following the revolutions."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following best describes the relationship between the Enlightenment and the revolutions of the late 18th century?",
+          "options": [
+            "A) Enlightenment ideas had little influence on the revolutions.",
+            "B) Enlightenment thinkers opposed revolutionary change.",
+            "C) Enlightenment ideas inspired revolutionary thought and action.",
+            "D) Enlightenment thinkers rejected the principles of government during revolutions."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Enlightenment ideas such as liberty, equality, and fraternity inspired revolutionary thought and actions in movements like the American and French Revolutions."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:11:27.683Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-3": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following factors contributed most significantly to the expansion of land-based empires between 1450 and 1750?",
+          "options": [
+            "A. Technological advancements in navigation",
+            "B. The establishment of maritime empires",
+            "C. Military conquests and territorial expansion",
+            "D. The rise of global trade networks"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Military conquests and territorial expansion were crucial for the growth of land-based empires during this period, allowing them to control more territory and resources."
+        },
+        {
+          "id": "q2",
+          "question": "What was a common administrative feature of land-based empires during the period from 1450 to 1750?",
+          "options": [
+            "A. Parliamentary systems of governance",
+            "B. Centralized bureaucracies",
+            "C. Direct democracy",
+            "D. Stateless societies"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Centralized bureaucracies were a hallmark of land-based empires, allowing for more effective governance and control over vast territories."
+        },
+        {
+          "id": "q3",
+          "question": "Which belief system was most often used to legitimize the rule of land-based empires during the early modern period?",
+          "options": [
+            "A. Buddhism",
+            "B. Confucianism",
+            "C. Divine Right of Kings",
+            "D. Humanism"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Divine Right of Kings was commonly used to justify monarchical rule in many land-based empires, reinforcing the authority of rulers."
+        },
+        {
+          "id": "q4",
+          "question": "Which empire is best known for its administrative innovations and effective governance during the period from 1450 to 1750?",
+          "options": [
+            "A. Ottoman Empire",
+            "B. Aztec Empire",
+            "C. Mongol Empire",
+            "D. Inca Empire"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The Ottoman Empire is renowned for its sophisticated administrative system, including the use of devshirme and millet systems for governance."
+        },
+        {
+          "id": "q5",
+          "question": "How did land-based empires typically respond to the challenges posed by rival states during the period 1450-1750?",
+          "options": [
+            "A. They formed alliances with one another",
+            "B. They expanded their military capabilities",
+            "C. They focused solely on economic trade",
+            "D. They adopted democratic governance"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Land-based empires often expanded their military capabilities to defend against rivals and assert their dominance in the region."
+        },
+        {
+          "id": "q6",
+          "question": "What role did cultural developments play in the administration of land-based empires in the early modern period?",
+          "options": [
+            "A. They had little impact on governance",
+            "B. They were used to unify diverse populations",
+            "C. They led to the decline of empires",
+            "D. They solely focused on art and literature"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Cultural developments were often utilized to unify diverse populations within empires, promoting a shared identity and loyalty to the state."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following best describes a significant economic characteristic of land-based empires from 1450 to 1750?",
+          "options": [
+            "A. Focus on industrial production",
+            "B. Reliance on tribute systems",
+            "C. Development of global stock markets",
+            "D. Widespread use of cryptocurrency"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Land-based empires often relied on tribute systems as a means of economic control and resource acquisition from conquered territories."
+        },
+        {
+          "id": "q8",
+          "question": "What was one significant impact of land-based empires on social structures during the period from 1450 to 1750?",
+          "options": [
+            "A. The abolition of social classes",
+            "B. The strengthening of feudal systems",
+            "C. The emergence of new social hierarchies based on ethnicity",
+            "D. The establishment of universal suffrage"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Land-based empires often created new social hierarchies based on ethnicity and religion, affecting the social fabric of their diverse populations."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:11:31.347Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-7": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "What was a primary motivation for imperialism from 1750 to 1900?",
+          "options": [
+            "A) The desire to spread democracy",
+            "B) The quest for new markets and raw materials",
+            "C) The promotion of humanitarian efforts",
+            "D) The establishment of global peace"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The quest for new markets and raw materials was a significant driver of imperialism during this period, as industrialized nations sought to fuel their economies."
+        },
+        {
+          "id": "q2",
+          "question": "Which of the following best describes the impact of industrialization on social classes in the 19th century?",
+          "options": [
+            "A) It eliminated class distinctions completely",
+            "B) It created a more rigid class structure",
+            "C) It led to the rise of a middle class",
+            "D) It only affected the working class"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Industrialization led to the rise of a middle class due to the demand for skilled labor and new job opportunities, while also significantly impacting the working class."
+        },
+        {
+          "id": "q3",
+          "question": "What was a consequence of the state expansion from 1750 to 1900?",
+          "options": [
+            "A) Increased focus on local governance",
+            "B) The spread of nationalism",
+            "C) Decreased military conflicts",
+            "D) A reduction in international trade"
+          ],
+          "correctAnswer": "B",
+          "explanation": "State expansion during this period often fueled nationalist sentiments, as newly acquired territories and peoples were integrated into larger national frameworks."
+        },
+        {
+          "id": "q4",
+          "question": "How did indigenous populations respond to imperialism in the 19th century?",
+          "options": [
+            "A) They uniformly accepted foreign rule",
+            "B) They often engaged in resistance movements",
+            "C) They were largely indifferent",
+            "D) They cooperated without exception"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Indigenous populations frequently resisted imperialism through various forms of resistance, including uprisings and the formation of new alliances."
+        },
+        {
+          "id": "q5",
+          "question": "Which technological innovation was crucial for facilitating imperial expansion in the late 19th century?",
+          "options": [
+            "A) The steam engine",
+            "B) The printing press",
+            "C) The telephone",
+            "D) The internal combustion engine"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The steam engine was essential for transportation and communication, enabling faster movement of goods and military forces, which facilitated imperial expansion."
+        },
+        {
+          "id": "q6",
+          "question": "What was one major ideological justification for imperialism during the late 19th century?",
+          "options": [
+            "A) Social Darwinism",
+            "B) Environmentalism",
+            "C) Isolationism",
+            "D) Anti-imperialism"
+          ],
+          "correctAnswer": "A",
+          "explanation": "Social Darwinism was used to justify imperialism by suggesting that stronger nations had a right to dominate weaker ones, reflecting a belief in racial superiority."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following best characterizes a consequence of industrialization on global economies?",
+          "options": [
+            "A) Decreased interdependence among nations",
+            "B) Increased trade and global economic networks",
+            "C) A rise in agrarian economies",
+            "D) The establishment of isolationist policies"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Industrialization led to increased trade and the development of global economic networks as nations sought resources and markets for their manufactured goods."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:14:26.312Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    }
+  }
+}
