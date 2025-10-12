@@ -107,7 +107,24 @@ export default function Login({ onLoginSuccess }) {
       setEmail("");
       setPassword("");
     } catch (err) {
-      setMsg(err.message);
+      console.error("Login error:", err);
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      
+      // More specific error messages
+      switch (err.code) {
+        case 'auth/user-not-found':
+          setMsg("No account found with this email address");
+          break;
+        case 'auth/wrong-password':
+          setMsg("Incorrect password");
+          break;
+        case 'auth/invalid-email':
+          setMsg("Invalid email address");
+          break;
+        default:
+          setMsg(err.message || "Login failed. Please try again.");
+      }
     }
   };
 
