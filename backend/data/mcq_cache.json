@@ -540,5 +540,189 @@
       "generatedAt": "2025-10-12T05:53:03.735Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
     }
+  },
+  "ap-united-states-history": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the period from 1491 to 1607 in North America?",
+          "options": [
+            "A) The establishment of permanent European settlements",
+            "B) The rise of major Native American empires",
+            "C) The initial contacts between European explorers and Native Americans",
+            "D) The beginning of the transatlantic slave trade"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The period from 1491 to 1607 is marked primarily by the initial contacts between European explorers and Native Americans, which set the stage for future interactions."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant consequence of European exploration in the Americas during the late 15th and early 16th centuries?",
+          "options": [
+            "A) The immediate establishment of democratic governments",
+            "B) The exchange of goods and ideas in the Columbian Exchange",
+            "C) The decline of European population due to disease",
+            "D) The isolation of Native American tribes from European influence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Columbian Exchange was a significant consequence of European exploration, involving the widespread transfer of plants, animals, and cultures between the Americas and the Old World."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following was a primary motivation for European exploration during the late 15th century?",
+          "options": [
+            "A) The desire to establish peace with Native Americans",
+            "B) The search for new trade routes and resources",
+            "C) The interest in spreading democratic ideals",
+            "D) The goal of expanding the territory of existing empires"
+          ],
+          "correctAnswer": "B",
+          "explanation": "A primary motivation for European exploration was the search for new trade routes and resources, particularly in light of the lucrative spice trade."
+        },
+        {
+          "id": "q4",
+          "question": "How did Native American societies in North America primarily respond to European contact in the early 16th century?",
+          "options": [
+            "A) They uniformly resisted all European influence",
+            "B) They engaged in trade and cultural exchange",
+            "C) They quickly adopted European political structures",
+            "D) They migrated away from areas of contact"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Many Native American societies engaged in trade and cultural exchange with Europeans, although responses varied widely among different tribes."
+        },
+        {
+          "id": "q5",
+          "question": "Which technological advancement played a crucial role in facilitating European exploration during the Age of Discovery?",
+          "options": [
+            "A) The steam engine",
+            "B) The compass",
+            "C) The printing press",
+            "D) The telephone"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The compass was a crucial technological advancement that aided European navigators in exploring and charting new territories."
+        },
+        {
+          "id": "q6",
+          "question": "What was a significant effect of the Spanish conquests in the Americas during the early 16th century?",
+          "options": [
+            "A) The establishment of a permanent British colony",
+            "B) The rapid decline of indigenous populations due to disease and warfare",
+            "C) The creation of a multi-ethnic society without conflict",
+            "D) The immediate abolition of the encomienda system"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Spanish conquests led to a rapid decline in indigenous populations primarily due to European diseases and violent conflicts."
+        }
+      ],
+      "generatedAt": "2025-10-13T21:09:40.594Z",
+      "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
+    }
+  },
+  "ap-music-theory": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes a major scale?",
+          "options": [
+            "A sequence of pitches with a specific pattern of whole and half steps",
+            "A scale that includes only whole steps",
+            "A scale that can only be played on a piano",
+            "A sequence of pitches that contains no accidentals"
+          ],
+          "correctAnswer": "A",
+          "explanation": "A major scale consists of a specific pattern of whole and half steps: whole, whole, half, whole, whole, whole, half."
+        },
+        {
+          "id": "q2",
+          "question": "What is the primary function of a key signature in music notation?",
+          "options": [
+            "To indicate the tempo of a piece",
+            "To specify the dynamics to be used",
+            "To determine which notes are sharp or flat throughout the piece",
+            "To provide information about the form of the music"
+          ],
+          "correctAnswer": "C",
+          "explanation": "A key signature indicates which notes are sharp or flat in a piece of music, affecting the overall tonality."
+        },
+        {
+          "id": "q3",
+          "question": "In the context of rhythm, what is 'meter'?",
+          "options": [
+            "The speed of the music",
+            "The organization of beats into regular groups",
+            "The loudness of the music",
+            "The arrangement of different musical instruments"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Meter refers to the organization of beats into regular groups, typically defined by the time signature."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following is an example of an expressive element in music?",
+          "options": [
+            "Key signature",
+            "Tempo markings",
+            "Time signature",
+            "Note values"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Tempo markings are considered expressive elements as they indicate the speed at which a piece should be played, affecting the emotional feel."
+        },
+        {
+          "id": "q5",
+          "question": "What defines the term 'pitch' in music theory?",
+          "options": [
+            "The duration of a sound",
+            "The loudness of a sound",
+            "The quality that makes a sound high or low",
+            "The pattern of notes in a scale"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Pitch refers to the perceived frequency of a sound, determining how high or low it sounds."
+        },
+        {
+          "id": "q6",
+          "question": "How does a time signature affect a piece of music?",
+          "options": [
+            "It specifies the key of the piece",
+            "It indicates the instruments to be used",
+            "It tells performers how many beats are in each measure and what note value receives one beat",
+            "It determines the dynamics throughout the piece"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The time signature indicates how many beats are in each measure and which note value represents one beat, helping to organize the rhythm."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following scales includes the notes A, B, C#, D, E, F#, and G#?",
+          "options": [
+            "A Major Scale",
+            "C Major Scale",
+            "E Minor Scale",
+            "D Major Scale"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The notes A, B, C#, D, E, F#, and G# correspond to the A Major scale."
+        },
+        {
+          "id": "q8",
+          "question": "What is the relationship between pitch and frequency?",
+          "options": [
+            "Higher pitches correspond to lower frequencies",
+            "Higher pitches correspond to higher frequencies",
+            "Frequency has no effect on pitch",
+            "Pitches are measured in decibels"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Higher pitches correspond to higher frequencies, as pitch is determined by the frequency of sound waves."
+        }
+      ],
+      "generatedAt": "2025-10-13T21:15:24.048Z",
+      "cedHash": "b38c1db0ecaff2a1235bd5a361fef0be"
+    }
   }
 }
