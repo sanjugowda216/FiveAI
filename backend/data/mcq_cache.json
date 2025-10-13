@@ -724,5 +724,97 @@
       "generatedAt": "2025-10-13T21:15:24.048Z",
       "cedHash": "b38c1db0ecaff2a1235bd5a361fef0be"
     }
+  },
+  "ap-research": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following statements best describes the AP Capstone Diploma Program?",
+          "options": [
+            "A) It is only available to select schools that apply for participation.",
+            "B) It allows any school to participate without a sign-up process starting 2024-25.",
+            "C) It requires students to complete AP Seminar and AP Research in any order.",
+            "D) It is exclusively for students in advanced science courses."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Starting in the 2024-25 school year, any school can participate in the AP Capstone Diploma Program without needing an application or sign-up process."
+        },
+        {
+          "id": "q2",
+          "question": "What is a primary expectation of students enrolled in AP courses according to the AP principles?",
+          "options": [
+            "A) Students must agree with the teacher's viewpoints.",
+            "B) Students are encouraged to analyze various perspectives, including those differing from their own.",
+            "C) Students should avoid engaging with evidence that contradicts their beliefs.",
+            "D) Students are expected to memorize facts without questioning them."
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP courses expect students to analyze different perspectives, fostering independent thinking and critical analysis."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following is a requirement for teachers who wish to teach AP Seminar or AP Research?",
+          "options": [
+            "A) They must have taught AP courses for at least five years.",
+            "B) They must complete required summer professional learning before teaching the courses.",
+            "C) They need to obtain special certification from College Board.",
+            "D) They can teach the courses without any prior training or experience."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Teachers of AP Seminar or AP Research must complete required summer professional learning prior to teaching either course."
+        },
+        {
+          "id": "q4",
+          "question": "What is the significance of the AP program's stance against censorship?",
+          "options": [
+            "A) It allows schools to limit course content based on community beliefs.",
+            "B) It ensures that AP courses cover essential academic topics without restriction.",
+            "C) It encourages teachers to avoid controversial subjects.",
+            "D) It mandates that all topics must be agreed upon by students before being taught."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The AP program opposes censorship, ensuring that essential academic topics are included in AP courses, which maintains the integrity of the curriculum."
+        },
+        {
+          "id": "q5",
+          "question": "How does the AP Research course fit into the AP Capstone sequence?",
+          "options": [
+            "A) It can be taken independently of AP Seminar.",
+            "B) It is the first course in the sequence.",
+            "C) It must be taken after completing AP Seminar.",
+            "D) It is optional for students pursuing the AP Capstone Diploma."
+          ],
+          "correctAnswer": "C",
+          "explanation": "AP Research may only be offered as the second course in the AP Capstone sequence, following AP Seminar."
+        },
+        {
+          "id": "q6",
+          "question": "What is one of the key principles regarding evidence in AP courses?",
+          "options": [
+            "A) Evidence is optional for students to consider.",
+            "B) Students must only use evidence that supports their opinions.",
+            "C) Evidence and the scientific method are foundational for discussions.",
+            "D) Students should avoid using evidence in their analyses."
+          ],
+          "correctAnswer": "C",
+          "explanation": "AP courses emphasize the importance of evidence and the scientific method as starting points for discussions, encouraging critical thinking."
+        },
+        {
+          "id": "q7",
+          "question": "Why does the AP program emphasize clarity and transparency in its courses?",
+          "options": [
+            "A) To create confusion among students and teachers.",
+            "B) To ensure all stakeholders understand course expectations clearly.",
+            "C) To limit the topics that can be discussed in class.",
+            "D) To maintain a competitive edge over other programs."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The AP program promotes clarity and transparency to provide clear expectations for teachers and students, facilitating better learning outcomes."
+        }
+      ],
+      "generatedAt": "2025-10-13T21:19:46.404Z",
+      "cedHash": "bdb85021f08d87347b89cd9f82d7b71d"
+    }
   }
 }
