@@ -1,13 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import questionRoutes from "./routes/questionRoutes.js";
+import { initializeCedParsing } from "./services/cedParser.js";
 
 dotenv.config();
 const app = express();
 
 // Allow requests from your frontend only
 app.use(cors({
-  origin: "http://localhost:5173", // frontend URL
+  origin: ["http://localhost:5173", "http://localhost:5174"], // frontend URLs
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -19,5 +21,28 @@ app.get("/", (req, res) => {
   res.send("FiveAI backend is running 👑");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Mount question routes
+app.use("/api/questions", questionRoutes);
+
+// Initialize CED parsing on startup
+async function startServer() {
+  try {
+    console.log("Starting FiveAI backend server...");
+    
+    // Initialize CED parsing
+    await initializeCedParsing();
+    
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📚 CED parsing completed`);
+      console.log(`🔗 API endpoints available at http://localhost:${PORT}/api/questions`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
