@@ -4,19 +4,51 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { getCourseById } from "../data/apCourses";
+import { submitFrqForGrading, getRubricsForCourse } from "../utils/api";
 
 const MAX_UPLOAD_SIZE = 25 * 1024 * 1024; // 25 MB
+const DEFAULT_FRQ_TYPE = "general";
+
+const FRQ_TYPE_OPTIONS = [
+  { value: "general", label: "General FRQ / Essay" },
+  { value: "dbq", label: "Document-Based Question (DBQ)" },
+  { value: "leq", label: "Long Essay Question (LEQ)" },
+  { value: "saq", label: "Short-Answer Question (SAQ)" },
+  { value: "argument-essay", label: "Argument Essay" },
+  { value: "synthesis-essay", label: "Synthesis Essay" },
+  { value: "rhetorical-analysis", label: "Rhetorical Analysis" },
+  { value: "performance-task", label: "Performance Task" },
+  { value: "research-presentation", label: "Research Presentation" },
+];
+
+const fileToDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
 
 export default function CourseOptions({ userProfile, onSelectCourse }) {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const course = getCourseById(courseId);
 
+  const [frqType, setFrqType] = useState(DEFAULT_FRQ_TYPE);
+  const [frqPrompt, setFrqPrompt] = useState("");
   const [essayResponse, setEssayResponse] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
   const [essayAttachment, setEssayAttachment] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
+  const [gradeResponse, setGradeResponse] = useState(null);
+  const [gradingError, setGradingError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGrading, setIsGrading] = useState(false);
+  const [availableRubrics, setAvailableRubrics] = useState([]);
+  const [isLoadingRubrics, setIsLoadingRubrics] = useState(false);
+  const [rubricError, setRubricError] = useState("");
+  const [progressWidth, setProgressWidth] = useState(35);
+
   const essayFileInputRef = useRef(null);
   const uploadInputRef = useRef(null);
 
@@ -25,6 +57,74 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
       onSelectCourse(course, { persist: false });
     }
   }, [course, onSelectCourse]);
+
+  useEffect(() => {
+    setFrqType(DEFAULT_FRQ_TYPE);
+    setFrqPrompt("");
+    setEssayResponse("");
+    setEssayAttachment(null);
+    setSelectedFile(null);
+    setGradeResponse(null);
+    setGradingError("");
+    setStatusMessage("");
+    if (essayFileInputRef.current) {
+      essayFileInputRef.current.value = "";
+    }
+    if (uploadInputRef.current) {
+      uploadInputRef.current.value = "";
+    }
+  }, [course?.id]);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadRubrics = async () => {
+      if (!course?.id) return;
+      setIsLoadingRubrics(true);
+      setRubricError("");
+
+      try {
+        const response = await getRubricsForCourse(course.id);
+        if (!active) return;
+        setAvailableRubrics(response?.rubrics ?? []);
+      } catch (error) {
+        console.error("Failed to load rubrics", error);
+        if (!active) return;
+        setAvailableRubrics([]);
+        setRubricError(
+          error?.message ?? "We couldn’t load rubric excerpts just yet."
+        );
+      } finally {
+        if (active) {
+          setIsLoadingRubrics(false);
+        }
+      }
+    };
+
+    loadRubrics();
+
+    return () => {
+      active = false;
+    };
+  }, [course?.id]);
+
+  useEffect(() => {
+    if (!isGrading) {
+      setProgressWidth(35);
+      return;
+    }
+
+    const steps = [30, 55, 80, 45, 70];
+    let index = 0;
+    setProgressWidth(steps[index]);
+
+    const timer = setInterval(() => {
+      index = (index + 1) % steps.length;
+      setProgressWidth(steps[index]);
+    }, 650);
+
+    return () => clearInterval(timer);
+  }, [isGrading]);
 
   if (!course) {
     return (
@@ -83,6 +183,26 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
     };
   };
 
+  const runGrading = async (payload) => {
+    setIsGrading(true);
+    setGradingError("");
+    try {
+      const response = await submitFrqForGrading(payload);
+      setGradeResponse(response);
+      return response;
+    } catch (error) {
+      console.error("Grading request failed", error);
+      setGradeResponse(null);
+      setGradingError(
+        error?.message ??
+          "We couldn’t get a grade from the server. Try again in a moment."
+      );
+      throw error;
+    } finally {
+      setIsGrading(false);
+    }
+  };
+
   const handleEssaySubmit = async () => {
     if (!submissionCollection) {
       setStatusMessage("You need to be logged in to submit work.");
@@ -90,55 +210,101 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
     }
 
     const trimmedEssay = essayResponse.trim();
+    const trimmedPrompt = frqPrompt.trim();
+
     if (!trimmedEssay && !essayAttachment) {
       setStatusMessage("Add your response or attach an image before submitting.");
       return;
     }
 
     setIsSubmitting(true);
+    setStatusMessage("");
+    setGradeResponse(null);
+    setGradingError("");
+
+    let base64Image = null;
+
     try {
-      let attachmentMeta = null;
       if (essayAttachment) {
-        attachmentMeta = await uploadAttachment(essayAttachment);
+        if (essayAttachment.size > MAX_UPLOAD_SIZE) {
+          throw new Error("Uploads must be 25 MB or smaller.");
+        }
+        base64Image = await fileToDataUrl(essayAttachment);
       }
 
-      const wordCount = trimmedEssay
-        ? trimmedEssay.split(/\s+/).filter(Boolean).length
-        : 0;
+      if (submissionCollection) {
+        try {
+          let attachmentMeta = null;
+          if (essayAttachment) {
+            attachmentMeta = await uploadAttachment(essayAttachment);
+          }
 
-      await addDoc(submissionCollection, {
+          const wordCount = trimmedEssay
+            ? trimmedEssay.split(/\s+/).filter(Boolean).length
+            : 0;
+
+          await addDoc(submissionCollection, {
+            courseId: course.id,
+            courseName: course.name,
+            submissionType: "essay",
+            submissionFormat: attachmentMeta
+              ? trimmedEssay
+                ? "hybrid"
+                : "image-only"
+              : "text",
+            essay: trimmedEssay || null,
+            wordCount,
+            prompt: trimmedPrompt || null,
+            questionType: frqType,
+            attachments: attachmentMeta ? [attachmentMeta] : [],
+            storagePath: attachmentMeta?.storagePath ?? null,
+            downloadURL: attachmentMeta?.downloadURL ?? null,
+            createdAt: serverTimestamp(),
+            reviewStatus: "pending-ai-feedback",
+          });
+
+          setStatusMessage("Submission saved. Running rubric-based grading...");
+        } catch (firestoreError) {
+          console.error("Failed to save essay submission", firestoreError);
+          setStatusMessage(
+            firestoreError?.message ??
+              "The submission was not stored, but we’ll still run the grader."
+          );
+        }
+      }
+
+      const gradingPayload = {
         courseId: course.id,
         courseName: course.name,
-        submissionType: "essay",
-        submissionFormat: attachmentMeta
-          ? trimmedEssay
-            ? "hybrid"
-            : "image-only"
-          : "text",
-        essay: trimmedEssay || null,
-        wordCount,
-        attachments: attachmentMeta ? [attachmentMeta] : [],
-        storagePath: attachmentMeta?.storagePath ?? null,
-        downloadURL: attachmentMeta?.downloadURL ?? null,
-        createdAt: serverTimestamp(),
-        reviewStatus: "pending-ai-feedback",
-      });
+        questionType: frqType,
+        prompt: trimmedPrompt,
+        responseText: trimmedEssay,
+        imageData: base64Image,
+        imageName: essayAttachment?.name ?? null,
+      };
+
+      const gradingResult = await runGrading(gradingPayload);
+
+      const gradeMessage = gradingResult?.graded
+        ? "Rubric-based grading complete."
+        : gradingResult?.grade?.summary ??
+          "Stored submission, but automated grading isn't available yet.";
+
+      setStatusMessage((prev) =>
+        prev ? `${prev} ${gradeMessage}` : gradeMessage
+      );
 
       setEssayResponse("");
+      setFrqPrompt("");
       setEssayAttachment(null);
       if (essayFileInputRef.current) {
         essayFileInputRef.current.value = "";
       }
-
-      setStatusMessage(
-        attachmentMeta
-          ? "Saved! Your typed response and image are ready for upcoming rubric grading."
-          : "Saved! AI scoring with the official rubric is coming soon."
-      );
-    } catch (err) {
-      console.error("Failed to save essay submission", err);
-      setStatusMessage(
-        err?.message ?? "We couldn't save that right now. Try again in a minute."
+    } catch (error) {
+      setStatusMessage((prev) =>
+        prev
+          ? `${prev} (${error?.message ?? "Grading failed."})`
+          : error?.message ?? "We couldn't process that submission. Try again shortly."
       );
     } finally {
       setIsSubmitting(false);
@@ -160,33 +326,70 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
     }
 
     setIsSubmitting(true);
-    try {
-      const attachmentMeta = await uploadAttachment(selectedFile);
+    setStatusMessage("");
+    setGradeResponse(null);
+    setGradingError("");
 
-      await addDoc(submissionCollection, {
+    try {
+      const base64Image = await fileToDataUrl(selectedFile);
+      let attachmentMeta = null;
+
+      try {
+        attachmentMeta = await uploadAttachment(selectedFile);
+        await addDoc(submissionCollection, {
+          courseId: course.id,
+          courseName: course.name,
+          submissionType: "file-upload",
+          attachments: attachmentMeta ? [attachmentMeta] : [],
+          fileName: selectedFile.name,
+          fileSize: selectedFile.size,
+          fileType: selectedFile.type,
+          prompt: frqPrompt.trim() || null,
+          questionType: frqType,
+          storagePath: attachmentMeta?.storagePath ?? null,
+          downloadURL: attachmentMeta?.downloadURL ?? null,
+          createdAt: serverTimestamp(),
+          reviewStatus: "pending-ai-feedback",
+        });
+        setStatusMessage("Upload saved. Running rubric-based grading...");
+      } catch (firestoreError) {
+        console.error("Failed to save upload", firestoreError);
+        setStatusMessage(
+          firestoreError?.message ??
+            "Upload was not stored, but we’ll still attempt grading."
+        );
+      }
+
+      const gradingPayload = {
         courseId: course.id,
         courseName: course.name,
-        submissionType: "file-upload",
-        attachments: attachmentMeta ? [attachmentMeta] : [],
-        fileName: selectedFile.name,
-        fileSize: selectedFile.size,
-        fileType: selectedFile.type,
-        storagePath: attachmentMeta?.storagePath ?? null,
-        downloadURL: attachmentMeta?.downloadURL ?? null,
-        createdAt: serverTimestamp(),
-        reviewStatus: "pending-ai-feedback",
-      });
+        questionType: frqType,
+        prompt: frqPrompt.trim(),
+        responseText: "",
+        imageData: base64Image,
+        imageName: selectedFile.name,
+      };
+
+      const gradingResult = await runGrading(gradingPayload);
+
+      const gradeMessage = gradingResult?.graded
+        ? "Rubric-based grading complete."
+        : gradingResult?.grade?.summary ??
+          "Stored submission, but automated grading isn't available yet.";
+
+      setStatusMessage((prev) =>
+        prev ? `${prev} ${gradeMessage}` : gradeMessage
+      );
 
       setSelectedFile(null);
       if (uploadInputRef.current) {
         uploadInputRef.current.value = "";
       }
-
-      setStatusMessage("Upload saved! AI rubric grading is coming soon.");
-    } catch (err) {
-      console.error("Failed to save upload", err);
-      setStatusMessage(
-        err?.message ?? "We couldn't capture that upload. Try again shortly."
+    } catch (error) {
+      setStatusMessage((prev) =>
+        prev
+          ? `${prev} (${error?.message ?? "Grading failed."})`
+          : error?.message ?? "We couldn't process that upload. Try again shortly."
       );
     } finally {
       setIsSubmitting(false);
@@ -194,6 +397,7 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
   };
 
   const isEssayFlow = course.submissionMode === "essay";
+  const grade = gradeResponse?.grade ?? null;
 
   return (
     <section style={styles.wrapper}>
@@ -203,8 +407,8 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
           <h1 style={styles.title}>{course.name}</h1>
           <p style={styles.subtitle}>
             Choose how you want to train today. Multiple choice pulls fresh
-            questions from the CED. FRQ / Essay submissions will be graded with
-            College Board rubrics once AI scoring is plugged in.
+            questions from the CED. FRQ / Essay submissions are stored and graded
+            instantly using the official College Board rubrics.
           </p>
         </div>
         <button style={styles.secondaryButton} onClick={() => navigate("/dashboard")}>
@@ -231,22 +435,51 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
           <h2 style={styles.cardTitle}>Submit FRQ / Essay</h2>
           <p style={styles.cardBody}>
             {isEssayFlow
-              ? "Paste your typed response and optionally attach a photo of handwritten work. We’ll store it and soon route it through rubric-based AI graders."
-              : "Upload images or PDFs of your written work. We’ll keep a record so you can request AI review when it’s ready."}
+              ? "Paste your typed response and optionally attach a photo of handwritten work. We’ll store it and score it against the CED rubric."
+              : "Upload images or PDFs of your work. We’ll keep a record and run rubric-based grading on each submission."}
           </p>
+
+          <div style={styles.fieldGroup}>
+            <label style={styles.fieldLabel}>Free-response type</label>
+            <select
+              value={frqType}
+              onChange={(e) => setFrqType(e.target.value)}
+              style={styles.select}
+            >
+              {FRQ_TYPE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={styles.fieldGroup}>
+            <label style={styles.fieldLabel}>Prompt or question</label>
+            <textarea
+              value={frqPrompt}
+              onChange={(e) => setFrqPrompt(e.target.value)}
+              placeholder="Paste the FRQ prompt so the grader can align to the right rubric..."
+              style={styles.promptArea}
+              rows={3}
+            />
+          </div>
 
           {isEssayFlow ? (
             <>
-              <textarea
-                value={essayResponse}
-                onChange={(e) => {
-                  setEssayResponse(e.target.value);
-                  if (statusMessage) setStatusMessage("");
-                }}
-                placeholder="Paste or type your essay/response here..."
-                style={styles.textarea}
-                rows={8}
-              />
+              <div style={styles.fieldGroup}>
+                <label style={styles.fieldLabel}>Typed response</label>
+                <textarea
+                  value={essayResponse}
+                  onChange={(e) => {
+                    setEssayResponse(e.target.value);
+                    if (statusMessage) setStatusMessage("");
+                  }}
+                  placeholder="Paste or type your essay/response here..."
+                  style={styles.textarea}
+                  rows={8}
+                />
+              </div>
               <div style={styles.attachmentStack}>
                 <label style={styles.uploadLabel}>
                   <input
@@ -284,11 +517,14 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                 </p>
               </div>
               <button
-                style={styles.primaryButton}
+                style={{
+                  ...styles.primaryButton,
+                  ...(isSubmitting || isGrading ? styles.primaryButtonDisabled : {}),
+                }}
                 onClick={handleEssaySubmit}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isGrading}
               >
-                {isSubmitting ? "Saving..." : "Submit for Grading"}
+                {isSubmitting || isGrading ? "Grading…" : "Submit for Grading"}
               </button>
             </>
           ) : (
@@ -328,19 +564,151 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                 Supports PDF, PNG, JPG up to 25 MB.
               </p>
               <button
-                style={styles.primaryButton}
+                style={{
+                  ...styles.primaryButton,
+                  ...(isSubmitting || isGrading ? styles.primaryButtonDisabled : {}),
+                }}
                 onClick={handleUploadSubmit}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isGrading}
               >
-                {isSubmitting ? "Saving..." : "Submit for Grading"}
+                {isSubmitting || isGrading ? "Grading…" : "Submit for Grading"}
               </button>
             </>
           )}
 
-          <p style={styles.helperText}>
-            AI scoring isn’t live yet. Submissions land in Firestore so you’ll
-            have a trail once the GPT/Claude graders are hooked in.
-          </p>
+          <div style={styles.rubricPanel}>
+            {isLoadingRubrics ? (
+              <p style={styles.helperText}>Loading rubric references…</p>
+            ) : availableRubrics.length ? (
+              <ul style={styles.rubricList}>
+                {availableRubrics.slice(0, 3).map((rubric) => (
+                  <li key={rubric.id} style={styles.rubricItem}>
+                    <strong>{rubric.title}</strong>
+                    <span style={styles.rubricTags}>
+                      {formatQuestionTypes(rubric.questionTypes)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : rubricError ? (
+              <p style={styles.error}>{rubricError}</p>
+            ) : (
+              <p style={styles.helperText}>
+                Add the course CED PDF so we can align to official rubrics.
+              </p>
+            )}
+          </div>
+
+          {isGrading && (
+            <div style={styles.progressBarContainer} aria-live="polite">
+              <p style={styles.helperText}>Scoring your submission… this can take a few seconds for images.</p>
+              <div style={styles.progressBarTrack}>
+                <div
+                  style={{
+                    ...styles.progressBarIndicator,
+                    width: `${progressWidth}%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {gradeResponse && (
+            <div style={styles.gradeCard}>
+              <div style={styles.gradeHeader}>
+                <h3 style={styles.gradeTitle}>AI Rubric Grade</h3>
+                {gradeResponse?.graded && gradeResponse?.grade?.model && (
+                  <span style={styles.gradeBadge}>{gradeResponse.grade.model}</span>
+                )}
+              </div>
+
+              {grade ? (
+                <>
+                  <div style={styles.gradeStats}>
+                    <div style={styles.gradeStat}>
+                      <span style={styles.statLabel}>Score</span>
+                      <span style={styles.statValue}>
+                        {grade.overallScore !== null
+                          ? `${grade.overallScore}${
+                              grade.maxScore ? ` / ${grade.maxScore}` : ""
+                            }`
+                          : "Pending"}
+                      </span>
+                    </div>
+                    <div style={styles.gradeStat}>
+                      <span style={styles.statLabel}>Level</span>
+                      <span style={styles.statValue}>
+                        {grade.performanceLevel || "—"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {grade.summary && (
+                    <p style={styles.gradeSummary}>{grade.summary}</p>
+                  )}
+
+                  {grade.strengths?.length ? (
+                    <div style={styles.gradeSection}>
+                      <p style={styles.gradeSubheading}>What worked</p>
+                      <ul style={styles.gradeList}>
+                        {grade.strengths.map((item, idx) => (
+                          <li key={`strength-${idx}`} style={styles.gradeListItem}>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
+                  {grade.improvements?.length ? (
+                    <div style={styles.gradeSection}>
+                      <p style={styles.gradeSubheading}>Next steps</p>
+                      <ul style={styles.gradeList}>
+                        {grade.improvements.map((item, idx) => (
+                          <li key={`improvement-${idx}`} style={styles.gradeListItem}>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
+                  {grade.rubricAlignment?.length ? (
+                    <div style={styles.gradeSection}>
+                      <p style={styles.gradeSubheading}>Rubric alignment</p>
+                      <ul style={styles.gradeList}>
+                        {grade.rubricAlignment.map((entry, idx) => (
+                          <li key={`alignment-${idx}`} style={styles.gradeListItem}>
+                            <strong>{entry.criterion}</strong>
+                            <span>
+                              {entry.score !== null
+                                ? ` — ${entry.score}${
+                                    entry.maxScore ? `/${entry.maxScore}` : ""
+                                  }`
+                                : ""}
+                            </span>
+                            <p style={styles.alignmentExplanation}>
+                              {entry.explanation}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <p style={styles.gradeSummary}>
+                  Automated grading not available yet. Once an OpenAI key is
+                  configured, FRQs will be evaluated against the rubric instantly.
+                </p>
+              )}
+
+              {gradingError && <p style={styles.error}>{gradingError}</p>}
+              {!gradeResponse?.graded && grade?.summary && (
+                <p style={styles.pendingNote}>{grade.summary}</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -424,24 +792,34 @@ const styles = {
     margin: 0,
     lineHeight: 1.6,
   },
-  primaryButton: {
-    alignSelf: "flex-start",
-    padding: "0.85rem 1.75rem",
-    backgroundColor: "#0078C8",
-    color: "#FFFFFF",
-    border: "none",
-    borderRadius: "0.85rem",
-    fontWeight: 700,
-    cursor: "pointer",
+  fieldGroup: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
   },
-  secondaryButton: {
-    padding: "0.85rem 1.5rem",
-    backgroundColor: "#E2E8F0",
-    color: "#0F172A",
-    border: "none",
-    borderRadius: "0.85rem",
+  fieldLabel: {
+    fontSize: "0.95rem",
     fontWeight: 600,
-    cursor: "pointer",
+    color: "#334155",
+  },
+  select: {
+    borderRadius: "0.75rem",
+    border: "1px solid rgba(15,23,42,0.12)",
+    padding: "0.75rem",
+    fontSize: "1rem",
+    backgroundColor: "#FFFFFF",
+    color: "#0F172A",
+    fontWeight: 600,
+  },
+  promptArea: {
+    width: "100%",
+    borderRadius: "0.75rem",
+    border: "1px solid rgba(15,23,42,0.12)",
+    padding: "0.85rem",
+    fontSize: "1rem",
+    lineHeight: 1.4,
+    resize: "vertical",
+    minHeight: "120px",
   },
   textarea: {
     width: "100%",
@@ -452,6 +830,31 @@ const styles = {
     lineHeight: 1.6,
     resize: "vertical",
     minHeight: "220px",
+  },
+  primaryButton: {
+    alignSelf: "flex-start",
+    padding: "0.85rem 1.75rem",
+    backgroundColor: "#0078C8",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.85rem",
+    fontWeight: 700,
+    cursor: "pointer",
+    transition: "background-color 0.2s ease",
+  },
+  primaryButtonDisabled: {
+    opacity: 0.75,
+    cursor: "not-allowed",
+    backgroundColor: "#0F4C81",
+  },
+  secondaryButton: {
+    padding: "0.85rem 1.5rem",
+    backgroundColor: "#E2E8F0",
+    color: "#0F172A",
+    border: "none",
+    borderRadius: "0.85rem",
+    fontWeight: 600,
+    cursor: "pointer",
   },
   uploadLabel: {
     display: "inline-flex",
@@ -491,6 +894,133 @@ const styles = {
     fontSize: "0.9rem",
     color: "#64748B",
   },
+  rubricPanel: {
+    borderTop: "1px solid rgba(15,23,42,0.1)",
+    paddingTop: "1rem",
+    marginTop: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.75rem",
+  },
+  rubricList: {
+    listStyle: "none",
+    margin: 0,
+    padding: 0,
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.75rem",
+  },
+  rubricItem: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.4rem",
+    backgroundColor: "#FFFFFF",
+    borderRadius: "0.75rem",
+    padding: "0.75rem 0.9rem",
+    border: "1px solid rgba(148, 163, 184, 0.3)",
+  },
+  rubricTags: {
+    fontSize: "0.85rem",
+    color: "#0369A1",
+    fontWeight: 600,
+  },
+  gradeCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "1rem",
+    padding: "1.5rem",
+    border: "1px solid rgba(148, 163, 184, 0.35)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+  },
+  gradeHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  gradeTitle: {
+    margin: 0,
+    fontSize: "1.1rem",
+    fontWeight: 700,
+    color: "#0F172A",
+  },
+  gradeBadge: {
+    backgroundColor: "#E0F2FE",
+    color: "#0369A1",
+    padding: "0.35rem 0.75rem",
+    borderRadius: "999px",
+    fontSize: "0.85rem",
+    fontWeight: 600,
+  },
+  gradeStats: {
+    display: "flex",
+    gap: "1.5rem",
+    flexWrap: "wrap",
+  },
+  gradeStat: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.25rem",
+  },
+  statLabel: {
+    fontSize: "0.85rem",
+    color: "#64748B",
+    textTransform: "uppercase",
+    letterSpacing: "0.08em",
+  },
+  statValue: {
+    fontSize: "1.3rem",
+    fontWeight: 700,
+    color: "#0F172A",
+  },
+  gradeSummary: {
+    margin: 0,
+    fontSize: "1rem",
+    color: "#334155",
+    lineHeight: 1.6,
+  },
+  gradeSection: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+  },
+  gradeSubheading: {
+    margin: 0,
+    fontSize: "0.95rem",
+    fontWeight: 700,
+    color: "#0F172A",
+  },
+  gradeList: {
+    margin: 0,
+    paddingLeft: "1.1rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.4rem",
+  },
+  gradeListItem: {
+    fontSize: "0.95rem",
+    color: "#334155",
+    lineHeight: 1.5,
+  },
+  alignmentExplanation: {
+    margin: "0.35rem 0 0",
+    fontSize: "0.9rem",
+    color: "#475569",
+    lineHeight: 1.45,
+  },
+  pendingNote: {
+    margin: 0,
+    fontSize: "0.9rem",
+    color: "#475569",
+    backgroundColor: "#F1F5F9",
+    padding: "0.75rem",
+    borderRadius: "0.75rem",
+  },
+  error: {
+    margin: 0,
+    fontSize: "0.9rem",
+    color: "#B91C1C",
+  },
   status: {
     margin: 0,
     fontSize: "0.95rem",
@@ -504,4 +1034,34 @@ const styles = {
     gap: "1rem",
     flexWrap: "wrap",
   },
+  progressBarContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+    marginTop: "1rem",
+  },
+  progressBarTrack: {
+    width: "100%",
+    height: "0.5rem",
+    backgroundColor: "#E2E8F0",
+    borderRadius: "999px",
+    overflow: "hidden",
+  },
+  progressBarIndicator: {
+    width: "35%",
+    height: "100%",
+    backgroundColor: "#0078C8",
+    borderRadius: "999px",
+    transition: "width 0.6s ease-in-out",
+  },
 };
+
+function formatQuestionTypes(types = []) {
+  if (!types.length) return "General rubric";
+  return types
+    .map((type) => {
+      const option = FRQ_TYPE_OPTIONS.find((item) => item.value === type);
+      return option?.label ?? type;
+    })
+    .join(" • ");
+}

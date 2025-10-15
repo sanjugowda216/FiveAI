@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { getCourseById } from "../data/apCourses";
 import { getUnitsForCourse, getQuestionsForUnit } from "../utils/api";
 import QuestionCard from "../components/QuestionCard";
@@ -9,7 +9,6 @@ export default function Practice({
   onEnsureCourseSelection,
   onBackToDashboard,
 }) {
-  const navigate = useNavigate();
   const { courseId } = useParams();
 
   const courseFromRoute = courseId ? getCourseById(courseId) : null;
@@ -17,6 +16,7 @@ export default function Practice({
   const routeCourseId = courseFromRoute?.id ?? null;
   const activeCourse = courseFromRoute ?? selectedCourse ?? null;
   const courseName = activeCourse?.name ?? "your AP course";
+  const activeCourseId = activeCourse?.id ?? null;
 
   // Debug logging
   console.log('Practice component debug:', {
@@ -43,27 +43,18 @@ export default function Practice({
   }, [courseFromRoute, onEnsureCourseSelection, selectedCourseId, routeCourseId]);
 
   // Load units when course is available
-  useEffect(() => {
-    if (activeCourse?.id) {
-      console.log('Loading units for course:', activeCourse.id);
-      loadUnits();
-    } else {
-      console.log('No active course found, not loading units');
-    }
-  }, [activeCourse?.id]);
-
-  const loadUnits = async () => {
-    if (!activeCourse?.id) {
+  const loadUnits = useCallback(async () => {
+    if (!activeCourseId) {
       console.log('No active course ID found');
       return;
     }
     
-    console.log('Loading units for course:', activeCourse.id);
+    console.log('Loading units for course:', activeCourseId);
     setLoading(true);
     setError(null);
     
     try {
-      const response = await getUnitsForCourse(activeCourse.id);
+      const response = await getUnitsForCourse(activeCourseId);
       setUnits(response.units || []);
     } catch (err) {
       setError(err.message);
@@ -71,14 +62,28 @@ export default function Practice({
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeCourseId]);
+
+  useEffect(() => {
+    if (activeCourseId) {
+      console.log('Loading units for course:', activeCourseId);
+      loadUnits();
+    } else {
+      console.log('No active course found, not loading units');
+    }
+  }, [activeCourseId, loadUnits]);
 
   const handleUnitSelect = async (unit) => {
+    if (!activeCourseId) {
+      setError('Course not available for practice.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     
     try {
-      const response = await getQuestionsForUnit(activeCourse.id, unit.number);
+      const response = await getQuestionsForUnit(activeCourseId, unit.number);
       setQuestions(response.questions || []);
       setSelectedUnit(unit);
       setCurrentQuestionIndex(0);

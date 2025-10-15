@@ -1,5 +1,5 @@
 // frontend/src/pages/Home.jsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 /**
  * Home.jsx
@@ -29,12 +29,15 @@ export default function Home() {
   const canvasRef = useRef(null);
 
   // Typing phrases (short, crisp)
-  const phrases = [
-    "Smarter studying starts here",
-    "Your AI companion for every AP course",
-    "Instant feedback. Clear explanations.",
-    "Built by students, for students",
-  ];
+  const phrases = useMemo(
+    () => [
+      "Smarter studying starts here",
+      "Your AI companion for every AP course",
+      "Instant feedback. Clear explanations.",
+      "Built by students, for students",
+    ],
+    []
+  );
 
   // Typing effect
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function Home() {
     }, delay);
 
     return () => clearTimeout(t);
-  }, [typingText, isDeleting, phraseIndex]);
+  }, [typingText, isDeleting, phraseIndex, phrases]);
 
   // Simple particle system for hero background (no external libs)
   useEffect(() => {

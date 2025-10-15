@@ -1,0 +1,84 @@
+[
+  {
+    "id": "84223a59-e41e-4cc1-ab59-db6867f38243",
+    "courseId": "ap-world-history",
+    "courseName": "AP World History: Modern",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-265",
+      "rubric-268",
+      "rubric-279"
+    ],
+    "grade": {
+      "graded": false,
+      "model": null,
+      "overallScore": null,
+      "maxScore": null,
+      "performanceLevel": "pending",
+      "summary": "Automated grader encountered an error. Please try again later.",
+      "strengths": [],
+      "improvements": [],
+      "rubricAlignment": []
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI/backend/data/frq_uploads/84223a59-e41e-4cc1-ab59-db6867f38243.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-14T23:44:41.222Z"
+  },
+  {
+    "id": "297d83ce-4024-4eec-b172-35234b8033ac",
+    "courseId": "ap-world-history",
+    "courseName": "AP World History: Modern",
+    "questionType": "saq",
+    "questionPrompt": "Identify and explain one way in which the Columbian Exchange affected the Americas, and one way it affected Afro-Eurasia during the period 1450–1750.",
+    "responseText": "In the Americas, the Columbian Exchange led to drastic population decline as diseases like smallpox, brought by Europeans, devastated Indigenous communities with no immunity. In contrast, Afro-Eurasia benefited from the introduction of New World crops such as maize and potatoes, which increased agricultural productivity and supported population growth in Europe and parts of Africa.",
+    "rubricSegmentIds": [
+      "rubric-302",
+      "rubric-323",
+      "rubric-326"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 2,
+      "maxScore": 3,
+      "performanceLevel": "Proficient",
+      "summary": "The student provided a clear identification and explanation of the effects of the Columbian Exchange on both the Americas and Afro-Eurasia. However, the response lacked depth in the explanation of the impacts, which limited the overall score.",
+      "strengths": [
+        "Identified a significant impact of the Columbian Exchange on the Americas (population decline due to disease).",
+        "Mentioned the positive effects on agricultural productivity in Afro-Eurasia due to New World crops."
+      ],
+      "improvements": [
+        "Expand on the explanation of how the introduction of crops in Afro-Eurasia specifically led to population growth and changes in society.",
+        "Provide more detailed analysis or examples to support the claims made about the impacts in both regions."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Identify one way in which the Columbian Exchange affected the Americas.",
+          "score": 1,
+          "maxScore": 1,
+          "explanation": "The student correctly identified the drastic population decline in the Americas due to diseases brought by Europeans."
+        },
+        {
+          "criterion": "Explain one way in which the Columbian Exchange affected Afro-Eurasia.",
+          "score": 1,
+          "maxScore": 1,
+          "explanation": "The student explained how the introduction of New World crops like maize and potatoes increased agricultural productivity in Afro-Eurasia."
+        },
+        {
+          "criterion": "Depth of explanation and analysis.",
+          "score": 0,
+          "maxScore": 1,
+          "explanation": "The response lacked depth and specific examples in the explanations, which limited the overall effectiveness of the argument."
+        }
+      ]
+    },
+    "image": null,
+    "createdAt": "2025-10-14T23:49:12.913Z"
+  }
+]

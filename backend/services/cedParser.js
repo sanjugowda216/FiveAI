@@ -9,6 +9,86 @@ const CEDS_DIR = path.join(process.cwd(), 'ceds');
 // Store parsed CED content in memory
 const cedContent = new Map();
 
+// Keywords and patterns used to identify rubric sections
+const RUBRIC_KEYWORDS = [
+  'scoring rubric',
+  'scoring guidelines',
+  'free-response question',
+  'frq rubric',
+  'essay rubric',
+  'long essay question',
+  'document-based question',
+  'dbq rubric',
+  'leq rubric',
+  'short-answer question',
+  'saq rubric',
+  'performance task rubric',
+  'performance task scoring',
+  'evaluation rubric',
+  'analytic rubric',
+  'holistic rubric'
+];
+
+const QUESTION_TYPE_PATTERNS = [
+  {
+    id: 'dbq',
+    label: 'Document-Based Question (DBQ)',
+    patterns: [/document[-\s]*based question/i, /\bdbq\b/i]
+  },
+  {
+    id: 'leq',
+    label: 'Long Essay Question (LEQ)',
+    patterns: [/long essay question/i, /\bleq\b/i]
+  },
+  {
+    id: 'saq',
+    label: 'Short-Answer Question (SAQ)',
+    patterns: [/short[-\s]*answer question/i, /\bsaq\b/i]
+  },
+  {
+    id: 'argument-essay',
+    label: 'Argument Essay',
+    patterns: [/argument essay/i]
+  },
+  {
+    id: 'synthesis-essay',
+    label: 'Synthesis Essay',
+    patterns: [/synthesis essay/i]
+  },
+  {
+    id: 'rhetorical-analysis',
+    label: 'Rhetorical Analysis',
+    patterns: [/rhetorical analysis/i]
+  },
+  {
+    id: 'research-presentation',
+    label: 'Research Presentation',
+    patterns: [/presentation rubric/i, /research presentation/i]
+  },
+  {
+    id: 'performance-task',
+    label: 'Performance Task',
+    patterns: [/performance task/i]
+  },
+  {
+    id: 'general',
+    label: 'General Free-Response Guidance',
+    patterns: [/free-response/i, /essay question/i, /writing rubric/i]
+  }
+];
+
+const STOP_WORDS = new Set([
+  'the','and','for','with','that','from','this','which','their','will','into',
+  'have','include','includes','including','such','should','must','each','students',
+  'student','score','scoring','points','point','criteria','criterion','may','also',
+  'use','using','used','through','your','they','them','there','where','when','what',
+  'been','being','are','were','was','has','had','but','because','about','across',
+  'within','make','makes','made','show','shows','provide','provided','provides',
+  'demonstrate','demonstrates','demonstrated','explain','explains','explained',
+  'analysis','analyze','analyzes','clearly','adequate','adequately','related',
+  'relevant','support','supports','supporting','evidence','example','examples'
+]);
+
 /**
  * Discover all CED PDF files in the ceds directory
  */
@@ -70,11 +150,13 @@ export async function parseCedFile(filepath) {
     
     // Extract unit structure
     const units = extractUnits(chunks);
+    const rubrics = extractRubrics(chunks);
     
     console.log(`Parsed ${chunks.length} chunks, found ${units.size} units`);
     return {
       chunks,
       units,
+      rubrics,
       fullText,
       hash: generateFileHash(filepath)
     };
@@ -264,4 +346,230 @@ export function getCedHash(courseId) {
  */
 export function hasCourseData(courseId) {
   return cedContent.has(courseId);
+}
+
+/**
+ * Extract rubric segments from CED content
+ */
+function extractRubrics(chunks) {
+  const rubrics = [];
+  const usedIndices = new Set();
+
+  chunks.forEach((chunk, index) => {
+    if (usedIndices.has(index)) {
+      return;
+    }
+
+    const normalized = chunk.toLowerCase();
+    const matchesKeyword = RUBRIC_KEYWORDS.some(keyword => normalized.includes(keyword));
+
+    if (!matchesKeyword) {
+      return;
+    }
+
+    const windowChunks = [chunk];
+    const collectedIndices = [index];
+
+    // Capture adjacent chunks if they likely continue the rubric section
+    for (let offset = 1; offset <= 2; offset++) {
+      const nextIndex = index + offset;
+      if (nextIndex < chunks.length) {
+        const nextChunk = chunks[nextIndex];
+        const nextNormalized = nextChunk.toLowerCase();
+        const continuation = RUBRIC_KEYWORDS.some(keyword => nextNormalized.includes(keyword)) ||
+          nextNormalized.includes('score point') ||
+          nextNormalized.includes('score of') ||
+          nextNormalized.includes('points for') ||
+          nextNormalized.includes('earning');
+
+        if (continuation) {
+          windowChunks.push(nextChunk);
+          collectedIndices.push(nextIndex);
+        } else if (offset === 1) {
+          // Include immediate context even if no keywords for readability
+          windowChunks.push(nextChunk);
+          collectedIndices.push(nextIndex);
+        }
+      }
+    }
+
+    collectedIndices.forEach(i => usedIndices.add(i));
+
+    const combinedContent = windowChunks.join('\n\n');
+    const title = extractRubricTitle(combinedContent);
+    const questionTypes = detectQuestionTypes(combinedContent);
+    const keywordSet = buildKeywordSet(combinedContent);
+
+    const rubric = {
+      id: `rubric-${index}`,
+      title,
+      questionTypes,
+      content: combinedContent,
+      preview: generatePreview(combinedContent),
+      chunkIndices: collectedIndices,
+      keywords: Array.from(keywordSet)
+    };
+
+    Object.defineProperty(rubric, 'keywordSet', {
+      value: keywordSet,
+      enumerable: false,
+      configurable: false,
+      writable: false
+    });
+
+    rubrics.push(rubric);
+  });
+
+  return rubrics;
+}
+
+/**
+ * Extract a reasonable title for a rubric section
+ */
+function extractRubricTitle(content) {
+  const lines = content
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  for (const line of lines) {
+    const upperCaseLine = line.toUpperCase();
+    if (
+      (upperCaseLine.includes('RUBRIC') || upperCaseLine.includes('SCORING')) &&
+      line.length <= 120
+    ) {
+      return normalizeTitle(line);
+    }
+    if (upperCaseLine.includes('FREE-RESPONSE') && line.length <= 120) {
+      return normalizeTitle(line);
+    }
+  }
+
+  return 'Rubric Guidance';
+}
+
+function normalizeTitle(title) {
+  if (!title) return 'Rubric Guidance';
+  const cleaned = title
+    .replace(/\s+/g, ' ')
+    .replace(/[\u2022\u2023\u25E6\u2043\u2219]/g, '')
+    .trim();
+  if (!cleaned) return 'Rubric Guidance';
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+}
+
+/**
+ * Detect likely question types referenced by the rubric
+ */
+function detectQuestionTypes(content) {
+  const types = new Set();
+  QUESTION_TYPE_PATTERNS.forEach(({ id, patterns }) => {
+    if (patterns.some(pattern => pattern.test(content))) {
+      types.add(id);
+    }
+  });
+
+  if (types.size === 0) {
+    types.add('general');
+  }
+
+  return Array.from(types);
+}
+
+/**
+ * Build keyword set for a rubric chunk
+ */
+function buildKeywordSet(content) {
+  const words = content
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(token => token.length > 3 && !STOP_WORDS.has(token));
+
+  return new Set(words);
+}
+
+function generatePreview(content, length = 420) {
+  const cleaned = content.replace(/\s+/g, ' ').trim();
+  if (cleaned.length <= length) return cleaned;
+  return `${cleaned.slice(0, length)}…`;
+}
+
+/**
+ * Get raw rubric segments for a course
+ */
+export function getRubricSegments(courseId) {
+  const courseData = cedContent.get(courseId);
+  if (!courseData?.rubrics) {
+    return [];
+  }
+  return courseData.rubrics;
+}
+
+/**
+ * Return rubric segments most relevant to a question/prompt
+ */
+export function findRelevantRubrics(courseId, { questionType, prompt = '', responseText = '' } = {}) {
+  const courseData = cedContent.get(courseId);
+  if (!courseData?.rubrics) {
+    return [];
+  }
+
+  const allRubrics = courseData.rubrics;
+  if (allRubrics.length === 0) {
+    return [];
+  }
+
+  const scored = allRubrics.map(segment => {
+    const score = scoreRubricSegment(segment, questionType, prompt, responseText);
+    return { segment, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  const topSegments = scored
+    .filter(item => item.score > 0)
+    .slice(0, 3)
+    .map(item => item.segment);
+
+  if (topSegments.length > 0) {
+    return topSegments;
+  }
+
+  // Fallback: return up to first 2 general rubrics
+  const generalRubrics = allRubrics.filter(segment => segment.questionTypes.includes('general'));
+  if (generalRubrics.length > 0) {
+    return generalRubrics.slice(0, 2);
+  }
+
+  return allRubrics.slice(0, 2);
+}
+
+function scoreRubricSegment(segment, questionType, prompt, responseText) {
+  let score = 0;
+
+  if (questionType && segment.questionTypes.includes(questionType)) {
+    score += 8;
+  } else if (segment.questionTypes.includes('general')) {
+    score += 2;
+  }
+
+  const promptKeywords = buildKeywordSet(`${prompt} ${responseText}`);
+  promptKeywords.forEach(keyword => {
+    if (segment.keywordSet.has(keyword)) {
+      score += 1;
+    }
+  });
+
+  if (prompt && segment.title) {
+    const normalizedPrompt = prompt.toLowerCase();
+    const normalizedTitle = segment.title.toLowerCase();
+    if (normalizedPrompt.includes(normalizedTitle) || normalizedTitle.includes(normalizedPrompt)) {
+      score += 5;
+    }
+  }
+
+  // Slight preference for rubrics with fewer chunk indices (more focused)
+  score -= segment.chunkIndices.length * 0.1;
+
+  return score;
 }

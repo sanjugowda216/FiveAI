@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import questionRoutes from "./routes/questionRoutes.js";
+import frqRoutes from "./routes/frqRoutes.js";
 import { initializeCedParsing } from "./services/cedParser.js";
 
 dotenv.config();
@@ -14,7 +15,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 // Simple test route
 app.get("/", (req, res) => {
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 // Mount question routes
 app.use("/api/questions", questionRoutes);
+app.use("/api/frq", frqRoutes);
 
 // Initialize CED parsing on startup
 async function startServer() {
