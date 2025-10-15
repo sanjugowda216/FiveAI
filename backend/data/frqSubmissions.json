@@ -1307,5 +1307,62 @@
       "size": 421958
     },
     "createdAt": "2025-10-15T01:17:43.624Z"
+  },
+  {
+    "id": "04232d1c-7cad-47b9-8b8f-7bf7c9a1914e",
+    "courseId": "ap-united-states-history",
+    "courseName": "AP United States History",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-866",
+      "rubric-869",
+      "rubric-885"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 4,
+      "maxScore": 6,
+      "performanceLevel": "Proficient",
+      "summary": "The student demonstrates a basic understanding of economic developments related to the Industrial Revolution and the Opium Wars. However, the response lacks depth and specific evidence to fully support the claims made. The handwriting is legible, but the ideas could be more clearly articulated and connected.",
+      "strengths": [
+        "Identified the Industrial Revolution as a significant economic development.",
+        "Mentioned the Opium Wars and their impact on China."
+      ],
+      "improvements": [
+        "Provide more specific examples and evidence to support claims.",
+        "Clarify connections between the Industrial Revolution and trade in China.",
+        "Enhance the explanation of the Opium Wars and their consequences."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Make a historically defensible claim.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The student makes claims about the Industrial Revolution and the Opium Wars but does not fully develop them into defensible arguments."
+        },
+        {
+          "criterion": "Support an argument using specific and relevant evidence.",
+          "score": 1,
+          "maxScore": 3,
+          "explanation": "The evidence provided is vague and lacks specific examples that would strengthen the argument."
+        },
+        {
+          "criterion": "Use historical reasoning to explain relationships among pieces of historical evidence.",
+          "score": 1,
+          "maxScore": 2,
+          "explanation": "The response does not effectively explain the relationships between the Industrial Revolution and trade or the Opium Wars."
+        }
+      ]
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI-1/backend/data/frq_uploads/04232d1c-7cad-47b9-8b8f-7bf7c9a1914e.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-15T01:26:37.257Z"
   }
 ]
