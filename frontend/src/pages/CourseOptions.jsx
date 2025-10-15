@@ -189,17 +189,63 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
     try {
       const response = await submitFrqForGrading(payload);
       setGradeResponse(response);
+      
+      // Save FRQ submission to localStorage for stats tracking
+      if (response && course?.id) {
+        saveFrqSubmissionToStats(course.id, payload, response);
+      }
+      
       return response;
     } catch (error) {
       console.error("Grading request failed", error);
       setGradeResponse(null);
       setGradingError(
         error?.message ??
-          "We couldn’t get a grade from the server. Try again in a moment."
+          "We couldn't get a grade from the server. Try again in a moment."
       );
       throw error;
     } finally {
       setIsGrading(false);
+    }
+  };
+
+  const saveFrqSubmissionToStats = (courseId, payload, response) => {
+    try {
+      // Get existing FRQ submissions
+      const existingSubmissions = JSON.parse(localStorage.getItem('frqSubmissions') || '{}');
+      
+      // Initialize course submissions if not exists
+      if (!existingSubmissions[courseId]) {
+        existingSubmissions[courseId] = [];
+      }
+      
+      // Create submission record
+      const submission = {
+        id: Date.now().toString(),
+        createdAt: new Date().toISOString(),
+        questionType: payload.questionType,
+        prompt: payload.prompt,
+        responseText: payload.responseText,
+        hasImage: !!payload.imageData,
+        imageName: payload.imageName,
+        grade: response?.grade || null,
+        graded: response?.graded || false
+      };
+      
+      // Add to submissions array
+      existingSubmissions[courseId].push(submission);
+      
+      // Keep only last 50 submissions per course
+      if (existingSubmissions[courseId].length > 50) {
+        existingSubmissions[courseId] = existingSubmissions[courseId].slice(-50);
+      }
+      
+      // Save back to localStorage
+      localStorage.setItem('frqSubmissions', JSON.stringify(existingSubmissions));
+      
+      console.log('Saved FRQ submission for', courseId, ':', submission);
+    } catch (error) {
+      console.error('Error saving FRQ submission to stats:', error);
     }
   };
 

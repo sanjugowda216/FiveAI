@@ -1364,5 +1364,241 @@
       "size": 421958
     },
     "createdAt": "2025-10-15T01:26:37.257Z"
+  },
+  {
+    "id": "c4430b41-3ab1-4bec-93a7-9f3ed8faef07",
+    "courseId": "ap-world-history",
+    "courseName": "AP World History: Modern",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-265",
+      "rubric-268",
+      "rubric-279"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 6,
+      "maxScore": 9,
+      "performanceLevel": "Proficient",
+      "summary": "The student demonstrates a solid understanding of the economic developments related to industrialization and the Opium Wars, but lacks depth in analysis and specificity in evidence. The response addresses the prompt but could benefit from clearer connections between claims and evidence.",
+      "strengths": [
+        "Identified the industrial revolution as a significant economic development.",
+        "Mentioned the Opium Wars and their impact on China's trade dynamics."
+      ],
+      "improvements": [
+        "Provide more specific examples of how industrialization directly affected China.",
+        "Clarify the connections between the Opium Wars and the resulting changes in trade and influence."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Make a historically defensible claim.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The student makes claims about industrialization and the Opium Wars but lacks a clear, defensible thesis that connects these ideas."
+        },
+        {
+          "criterion": "Support an argument using specific and relevant evidence.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The response includes relevant evidence but lacks specificity and depth in explaining how this evidence supports the claims."
+        },
+        {
+          "criterion": "Use historical reasoning to explain relationships among pieces of historical evidence.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The student attempts to connect evidence but does not fully explain the relationships or implications of these connections."
+        }
+      ]
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI-1/backend/data/frq_uploads/c4430b41-3ab1-4bec-93a7-9f3ed8faef07.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-15T01:34:32.191Z"
+  },
+  {
+    "id": "5b5546bf-384f-4f55-8a21-7ce274c65df2",
+    "courseId": "ap-research",
+    "courseName": "AP Research",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-15",
+      "rubric-83"
+    ],
+    "grade": {
+      "graded": false,
+      "model": null,
+      "overallScore": 0,
+      "maxScore": 7,
+      "performanceLevel": "Needs Improvement",
+      "summary": "Automated grader encountered an error. Please try again later.",
+      "strengths": [],
+      "improvements": [
+        "Please provide a more complete response to receive a proper grade"
+      ],
+      "rubricAlignment": []
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI-1/backend/data/frq_uploads/5b5546bf-384f-4f55-8a21-7ce274c65df2.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-15T01:37:56.381Z"
+  },
+  {
+    "id": "f206c3d0-f29b-4277-8f80-da22ce12321c",
+    "courseId": "ap-research",
+    "courseName": "AP Research",
+    "questionType": "general",
+    "questionPrompt": "hello",
+    "responseText": "hello",
+    "rubricSegmentIds": [
+      "rubric-15",
+      "rubric-83"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 0,
+      "maxScore": 5,
+      "performanceLevel": "Unsatisfactory",
+      "summary": "The submission does not meet any of the criteria for evaluation as it consists solely of a greeting and lacks any content related to the AP Research course or its requirements. There are no responses to the prompt or evidence of understanding of the course material.",
+      "strengths": [],
+      "improvements": [
+        "Provide a detailed response relevant to the AP Research course.",
+        "Include specific examples of research topics or methodologies.",
+        "Engage with the course content to demonstrate understanding."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Disciplinary Focus",
+          "score": 0,
+          "maxScore": 5,
+          "explanation": "The response does not demonstrate any understanding of the disciplinary focus required for AP Research."
+        },
+        {
+          "criterion": "Internship",
+          "score": 0,
+          "maxScore": 5,
+          "explanation": "There is no mention of any internship or research project, which is a key component of the course."
+        },
+        {
+          "criterion": "General",
+          "score": 0,
+          "maxScore": 5,
+          "explanation": "The submission does not reflect any understanding of research methods or inquiry, which are central to the course."
+        }
+      ]
+    },
+    "image": null,
+    "createdAt": "2025-10-15T01:38:17.463Z"
+  },
+  {
+    "id": "b5ff95a4-2791-4446-b4f0-ceade9161d72",
+    "courseId": "ap-psychology",
+    "courseName": "AP Psychology",
+    "questionType": "general",
+    "questionPrompt": "Test prompt",
+    "responseText": "This is a test response about psychology concepts.",
+    "rubricSegmentIds": [
+      "rubric-281",
+      "rubric-242",
+      "rubric-260"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 0,
+      "maxScore": 7,
+      "performanceLevel": "Needs Improvement",
+      "summary": "The student response does not address the prompt adequately. There is no identification of the research method or the operational definition of executive functioning, which are critical components of the rubric. As a result, the response earns no points.",
+      "strengths": [],
+      "improvements": [
+        "Clearly identify the research method used in the study.",
+        "Provide a measurable or quantifiable definition of the identified variable.",
+        "Ensure to address all parts of the question as outlined in the prompt."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Part A Research Method",
+          "score": 0,
+          "maxScore": 1,
+          "explanation": "The response does not accurately identify the research method used in the study."
+        },
+        {
+          "criterion": "Part B Research Variable",
+          "score": 0,
+          "maxScore": 1,
+          "explanation": "The response does not state a measurable or quantifiable definition of the identified variable used in the study."
+        }
+      ]
+    },
+    "image": null,
+    "createdAt": "2025-10-15T01:42:02.379Z"
+  },
+  {
+    "id": "535671f6-07c2-4f1f-8067-d71d9cfa9b13",
+    "courseId": "ap-world-history",
+    "courseName": "AP World History: Modern",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-265",
+      "rubric-268",
+      "rubric-279"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 4,
+      "maxScore": 6,
+      "performanceLevel": "Proficient",
+      "summary": "The student demonstrates a basic understanding of the economic developments related to industrialization and the Opium Wars, but lacks depth in analysis and supporting evidence. The response addresses the prompt but does not fully develop a cohesive argument or provide specific examples to strengthen the claims.",
+      "strengths": [
+        "Identified the industrial revolution as a significant economic development.",
+        "Mentioned the impact of the Opium Wars on China's trade and spheres of influence."
+      ],
+      "improvements": [
+        "Provide more specific examples and details to support claims.",
+        "Develop a clearer argument that connects the points made in each part of the response.",
+        "Use historical reasoning to explain the relationships between the events discussed."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Make a historically defensible claim.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The student makes a claim about the industrial revolution and the Opium Wars but does not fully articulate a defensible position or connect the claims effectively."
+        },
+        {
+          "criterion": "Support an argument using specific and relevant evidence.",
+          "score": 1,
+          "maxScore": 3,
+          "explanation": "The evidence provided is relevant but lacks specificity and depth, which weakens the overall argument."
+        },
+        {
+          "criterion": "Use historical reasoning to explain relationships among pieces of historical evidence.",
+          "score": 1,
+          "maxScore": 3,
+          "explanation": "The response touches on relationships between events but does not fully explain how they connect or the significance of those connections."
+        }
+      ]
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI-1/backend/data/frq_uploads/535671f6-07c2-4f1f-8067-d71d9cfa9b13.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-15T01:43:47.405Z"
   }
 ]

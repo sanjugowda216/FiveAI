@@ -104,7 +104,10 @@ export async function gradeFrqSubmission({
       ? aiResponse.content.map(part => part?.text ?? '').join(' ')
       : aiResponse.content;
 
-    const parsed = await outputParser.parse(rawContent);
+    // Clean the content to handle markdown-wrapped JSON
+    const cleanedContent = cleanJsonContent(rawContent);
+
+    const parsed = await outputParser.parse(cleanedContent);
 
     return {
       graded: true,
@@ -115,6 +118,26 @@ export async function gradeFrqSubmission({
     console.error('FRQ grading failed:', error);
     return buildFallbackGrade('Automated grader encountered an error. Please try again later.');
   }
+}
+
+function cleanJsonContent(content) {
+  if (!content) return content;
+  
+  // Remove markdown code block wrappers
+  let cleaned = content.trim();
+  
+  // Remove ```json and ``` wrappers
+  if (cleaned.startsWith('```json')) {
+    cleaned = cleaned.substring(7);
+  } else if (cleaned.startsWith('```')) {
+    cleaned = cleaned.substring(3);
+  }
+  
+  if (cleaned.endsWith('```')) {
+    cleaned = cleaned.substring(0, cleaned.length - 3);
+  }
+  
+  return cleaned.trim();
 }
 
 function buildFallbackGrade(summary) {

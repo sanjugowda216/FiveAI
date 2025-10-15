@@ -153,6 +153,7 @@ export default function Practice({
           onBackToUnits={handleBackToUnits}
           canGoNext={currentQuestionIndex < questions.length - 1}
           canGoPrevious={currentQuestionIndex > 0}
+          courseId={activeCourseId}
         />
       </section>
     );
