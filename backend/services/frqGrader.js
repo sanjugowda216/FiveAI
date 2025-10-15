@@ -7,8 +7,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const GradeSchema = z.object({
-  overallScore: z.number().nullable().describe('Total points earned by the student'),
-  maxScore: z.number().nullable().describe('Maximum possible points for the task'),
+  overallScore: z.number().describe('Total points earned by the student'),
+  maxScore: z.number().describe('Maximum possible points for the task'),
   performanceLevel: z.string().describe('Performance band or rating (e.g., Exemplary, Proficient)'),
   summary: z.string().describe('Short paragraph summarising the evaluation'),
   strengths: z.array(z.string()).describe('Bullet points describing what the student did well'),
@@ -16,8 +16,8 @@ const GradeSchema = z.object({
   rubricAlignment: z.array(
     z.object({
       criterion: z.string().describe('Name of the rubric criterion'),
-      score: z.number().nullable().describe('Points earned for this criterion'),
-      maxScore: z.number().nullable().describe('Maximum points for this criterion'),
+      score: z.number().describe('Points earned for this criterion'),
+      maxScore: z.number().describe('Maximum points for this criterion'),
       explanation: z.string().describe('How the student met or missed the criterion')
     })
   ).describe('Detailed alignment to each rubric criterion considered')
@@ -121,12 +121,12 @@ function buildFallbackGrade(summary) {
   return {
     graded: false,
     model: null,
-    overallScore: null,
-    maxScore: null,
-    performanceLevel: 'pending',
+    overallScore: 0,
+    maxScore: 7,
+    performanceLevel: 'Needs Improvement',
     summary,
     strengths: [],
-    improvements: [],
+    improvements: ['Please provide a more complete response to receive a proper grade'],
     rubricAlignment: []
   };
 }

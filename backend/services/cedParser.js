@@ -269,7 +269,8 @@ function createDefaultUnits(chunks) {
  * Get unit content for a specific course and unit
  */
 export function getUnitContent(courseId, unitNumber) {
-  const courseData = cedContent.get(courseId);
+  const cedId = mapCourseIdToCedId(courseId);
+  const courseData = cedContent.get(cedId);
   if (!courseData) {
     return null;
   }
@@ -297,7 +298,8 @@ export function getUnitContent(courseId, unitNumber) {
  * Get all available units for a course
  */
 export function getAvailableUnits(courseId) {
-  const courseData = cedContent.get(courseId);
+  const cedId = mapCourseIdToCedId(courseId);
+  const courseData = cedContent.get(cedId);
   if (!courseData) {
     return [];
   }
@@ -342,10 +344,40 @@ export function getCedHash(courseId) {
 }
 
 /**
+ * Map frontend course IDs to backend CED file names
+ */
+function mapCourseIdToCedId(courseId) {
+  const courseMapping = {
+    'ap-psychology': 'ap-psychology-ced',
+    'ap-human-geography': 'ap-human-geography-ced',
+    'ap-macroeconomics': 'ap-macroeconomics-ced',
+    'ap-microeconomics': 'ap-microeconomics-ced',
+    'ap-us-government-and-politics': 'ap-us-government-and-politics-ced',
+    'ap-comparative-government-and-politics': 'ap-comparative-government-and-politics-ced',
+    'ap-united-states-history': 'ap-united-states-history',
+    'ap-world-history': 'ap-world-history',
+    'ap-european-history': 'ap-european-history',
+    'ap-english-language': 'ap-english-language',
+    'ap-english-literature': 'ap-english-literature',
+    'ap-art-history': 'ap-art-history',
+    'ap-drawing': 'ap-drawing',
+    'ap-studio-art-2d': 'ap-studio-art-2d',
+    'ap-studio-art-3d': 'ap-studio-art-3d',
+    'ap-music-theory': 'ap-music-theory',
+    'ap-research': 'ap-research',
+    'ap-seminar': 'ap-seminar',
+    'ap-african-american-studies': 'ap-african-american-studies'
+  };
+  
+  return courseMapping[courseId] || courseId;
+}
+
+/**
  * Check if a course has been parsed
  */
 export function hasCourseData(courseId) {
-  return cedContent.has(courseId);
+  const cedId = mapCourseIdToCedId(courseId);
+  return cedContent.has(cedId);
 }
 
 /**
@@ -499,7 +531,8 @@ function generatePreview(content, length = 420) {
  * Get raw rubric segments for a course
  */
 export function getRubricSegments(courseId) {
-  const courseData = cedContent.get(courseId);
+  const cedId = mapCourseIdToCedId(courseId);
+  const courseData = cedContent.get(cedId);
   if (!courseData?.rubrics) {
     return [];
   }
@@ -510,12 +543,30 @@ export function getRubricSegments(courseId) {
  * Return rubric segments most relevant to a question/prompt
  */
 export function findRelevantRubrics(courseId, { questionType, prompt = '', responseText = '' } = {}) {
-  const courseData = cedContent.get(courseId);
+  const cedId = mapCourseIdToCedId(courseId);
+  const courseData = cedContent.get(cedId);
   if (!courseData?.rubrics) {
     return [];
   }
 
-  const allRubrics = courseData.rubrics;
+  // Filter out unwanted rubric segments
+  const unwantedPatterns = [
+    'Document-Based Question (DBQ) • Short-Answer Question (SAQ)',
+    'Question, as well as scoring guidelines and student samples, is also available on',
+    'Long Essay Question (LEQ) • General FRQ / Essay',
+    'Change fostered by innovation',
+    'This essay with full scoring guides and',
+    'also for the score'
+  ];
+
+  const allRubrics = courseData.rubrics.filter(segment => {
+    const title = segment.title?.toLowerCase() || '';
+    const content = segment.content?.toLowerCase() || '';
+    return !unwantedPatterns.some(pattern => 
+      title.includes(pattern.toLowerCase()) || content.includes(pattern.toLowerCase())
+    );
+  });
+
   if (allRubrics.length === 0) {
     return [];
   }

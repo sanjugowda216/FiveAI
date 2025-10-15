@@ -816,5 +816,85 @@
       "generatedAt": "2025-10-13T21:19:46.404Z",
       "cedHash": "bdb85021f08d87347b89cd9f82d7b71d"
     }
+  },
+  "ap-psychology": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which part of the brain is primarily responsible for regulating basic life functions such as breathing and heart rate?",
+          "options": [
+            "A) Cerebellum",
+            "B) Medulla Oblongata",
+            "C) Hippocampus",
+            "D) Thalamus"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Medulla Oblongata is responsible for autonomic functions such as breathing and heart rate regulation."
+        },
+        {
+          "id": "q2",
+          "question": "What term describes the process by which neurotransmitters are reabsorbed by the neuron that released them?",
+          "options": [
+            "A) Reuptake",
+            "B) Synaptic transmission",
+            "C) Neurogenesis",
+            "D) Reflex arc"
+          ],
+          "correctAnswer": "A",
+          "explanation": "Reuptake is the process by which neurotransmitters are reabsorbed into the presynaptic neuron after they have transmitted a signal across the synapse."
+        },
+        {
+          "id": "q3",
+          "question": "If a researcher is studying the impact of brain damage to the frontal lobe on decision-making abilities, which of the following research methods would likely be most appropriate?",
+          "options": [
+            "A) Case study",
+            "B) Survey",
+            "C) Experimental",
+            "D) Longitudinal"
+          ],
+          "correctAnswer": "A",
+          "explanation": "A case study is ideal for examining the effects of specific brain damage on individual behavior and cognitive functions."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following neurotransmitters is most closely associated with mood regulation and is often linked to depression?",
+          "options": [
+            "A) Acetylcholine",
+            "B) Serotonin",
+            "C) Dopamine",
+            "D) Norepinephrine"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Serotonin plays a crucial role in mood regulation, and low levels of serotonin are often associated with depression."
+        },
+        {
+          "id": "q5",
+          "question": "What is the primary function of the limbic system in the brain?",
+          "options": [
+            "A) Motor control",
+            "B) Memory and emotion",
+            "C) Vision processing",
+            "D) Language comprehension"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The limbic system is primarily involved in the processing of emotions and memory."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best describes the role of the autonomic nervous system?",
+          "options": [
+            "A) Controls voluntary muscle movements",
+            "B) Regulates involuntary bodily functions",
+            "C) Manages sensory information",
+            "D) Coordinates cognitive tasks"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The autonomic nervous system regulates involuntary bodily functions such as heart rate, digestion, and respiratory rate."
+        }
+      ],
+      "generatedAt": "2025-10-15T00:49:35.184Z",
+      "cedHash": null
+    }
   }
 }

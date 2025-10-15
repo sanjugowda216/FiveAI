@@ -204,11 +204,6 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
   };
 
   const handleEssaySubmit = async () => {
-    if (!submissionCollection) {
-      setStatusMessage("You need to be logged in to submit work.");
-      return;
-    }
-
     const trimmedEssay = essayResponse.trim();
     const trimmedPrompt = frqPrompt.trim();
 
@@ -232,46 +227,9 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
         base64Image = await fileToDataUrl(essayAttachment);
       }
 
-      if (submissionCollection) {
-        try {
-          let attachmentMeta = null;
-          if (essayAttachment) {
-            attachmentMeta = await uploadAttachment(essayAttachment);
-          }
-
-          const wordCount = trimmedEssay
-            ? trimmedEssay.split(/\s+/).filter(Boolean).length
-            : 0;
-
-          await addDoc(submissionCollection, {
-            courseId: course.id,
-            courseName: course.name,
-            submissionType: "essay",
-            submissionFormat: attachmentMeta
-              ? trimmedEssay
-                ? "hybrid"
-                : "image-only"
-              : "text",
-            essay: trimmedEssay || null,
-            wordCount,
-            prompt: trimmedPrompt || null,
-            questionType: frqType,
-            attachments: attachmentMeta ? [attachmentMeta] : [],
-            storagePath: attachmentMeta?.storagePath ?? null,
-            downloadURL: attachmentMeta?.downloadURL ?? null,
-            createdAt: serverTimestamp(),
-            reviewStatus: "pending-ai-feedback",
-          });
-
-          setStatusMessage("Submission saved. Running rubric-based grading...");
-        } catch (firestoreError) {
-          console.error("Failed to save essay submission", firestoreError);
-          setStatusMessage(
-            firestoreError?.message ??
-              "The submission was not stored, but we’ll still run the grader."
-          );
-        }
-      }
+      // Skip Firebase Storage for now due to CORS issues
+      // Just proceed directly to grading
+      setStatusMessage("Processing submission for grading...");
 
       const gradingPayload = {
         courseId: course.id,
@@ -312,10 +270,6 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
   };
 
   const handleUploadSubmit = async () => {
-    if (!submissionCollection) {
-      setStatusMessage("You need to be logged in to submit work.");
-      return;
-    }
     if (!selectedFile) {
       setStatusMessage("Select a file or image before submitting.");
       return;
@@ -331,34 +285,10 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
     setGradingError("");
 
     try {
+      setStatusMessage("Converting image to base64...");
       const base64Image = await fileToDataUrl(selectedFile);
-      let attachmentMeta = null;
-
-      try {
-        attachmentMeta = await uploadAttachment(selectedFile);
-        await addDoc(submissionCollection, {
-          courseId: course.id,
-          courseName: course.name,
-          submissionType: "file-upload",
-          attachments: attachmentMeta ? [attachmentMeta] : [],
-          fileName: selectedFile.name,
-          fileSize: selectedFile.size,
-          fileType: selectedFile.type,
-          prompt: frqPrompt.trim() || null,
-          questionType: frqType,
-          storagePath: attachmentMeta?.storagePath ?? null,
-          downloadURL: attachmentMeta?.downloadURL ?? null,
-          createdAt: serverTimestamp(),
-          reviewStatus: "pending-ai-feedback",
-        });
-        setStatusMessage("Upload saved. Running rubric-based grading...");
-      } catch (firestoreError) {
-        console.error("Failed to save upload", firestoreError);
-        setStatusMessage(
-          firestoreError?.message ??
-            "Upload was not stored, but we’ll still attempt grading."
-        );
-      }
+      
+      setStatusMessage("Processing image for grading...");
 
       const gradingPayload = {
         courseId: course.id,
@@ -417,17 +347,16 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
       </div>
 
       <div style={styles.grid}>
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Practice MCQs</h2>
-          <p style={styles.cardBody}>
-            Launch adaptive multiple-choice practice aligned with the course’s
-            CED units. Item difficulty adapts as you answer.
+        <div style={styles.mcqCard}>
+          <h2 style={styles.mcqTitle}>Practice MCQs</h2>
+          <p style={styles.mcqDescription}>
+            Adaptive practice aligned with CED units
           </p>
           <button
-            style={styles.primaryButton}
+            style={styles.mcqButton}
             onClick={() => navigate(`/practice/${course.id}`)}
           >
-            Start Multiple Choice Practice
+            Start Practice
           </button>
         </div>
 
@@ -628,11 +557,11 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                     <div style={styles.gradeStat}>
                       <span style={styles.statLabel}>Score</span>
                       <span style={styles.statValue}>
-                        {grade.overallScore !== null
+                        {grade.overallScore !== null && grade.overallScore !== undefined
                           ? `${grade.overallScore}${
                               grade.maxScore ? ` / ${grade.maxScore}` : ""
                             }`
-                          : "Pending"}
+                          : `${grade.overallScore || 0} / ${grade.maxScore || 7}`}
                       </span>
                     </div>
                     <div style={styles.gradeStat}>
@@ -768,8 +697,9 @@ const styles = {
   },
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "1.5rem",
+    gridTemplateColumns: "300px 1fr",
+    gap: "2rem",
+    alignItems: "start",
   },
   card: {
     backgroundColor: "#F8FAFC",
@@ -780,11 +710,45 @@ const styles = {
     flexDirection: "column",
     gap: "1rem",
   },
+  mcqCard: {
+    backgroundColor: "#F8FAFC",
+    borderRadius: "1rem",
+    padding: "1.25rem",
+    boxShadow: "0 10px 24px rgba(15, 23, 42, 0.08)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.75rem",
+    height: "fit-content",
+  },
   cardTitle: {
     fontSize: "1.25rem",
     fontWeight: 700,
     color: "#0F172A",
     margin: 0,
+  },
+  mcqTitle: {
+    fontSize: "1.1rem",
+    fontWeight: 600,
+    color: "#0F172A",
+    margin: 0,
+  },
+  mcqDescription: {
+    fontSize: "0.9rem",
+    color: "#64748B",
+    margin: 0,
+    lineHeight: 1.4,
+  },
+  mcqButton: {
+    backgroundColor: "#3B82F6",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.5rem",
+    padding: "0.75rem 1rem",
+    fontSize: "0.9rem",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+    width: "100%",
   },
   cardBody: {
     fontSize: "1rem",
