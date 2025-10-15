@@ -1600,5 +1600,120 @@
       "size": 421958
     },
     "createdAt": "2025-10-15T01:43:47.405Z"
+  },
+  {
+    "id": "583b3fee-2be9-4618-98cd-4ecd47a8f54b",
+    "courseId": "ap-world-history",
+    "courseName": "AP World History: Modern",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-265",
+      "rubric-268",
+      "rubric-279"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 4,
+      "maxScore": 6,
+      "performanceLevel": "Proficient",
+      "summary": "The student demonstrates a basic understanding of the economic developments related to industrialization and the Opium Wars, but the responses lack depth and specific evidence to fully support the claims made. The explanations are somewhat vague and would benefit from more detailed historical context and analysis.",
+      "strengths": [
+        "Identified the industrial revolution as a key economic development.",
+        "Mentioned the Opium Wars and their impact on China."
+      ],
+      "improvements": [
+        "Provide more specific examples and evidence to support claims.",
+        "Enhance explanations with historical context and details.",
+        "Clarify the connections between events and their implications."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Make a historically defensible claim.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The student makes claims about the industrial revolution and the Opium Wars but lacks a clear, defensible argument that connects these events to broader historical themes."
+        },
+        {
+          "criterion": "Support an argument using specific and relevant evidence.",
+          "score": 1,
+          "maxScore": 3,
+          "explanation": "The student provides some evidence but it is not sufficiently detailed or specific to effectively support the claims made."
+        },
+        {
+          "criterion": "Use historical reasoning to explain relationships among pieces of historical evidence.",
+          "score": 1,
+          "maxScore": 3,
+          "explanation": "The response shows minimal use of historical reasoning to connect evidence and claims, lacking depth in analysis."
+        }
+      ]
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI-1/backend/data/frq_uploads/583b3fee-2be9-4618-98cd-4ecd47a8f54b.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-15T02:27:28.057Z"
+  },
+  {
+    "id": "c02424cb-07d0-445c-953d-7a4ac83fc16a",
+    "courseId": "ap-world-history",
+    "courseName": "AP World History: Modern",
+    "questionType": "general",
+    "questionPrompt": "",
+    "responseText": "",
+    "rubricSegmentIds": [
+      "rubric-265",
+      "rubric-268",
+      "rubric-279"
+    ],
+    "grade": {
+      "graded": true,
+      "model": "gpt-4o-mini",
+      "overallScore": 4,
+      "maxScore": 6,
+      "performanceLevel": "Proficient",
+      "summary": "The student demonstrates a basic understanding of the economic developments related to industrialization and the Opium Wars, but the responses lack depth and specific evidence to fully support the claims. The third response provides some relevant context but could benefit from clearer connections to the prompt.",
+      "strengths": [
+        "Identified industrialization as a key economic development.",
+        "Mentioned the Opium Wars and their impact on China.",
+        "Recognized the role of British authority in the context of imperialism."
+      ],
+      "improvements": [
+        "Provide more specific examples and evidence to support claims.",
+        "Clarify connections between the economic developments and their historical significance.",
+        "Improve organization and clarity in writing to enhance argumentation."
+      ],
+      "rubricAlignment": [
+        {
+          "criterion": "Make a historically defensible claim.",
+          "score": 2,
+          "maxScore": 3,
+          "explanation": "The student makes claims about industrialization and the Opium Wars but lacks a clear, defensible thesis that connects these ideas."
+        },
+        {
+          "criterion": "Support an argument using specific and relevant evidence.",
+          "score": 1,
+          "maxScore": 2,
+          "explanation": "The evidence provided is relevant but not sufficiently detailed or specific to strongly support the claims made."
+        },
+        {
+          "criterion": "Use historical reasoning to explain relationships among pieces of historical evidence.",
+          "score": 1,
+          "maxScore": 1,
+          "explanation": "The student attempts to explain relationships, particularly in the context of British imperialism, but the connections are not fully developed."
+        }
+      ]
+    },
+    "image": {
+      "mimeType": "image/png",
+      "filePath": "/Users/sanjanagowda/FiveAI-1/backend/data/frq_uploads/c02424cb-07d0-445c-953d-7a4ac83fc16a.png",
+      "originalName": "Screenshot 2025-10-14 at 4.30.35 PM.png",
+      "size": 421958
+    },
+    "createdAt": "2025-10-15T04:10:57.768Z"
   }
 ]

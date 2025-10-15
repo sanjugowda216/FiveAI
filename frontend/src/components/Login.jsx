@@ -55,6 +55,7 @@ export default function Login({ onLoginSuccess }) {
         const mergedProfile = {
           uid: user.uid,
           email: data.email ?? user.email ?? email,
+          preferredName: data.preferredName || null,
           selectedCourse: normalizedSelection,
           stats: data.stats ?? defaultStats,
           favoriteCourses,
@@ -96,6 +97,7 @@ export default function Login({ onLoginSuccess }) {
         profileData = {
           uid: user.uid,
           email: defaultProfile.email,
+          preferredName: null,
           selectedCourse: null,
           stats: defaultStats,
           favoriteCourses: [],

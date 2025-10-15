@@ -611,6 +611,108 @@
       ],
       "generatedAt": "2025-10-12T05:53:03.735Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-9": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following technological advancements significantly contributed to the acceleration of globalization after 1900?",
+          "options": [
+            "A) Steam engine",
+            "B) Internet",
+            "C) Printing press",
+            "D) Telegraph"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Internet revolutionized global communication and commerce, significantly accelerating the pace of globalization after 1900."
+        },
+        {
+          "id": "q2",
+          "question": "What was a major limitation of technological advances in the 20th century regarding public health?",
+          "options": [
+            "A) Increased global travel",
+            "B) Access to clean water",
+            "C) Development of vaccines",
+            "D) Spread of infectious diseases"
+          ],
+          "correctAnswer": "D",
+          "explanation": "While technology advanced significantly, it also facilitated the rapid spread of infectious diseases due to increased global travel, posing challenges to public health."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following best describes the impact of globalization on cultural interactions in the 20th century?",
+          "options": [
+            "A) Isolation of cultures",
+            "B) Homogenization of cultures",
+            "C) Decline of trade networks",
+            "D) Decrease in migration"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Globalization led to the homogenization of cultures as ideas and products spread rapidly across borders, influencing lifestyles and traditions worldwide."
+        },
+        {
+          "id": "q4",
+          "question": "In what way did technological advancements in communication contribute to global conflicts in the 20th century?",
+          "options": [
+            "A) By reducing the need for diplomacy",
+            "B) By allowing rapid dissemination of propaganda",
+            "C) By limiting access to information",
+            "D) By fostering international cooperation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Technological advancements in communication, such as radio and television, allowed for the rapid dissemination of propaganda, which often exacerbated tensions and contributed to global conflicts."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following processes is most directly associated with the economic aspect of globalization?",
+          "options": [
+            "A) Cultural exchange",
+            "B) International trade agreements",
+            "C) Environmental degradation",
+            "D) Technological innovation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "International trade agreements are a key economic aspect of globalization, facilitating trade between nations and promoting economic interdependence."
+        },
+        {
+          "id": "q6",
+          "question": "What role did multinational corporations play in the process of globalization in the late 20th century?",
+          "options": [
+            "A) They created barriers to trade",
+            "B) They limited technological exchange",
+            "C) They expanded global supply chains",
+            "D) They promoted isolationism"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Multinational corporations expanded global supply chains, which is a fundamental aspect of economic globalization, allowing for production and distribution across multiple countries."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following best characterizes the relationship between technology and environmental issues in the context of globalization?",
+          "options": [
+            "A) Technology has always improved environmental conditions",
+            "B) Technological advancements have led to environmental sustainability",
+            "C) Globalization has reduced the impact of technology on the environment",
+            "D) Technological advancements have often exacerbated environmental degradation"
+          ],
+          "correctAnswer": "D",
+          "explanation": "Technological advancements, while beneficial in many aspects, have often led to environmental degradation due to increased industrial activity and resource extraction associated with globalization."
+        },
+        {
+          "id": "q8",
+          "question": "How did the concept of global citizenship emerge in the context of globalization?",
+          "options": [
+            "A) Through nationalistic movements",
+            "B) As a response to environmental challenges",
+            "C) By promoting local traditions",
+            "D) Through increased interconnectedness and shared global issues"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The concept of global citizenship emerged as people recognized their interconnectedness and shared responsibilities in addressing global issues such as climate change, poverty, and human rights."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:08:50.697Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
     }
   },
   "ap-united-states-history": {
@@ -690,6 +792,186 @@
         }
       ],
       "generatedAt": "2025-10-13T21:09:40.594Z",
+      "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
+    },
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the significance of the year 1607 in American history?",
+          "options": [
+            "A. The establishment of the first permanent English settlement in North America",
+            "B. The signing of the Mayflower Compact",
+            "C. The beginning of the Spanish colonization of Florida",
+            "D. The birth of George Washington"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The year 1607 marks the founding of Jamestown, the first permanent English settlement in North America, which had a lasting impact on future colonization efforts."
+        },
+        {
+          "id": "q2",
+          "question": "What was a primary motivation for the establishment of the English colonies in North America during the early 17th century?",
+          "options": [
+            "A. The spread of democracy",
+            "B. The search for economic opportunities",
+            "C. The desire to convert Native Americans to Christianity",
+            "D. The establishment of a penal colony"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Economic opportunities, including the pursuit of resources and land for agriculture, were primary motivations for the establishment of English colonies."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following statements about the relationship between Native Americans and European settlers during the early colonial period is most accurate?",
+          "options": [
+            "A. Native Americans universally welcomed European settlers as allies in trade",
+            "B. European settlers often viewed Native Americans as obstacles to expansion",
+            "C. Native Americans and European settlers maintained equal power in negotiations",
+            "D. European settlers and Native Americans had no significant interactions"
+          ],
+          "correctAnswer": "B",
+          "explanation": "European settlers often viewed Native Americans as obstacles to their expansion and sought to take their land, leading to conflict."
+        },
+        {
+          "id": "q4",
+          "question": "The period from 1607 to 1754 in colonial America is characterized by which of the following developments?",
+          "options": [
+            "A. The establishment of a unified colonial government",
+            "B. The dominance of French influence in North America",
+            "C. The growth of slavery in the southern colonies",
+            "D. The absence of any form of colonial resistance to British rule"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The growth of slavery in the southern colonies became a major development during this period as plantations expanded."
+        },
+        {
+          "id": "q5",
+          "question": "What role did the transatlantic slave trade play in the development of the British colonies in North America?",
+          "options": [
+            "A. It significantly decreased the population of the colonies",
+            "B. It provided labor for the agricultural economy, particularly in the South",
+            "C. It led to the immediate abolition of slavery in the colonies",
+            "D. It was primarily focused on trade with Native American tribes"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The transatlantic slave trade provided a large labor force for the agricultural economy, particularly in the Southern colonies, where labor-intensive crops were grown."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best describes the impact of the Enlightenment on colonial American society in the 17th and 18th centuries?",
+          "options": [
+            "A. It led to a decline in religious beliefs among colonists",
+            "B. It encouraged the questioning of traditional authority and the promotion of individual rights",
+            "C. It resulted in the establishment of a monarchy in the colonies",
+            "D. It had no significant impact on colonial thought"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Enlightenment encouraged colonists to question traditional authority, leading to a greater emphasis on individual rights and governance."
+        },
+        {
+          "id": "q7",
+          "question": "Which event in the early 18th century exemplified the growing tensions between colonial interests and British imperial policies?",
+          "options": [
+            "A. The establishment of the Dominion of New England",
+            "B. The navigation acts",
+            "C. The Glorious Revolution",
+            "D. The Great Awakening"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The navigation acts, which restricted colonial trade to benefit England, exemplified the growing tensions between colonial interests and British policies."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:01:59.264Z",
+      "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
+    },
+    "unit-3": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following documents most directly influenced the development of American political thought during the late 18th century?",
+          "options": [
+            "A. The Declaration of Independence",
+            "B. The Articles of Confederation",
+            "C. The Magna Carta",
+            "D. The Federalist Papers"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The Declaration of Independence articulated the foundational principles of American political thought, emphasizing individual rights and government by consent."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant outcome of the French and Indian War (1754-1763) that contributed to colonial unrest?",
+          "options": [
+            "A. Increased British military presence in the colonies",
+            "B. Expansion of colonial territory",
+            "C. Decreased taxes on the colonies",
+            "D. Strengthening of colonial assemblies"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The French and Indian War led to increased British military presence to protect new territories, which fueled colonial resentment and resistance."
+        },
+        {
+          "id": "q3",
+          "question": "The principle of 'no taxation without representation' is most closely associated with which of the following events?",
+          "options": [
+            "A. The Boston Tea Party",
+            "B. The signing of the Declaration of Independence",
+            "C. The Intolerable Acts",
+            "D. The First Continental Congress"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The phrase 'no taxation without representation' became a rallying cry for the Boston Tea Party, expressing colonial opposition to British taxation without legislative representation."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following best describes the impact of the Enlightenment on the American Revolution?",
+          "options": [
+            "A. It promoted absolute monarchies across the colonies.",
+            "B. It encouraged the questioning of traditional authority and the promotion of individual rights.",
+            "C. It led to the establishment of a theocracy in the colonies.",
+            "D. It resulted in a unified colonial response to British rule."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Enlightenment encouraged colonists to question traditional authority and assert their rights, which significantly influenced revolutionary thought."
+        },
+        {
+          "id": "q5",
+          "question": "Which event directly led to the first shots fired in the American Revolutionary War?",
+          "options": [
+            "A. The Boston Massacre",
+            "B. The Battles of Lexington and Concord",
+            "C. The Boston Tea Party",
+            "D. The signing of the Treaty of Paris"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Battles of Lexington and Concord marked the first military engagements of the American Revolutionary War between colonial militia and British troops."
+        },
+        {
+          "id": "q6",
+          "question": "The Articles of Confederation created a government that was intentionally weak. Which of the following was a direct consequence of this weakness?",
+          "options": [
+            "A. The establishment of a strong centralized government",
+            "B. An inability to levy taxes or regulate commerce effectively",
+            "C. The rapid expansion of U.S. territory",
+            "D. The drafting of the Bill of Rights"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Articles of Confederation's weakness included the inability to levy taxes or regulate commerce, leading to financial instability and calls for a stronger federal government."
+        },
+        {
+          "id": "q7",
+          "question": "What was a primary goal of the Constitutional Convention of 1787?",
+          "options": [
+            "A. To abolish slavery in the United States",
+            "B. To create a stronger federal government",
+            "C. To establish a monarchy",
+            "D. To extend voting rights to all citizens"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Constitutional Convention aimed to address the weaknesses of the Articles of Confederation by creating a stronger federal government with an effective system of checks and balances."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:11:20.005Z",
       "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
     }
   },
@@ -1119,6 +1401,238 @@
       ],
       "generatedAt": "2025-10-15T06:30:55.365Z",
       "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
+    }
+  },
+  "ap-seminar": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "What is the primary goal of the AP Capstone Diploma Program?",
+          "options": [
+            "A) To provide a standardized test for college admissions.",
+            "B) To allow schools to offer college-level courses without any prerequisites.",
+            "C) To develop students' independent thinking and research skills.",
+            "D) To ensure all students pass advanced placement exams."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The AP Capstone Diploma Program aims to develop students' independent thinking and research skills, enabling them to engage with complex issues."
+        },
+        {
+          "id": "q2",
+          "question": "Which principle emphasizes the importance of transparency in AP courses?",
+          "options": [
+            "A) Clarity and transparency",
+            "B) Evidence-based learning",
+            "C) Academic freedom",
+            "D) Opposing indoctrination"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The principle of 'clarity and transparency' highlights the need for clear expectations in AP courses, ensuring that both teachers and students understand the course framework."
+        },
+        {
+          "id": "q3",
+          "question": "According to the AP Seminar curriculum framework, which of the following is NOT a focus of the course?",
+          "options": [
+            "A) Analyzing various perspectives",
+            "B) Developing memorization skills",
+            "C) Assessing the credibility of sources",
+            "D) Drawing independent conclusions"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Seminar focuses on critical thinking skills, analysis, and independent conclusions rather than memorization."
+        },
+        {
+          "id": "q4",
+          "question": "What action does the AP Program take if a school censors required topics from its AP courses?",
+          "options": [
+            "A) It allows the school to keep the AP designation temporarily.",
+            "B) It requires a review of the curriculum.",
+            "C) It removes the AP designation from the course.",
+            "D) It provides additional resources to the school."
+          ],
+          "correctAnswer": "C",
+          "explanation": "If a school censors required topics, the AP Program will remove the AP designation from that course to maintain academic integrity."
+        },
+        {
+          "id": "q5",
+          "question": "What is a key characteristic of the evidence-based learning principle in AP courses?",
+          "options": [
+            "A) It encourages students to memorize facts.",
+            "B) It promotes discussions based on personal beliefs.",
+            "C) It requires students to use the scientific method.",
+            "D) It emphasizes the importance of teacher-led instruction."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The evidence-based learning principle emphasizes the use of the scientific method as a foundation for discussions and critical thinking in AP courses."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best describes 'academic freedom' as outlined in the AP Seminar course principles?",
+          "options": [
+            "A) Teachers can teach any subject they prefer.",
+            "B) Students are free to express personal opinions in assessments.",
+            "C) Both teachers and students have the right to explore various viewpoints.",
+            "D) Schools can limit discussions to approved topics only."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Academic freedom in the AP context means that both teachers and students are encouraged to explore a range of viewpoints without censorship."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:11:22.458Z",
+      "cedHash": "153f8ec8005927e43dcb68c18d2e228f"
+    }
+  },
+  "ap-calculus-ab": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Given the function f(x) = 3x^2 - 12x + 5, what is the limit of f(x) as x approaches 2?",
+          "options": [
+            "-1",
+            "1",
+            "5",
+            "7"
+          ],
+          "correctAnswer": "1",
+          "explanation": "To find the limit as x approaches 2, substitute 2 into the function: f(2) = 3(2)^2 - 12(2) + 5 = 12 - 24 + 5 = -7."
+        },
+        {
+          "id": "q2",
+          "question": "Evaluate the limit: lim (x -> 1) (x^2 - 1)/(x - 1).",
+          "options": [
+            "0",
+            "1",
+            "2",
+            "Undefined"
+          ],
+          "correctAnswer": "2",
+          "explanation": "Factoring gives (x - 1)(x + 1)/(x - 1), which simplifies to x + 1. Evaluating at x = 1 gives 2."
+        },
+        {
+          "id": "q3",
+          "question": "The limit of f(x) as x approaches 3 exists if f(x) is continuous at x = 3. If f(3) = 7 and lim (x -> 3) f(x) = 7, what can be said about f(x)?",
+          "options": [
+            "It is discontinuous at x = 3",
+            "It is continuous at x = 3",
+            "It has a removable discontinuity",
+            "It has an infinite discontinuity"
+          ],
+          "correctAnswer": "IT IS CONTINUOUS AT X = 3",
+          "explanation": "A function is continuous at a point if the limit exists and equals the function's value at that point."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following statements is true regarding the limit of f(x) as x approaches infinity for f(x) = 1/x?",
+          "options": [
+            "The limit is 0",
+            "The limit is 1",
+            "The limit is undefined",
+            "The limit is infinity"
+          ],
+          "correctAnswer": "THE LIMIT IS 0",
+          "explanation": "As x approaches infinity, 1/x approaches 0."
+        },
+        {
+          "id": "q5",
+          "question": "If the function g(x) is defined as g(x) = { x^2 for x < 2, 4 for x = 2, 2x - 2 for x > 2. What is g(2)?",
+          "options": [
+            "0",
+            "2",
+            "4",
+            "Undefined"
+          ],
+          "correctAnswer": "4",
+          "explanation": "g(2) is defined directly as 4 in the piecewise function."
+        },
+        {
+          "id": "q6",
+          "question": "Consider the function h(x) = 5x/(x^2 + 1). What is lim (x -> 0) h(x)?",
+          "options": [
+            "0",
+            "5",
+            "1",
+            "Undefined"
+          ],
+          "correctAnswer": "0",
+          "explanation": "Substituting 0 into h(x), we get h(0) = 5(0)/(0^2 + 1) = 0."
+        },
+        {
+          "id": "q7",
+          "question": "For the piecewise function f(x) = { x^2, x < 1; 3, x = 1; 2x, x > 1. What is lim (x -> 1-) f(x)?",
+          "options": [
+            "1",
+            "2",
+            "3",
+            "0"
+          ],
+          "correctAnswer": "1",
+          "explanation": "The left-hand limit as x approaches 1 is determined by the first piece: lim (x -> 1-) f(x) = 1^2 = 1."
+        },
+        {
+          "id": "q8",
+          "question": "If f(x) = x^3 - 3x + 2, what is the value of f'(1)?",
+          "options": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "correctAnswer": "0",
+          "explanation": "First, differentiate f(x) to get f'(x) = 3x^2 - 3. Then, evaluate f'(1): f'(1) = 3(1)^2 - 3 = 0."
+        },
+        {
+          "id": "q9",
+          "question": "What is the derivative of the function f(x) = 4x^2 - 3x + 1 at x = 2?",
+          "options": [
+            "1",
+            "5",
+            "10",
+            "12"
+          ],
+          "correctAnswer": "5",
+          "explanation": "The derivative f'(x) = 8x - 3. Evaluating at x = 2 gives f'(2) = 8(2) - 3 = 16 - 3 = 13."
+        },
+        {
+          "id": "q10",
+          "question": "Calculate the limit: lim (x -> 0) (sin(x)/x).",
+          "options": [
+            "0",
+            "1",
+            "Undefined",
+            "Infinity"
+          ],
+          "correctAnswer": "1",
+          "explanation": "This limit is a well-known limit that equals 1."
+        },
+        {
+          "id": "q11",
+          "question": "If the limit of f(x) as x approaches 2 is 5 and the limit as x approaches 3 is 6, what can be said about the continuity of f(x) at those points?",
+          "options": [
+            "f(x) is continuous at both points",
+            "f(x) is discontinuous at both points",
+            "f(x) is continuous at x = 2, discontinuous at x = 3",
+            "f(x) is discontinuous at x = 2, continuous at x = 3"
+          ],
+          "correctAnswer": "F(X) IS DISCONTINUOUS AT BOTH POINTS",
+          "explanation": "The continuity of a function requires that the limit must equal the function's value at those points."
+        },
+        {
+          "id": "q12",
+          "question": "Let f(x) = 2/x. What is lim (x -> ∞) f(x)?",
+          "options": [
+            "0",
+            "2",
+            "∞",
+            "Undefined"
+          ],
+          "correctAnswer": "0",
+          "explanation": "As x approaches infinity, the function approaches 0."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:17:49.530Z",
+      "cedHash": "34e04ca920d39358cc327fcc335bf597"
     }
   }
 }

@@ -5,6 +5,7 @@ const featuredCourses = apCourses.slice(0, 4);
 
 export default function Dashboard({
   userEmail,
+  preferredName,
   selectedCourse,
   pinnedCourses = [],
   onStartPractice,
@@ -14,13 +15,14 @@ export default function Dashboard({
   const hasCourseSelected = Boolean(selectedCourse?.id);
   const selectedCourseName = selectedCourse?.name ?? "an AP course";
   const hasPinnedCourses = pinnedCourses.length > 0;
+  const displayName = preferredName || userEmail || "there";
 
   return (
     <section style={styles.wrapper}>
       <header style={styles.header}>
         <div>
           <h1 style={styles.heading}>
-            {userEmail ? `Welcome back, ${userEmail}!` : "Welcome to FiveAI 🔥"}
+            {preferredName ? `Welcome back, ${preferredName}!` : userEmail ? `Welcome back, ${userEmail}!` : "Welcome to FiveAI 🔥"}
           </h1>
           <p style={styles.subheading}>
             {hasCourseSelected

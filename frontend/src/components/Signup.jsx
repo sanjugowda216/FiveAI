@@ -6,6 +6,7 @@ import { auth, db } from "../firebase";
 export default function Signup({ onSignupSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [preferredName, setPreferredName] = useState("");
   const [msg, setMsg] = useState("");
 
   const handleSignup = async (e) => {
@@ -20,6 +21,7 @@ export default function Signup({ onSignupSuccess }) {
 
       const defaultProfile = {
         email: user.email ?? email,
+        preferredName: preferredName.trim() || null,
         selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
         favoriteCourses: [],
@@ -31,6 +33,7 @@ export default function Signup({ onSignupSuccess }) {
       const profileForState = {
         uid: user.uid,
         email: user.email ?? email,
+        preferredName: preferredName.trim() || null,
         selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
         favoriteCourses: [],
@@ -40,6 +43,7 @@ export default function Signup({ onSignupSuccess }) {
       setMsg("Account created! 🎉");
       setEmail("");
       setPassword("");
+      setPreferredName("");
     } catch (err) {
       setMsg(err.message);
     }
@@ -47,6 +51,12 @@ export default function Signup({ onSignupSuccess }) {
 
   return (
     <form onSubmit={handleSignup} className="form">
+      <input
+        type="text"
+        placeholder="Preferred Name (optional)"
+        value={preferredName}
+        onChange={(e) => setPreferredName(e.target.value)}
+      />
       <input
         type="email"
         placeholder="Email"

@@ -74,6 +74,7 @@ function App() {
           profileData = {
             uid: user.uid,
             email: data.email ?? fallbackEmail,
+            preferredName: data.preferredName || null,
             selectedCourse: normalizedSelection,
             stats: data.stats ?? DEFAULT_STATS,
             favoriteCourses,
@@ -114,6 +115,7 @@ function App() {
           profileData = {
             uid: user.uid,
             email: defaultProfile.email,
+            preferredName: null,
             selectedCourse: null,
             stats: DEFAULT_STATS,
             favoriteCourses: [],
@@ -329,6 +331,7 @@ function App() {
             element={
               <Dashboard
                 userEmail={userProfile?.email}
+                preferredName={userProfile?.preferredName}
                 selectedCourse={selectedCourse}
                 pinnedCourses={pinnedCourses}
                 onStartPractice={() => {

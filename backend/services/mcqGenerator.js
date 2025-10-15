@@ -44,6 +44,38 @@ if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_key_here'
 // Create output parser
 const outputParser = StructuredOutputParser.fromZodSchema(MCQResponseSchema);
 
+// Helper function to determine if a course is math-related
+function isMathCourse(courseName) {
+  const mathKeywords = [
+    'calculus', 'statistics', 'algebra', 'geometry', 'trigonometry', 
+    'precalculus', 'mathematics', 'math', 'mathematical'
+  ];
+  const courseLower = courseName.toLowerCase();
+  return mathKeywords.some(keyword => courseLower.includes(keyword));
+}
+
+// Helper function to determine if a course is statistics
+function isStatisticsCourse(courseName) {
+  return courseName.toLowerCase().includes('statistics');
+}
+
+// Get math-specific instructions
+function getMathSpecificInstructions(courseName) {
+  if (isMathCourse(courseName)) {
+    return `
+MATH-SPECIFIC INSTRUCTIONS:
+- Create ACTUAL MATH PROBLEMS with calculations, equations, and mathematical concepts
+- Include problems that require students to solve equations, find derivatives, integrals, or statistical calculations
+- Use real mathematical scenarios and word problems
+- Include problems with graphs, functions, and mathematical reasoning
+- Avoid questions about CED structure, exam format, or course organization
+- Focus on mathematical content: formulas, theorems, problem-solving, and applications
+- Include numerical answers that students must calculate
+- Use proper mathematical notation and terminology`;
+  }
+  return '';
+}
+
 // Create prompt template
 const promptTemplate = new PromptTemplate({
   template: `You are an expert AP exam question writer. Generate {questionCount} high-quality multiple choice questions based on the provided course content.
@@ -62,8 +94,10 @@ Instructions:
 - Include a mix of factual recall and analytical thinking questions
 - Keep explanations concise but informative
 
+{mathSpecificInstructions}
+
 {format_instructions}`,
-  inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content', 'questionCount'],
+  inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content', 'questionCount', 'mathSpecificInstructions'],
   partialVariables: {
     format_instructions: outputParser.getFormatInstructions()
   }
@@ -88,13 +122,17 @@ export async function generateMCQQuestions(courseName, unitNumber, unitTitle, co
       ? content.substring(0, maxContentLength) + '...'
       : content;
     
+    // Get math-specific instructions
+    const mathInstructions = getMathSpecificInstructions(courseName);
+    
     // Create the prompt
     const prompt = await promptTemplate.format({
       courseName,
       unitNumber,
       unitTitle,
       content: truncatedContent,
-      questionCount
+      questionCount,
+      mathSpecificInstructions: mathInstructions
     });
     
     // Generate response
@@ -127,7 +165,85 @@ export async function generateMCQQuestions(courseName, unitNumber, unitTitle, co
  * Generate fallback questions when AI generation fails
  */
 function generateFallbackQuestions(courseName, unitNumber, questionCount = 6) {
-  const baseQuestions = [
+  // Check if this is a math course for different fallback questions
+  const isMath = isMathCourse(courseName);
+  const isStats = isStatisticsCourse(courseName);
+  
+  const baseQuestions = isStats ? [
+    {
+      id: 'q1',
+      question: `A sample of 25 students has a mean test score of 78 with a standard deviation of 8. What is the 95% confidence interval for the population mean?`,
+      options: [
+        '74.86 to 81.14',
+        '76.32 to 79.68',
+        '74.12 to 81.88',
+        '75.44 to 80.56'
+      ],
+      correctAnswer: 'A',
+      explanation: 'Using the formula: x̄ ± t*(s/√n). For 95% CI with df=24, t*=2.064. CI = 78 ± 2.064(8/√25) = 78 ± 3.14 = (74.86, 81.14).'
+    },
+    {
+      id: 'q2',
+      question: `If the correlation coefficient between two variables is r = 0.85, what percentage of the variation in y is explained by the linear relationship with x?`,
+      options: [
+        '72.25%',
+        '85%',
+        '92.5%',
+        '15%'
+      ],
+      correctAnswer: 'A',
+      explanation: 'The coefficient of determination is r² = (0.85)² = 0.7225 = 72.25%. This means 72.25% of the variation in y is explained by the linear relationship with x.'
+    },
+    {
+      id: 'q3',
+      question: `In a normal distribution with mean μ = 100 and standard deviation σ = 15, what is the probability that a randomly selected value is between 85 and 115?`,
+      options: [
+        '0.6826',
+        '0.9544',
+        '0.9974',
+        '0.5000'
+      ],
+      correctAnswer: 'A',
+      explanation: 'This is within one standard deviation of the mean (100 ± 15). For a normal distribution, P(μ-σ < X < μ+σ) ≈ 0.6826.'
+    }
+  ] : isMath ? [
+    {
+      id: 'q1',
+      question: `What is the derivative of f(x) = x² + 3x - 5?`,
+      options: [
+        '2x + 3',
+        'x + 3',
+        '2x - 5',
+        'x² + 3'
+      ],
+      correctAnswer: 'A',
+      explanation: 'Using the power rule: d/dx(x²) = 2x, d/dx(3x) = 3, d/dx(-5) = 0. So f\'(x) = 2x + 3.'
+    },
+    {
+      id: 'q2',
+      question: `If f(x) = 2x³ - 4x + 1, what is f\'(2)?`,
+      options: [
+        '20',
+        '16',
+        '24',
+        '12'
+      ],
+      correctAnswer: 'A',
+      explanation: 'f\'(x) = 6x² - 4. So f\'(2) = 6(2)² - 4 = 6(4) - 4 = 24 - 4 = 20.'
+    },
+    {
+      id: 'q3',
+      question: `What is the limit as x approaches 0 of (sin x)/x?`,
+      options: [
+        '1',
+        '0',
+        '∞',
+        'undefined'
+      ],
+      correctAnswer: 'A',
+      explanation: 'This is a fundamental limit: lim(x→0) (sin x)/x = 1. This is a standard result in calculus.'
+    }
+  ] : [
     {
       id: 'q1',
       question: `Based on the content in ${courseName} Unit ${unitNumber}, which of the following best describes the main topic?`,
