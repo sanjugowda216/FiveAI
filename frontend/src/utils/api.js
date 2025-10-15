@@ -81,3 +81,57 @@ export async function regenerateQuestionsForUnit(courseId, unitNumber) {
     throw error;
   }
 }
+
+/**
+ * Fetch available rubric excerpts for an FRQ course.
+ */
+export async function getRubricsForCourse(courseId) {
+  if (!courseId) {
+    throw new Error('Course ID is required to load rubrics.');
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/api/frq/rubrics/${courseId}`);
+    if (!response.ok) {
+      const errorData = await safeParseJson(response);
+      throw new Error(errorData?.message || `Failed to load rubrics for ${courseId}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching rubrics:', error);
+    throw error;
+  }
+}
+
+/**
+ * Submit an FRQ response for rubric-based grading.
+ */
+export async function submitFrqForGrading(payload) {
+  try {
+    const response = await fetch(`${API_URL}/api/frq/grade`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorData = await safeParseJson(response);
+      throw new Error(errorData?.message || 'FRQ grading failed.');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error submitting FRQ for grading:', error);
+    throw error;
+  }
+}
+
+async function safeParseJson(response) {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+}

@@ -11,6 +11,7 @@ import Courses from "./pages/Courses";
 import CourseOptions from "./pages/CourseOptions";
 import Practice from "./pages/Practice";
 import Stats from "./pages/Stats";
+import StudyCalendar from "./pages/StudyCalendar";
 import { auth, db } from "./firebase";
 import {
   findCourseByName,
@@ -384,6 +385,7 @@ function App() {
             }
           />
           <Route path="/stats" element={<Stats stats={userProfile?.stats} />} />
+          <Route path="/calendar" element={<StudyCalendar />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>

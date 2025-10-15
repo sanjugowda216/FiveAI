@@ -109,7 +109,6 @@ const submissionModeLabels = {
 
 export default function APCourse({
   onSelectCourse,
-  selectedCourseId,
   courses = apCourses,
   favoriteCourseIds = [],
   onToggleFavorite,

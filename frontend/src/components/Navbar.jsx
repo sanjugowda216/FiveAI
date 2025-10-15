@@ -4,6 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 const navItems = [
   { path: "/dashboard", label: "Dashboard" },
   { path: "/courses", label: "AP Courses" },
+  { path: "/calendar", label: "Study Calendar" },
   { path: "/stats", label: "My Stats" },
   { path: "/practice", label: "Practice" },
 ];

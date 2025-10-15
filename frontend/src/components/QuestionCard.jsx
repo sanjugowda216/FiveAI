@@ -8,7 +8,8 @@ export default function QuestionCard({
   onPrevious,
   onBackToUnits,
   canGoNext,
-  canGoPrevious
+  canGoPrevious,
+  courseId
 }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -31,6 +32,48 @@ export default function QuestionCard({
     if (selectedAnswer) {
       setSubmitted(true);
       setShowExplanation(true);
+      
+      // Track stats for this question
+      if (courseId) {
+        trackQuestionStats(courseId, selectedAnswer === question.correctAnswer);
+      }
+    }
+  };
+
+  const trackQuestionStats = (courseId, isCorrect) => {
+    try {
+      // Get existing stats
+      const existingStats = JSON.parse(localStorage.getItem('mcqStats') || '{}');
+      
+      // Initialize course stats if not exists
+      if (!existingStats[courseId]) {
+        existingStats[courseId] = {
+          totalQuestions: 0,
+          correct: 0,
+          recentScores: [],
+          sessions: []
+        };
+      }
+      
+      // Update stats
+      existingStats[courseId].totalQuestions += 1;
+      if (isCorrect) {
+        existingStats[courseId].correct += 1;
+      }
+      
+      // Add to recent scores (keep last 20)
+      const currentScore = isCorrect ? 100 : 0;
+      existingStats[courseId].recentScores.push(currentScore);
+      if (existingStats[courseId].recentScores.length > 20) {
+        existingStats[courseId].recentScores.shift();
+      }
+      
+      // Save back to localStorage
+      localStorage.setItem('mcqStats', JSON.stringify(existingStats));
+      
+      console.log('Updated MCQ stats for', courseId, ':', existingStats[courseId]);
+    } catch (error) {
+      console.error('Error tracking question stats:', error);
     }
   };
 
