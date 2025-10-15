@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCourseById } from "../data/apCourses";
-import { getUnitsForCourse, getQuestionsForUnit } from "../utils/api";
+import { getUnitsForCourse, getQuestionsForUnit, getAdaptivePracticeQuestions } from "../utils/api";
 import QuestionCard from "../components/QuestionCard";
 
 export default function Practice({
   selectedCourse,
   onEnsureCourseSelection,
   onBackToDashboard,
+  userProfile,
 }) {
   const { courseId } = useParams();
 
@@ -35,6 +36,8 @@ export default function Practice({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
+  const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
+  const [showAdaptiveButton, setShowAdaptiveButton] = useState(false);
 
   useEffect(() => {
     if (!courseFromRoute || !onEnsureCourseSelection) return;
@@ -81,13 +84,16 @@ export default function Practice({
 
     setLoading(true);
     setError(null);
+    setIsAdaptiveMode(false);
     
     try {
-      const response = await getQuestionsForUnit(activeCourseId, unit.number);
+      const isAuthenticated = !!userProfile?.uid;
+      const response = await getQuestionsForUnit(activeCourseId, unit.number, isAuthenticated);
       setQuestions(response.questions || []);
       setSelectedUnit(unit);
       setCurrentQuestionIndex(0);
       setShowQuestions(true);
+      setShowAdaptiveButton(isAuthenticated && response.questions?.length >= 12);
     } catch (err) {
       setError(err.message);
       console.error('Failed to load questions:', err);
@@ -101,6 +107,43 @@ export default function Practice({
     setSelectedUnit(null);
     setQuestions([]);
     setCurrentQuestionIndex(0);
+    setIsAdaptiveMode(false);
+    setShowAdaptiveButton(false);
+  };
+
+  const handleAdaptivePractice = async () => {
+    if (!activeCourseId || !selectedUnit) {
+      setError('Course or unit not available for adaptive practice.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Get previous answers from localStorage
+      const existingStats = JSON.parse(localStorage.getItem('mcqStats') || '{}');
+      const courseStats = existingStats[activeCourseId] || {};
+      const previousAnswers = courseStats.recentScores || [];
+      
+      // Convert scores to answer format expected by backend
+      const formattedAnswers = previousAnswers.map((score, index) => ({
+        isCorrect: score === 100,
+        questionId: `q${index + 1}`,
+        topic: 'general' // We could enhance this to track specific topics
+      }));
+
+      const response = await getAdaptivePracticeQuestions(activeCourseId, selectedUnit.number, formattedAnswers);
+      setQuestions(response.questions || []);
+      setCurrentQuestionIndex(0);
+      setIsAdaptiveMode(true);
+      setShowAdaptiveButton(false);
+    } catch (err) {
+      setError(err.message);
+      console.error('Failed to load adaptive questions:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleNextQuestion = () => {
@@ -138,11 +181,30 @@ export default function Practice({
     return (
       <section style={styles.wrapper}>
         <div style={styles.header}>
-          <h1 style={styles.title}>{courseName} - Unit {selectedUnit.number}</h1>
+          <h1 style={styles.title}>
+            {courseName} - Unit {selectedUnit.number}
+            {isAdaptiveMode && <span style={styles.adaptiveBadge}>Adaptive Practice</span>}
+          </h1>
           <p style={styles.subtitle}>
             Question {currentQuestionIndex + 1} of {questions.length}
+            {isAdaptiveMode && <span style={styles.adaptiveSubtitle}> - Personalized for your weak areas</span>}
           </p>
         </div>
+
+        {showAdaptiveButton && !isAdaptiveMode && (
+          <div style={styles.adaptiveButtonContainer}>
+            <button 
+              style={styles.adaptiveButton}
+              onClick={handleAdaptivePractice}
+              disabled={loading}
+            >
+              {loading ? 'Generating...' : 'Generate Adaptive Practice (6 questions)'}
+            </button>
+            <p style={styles.adaptiveButtonDescription}>
+              Get personalized questions based on your previous performance
+            </p>
+          </div>
+        )}
 
         <QuestionCard
           question={questions[currentQuestionIndex]}
@@ -165,6 +227,11 @@ export default function Practice({
         <h1 style={styles.title}>Practice Hub</h1>
         <p style={styles.subtitle}>
           Choose a unit to practice with AI-generated questions for <strong>{courseName}</strong>.
+          {userProfile?.uid ? (
+            <span style={styles.authInfo}> You'll get 12 questions per unit (signed in)</span>
+          ) : (
+            <span style={styles.guestInfo}> You'll get 6 questions per unit (guest mode)</span>
+          )}
         </p>
       </div>
 
@@ -200,6 +267,9 @@ export default function Practice({
                 }}>
                   {unit.hasQuestions ? 'Questions Ready' : 'Generate Questions'}
                 </span>
+                <div style={styles.questionCountInfo}>
+                  {userProfile?.uid ? '12 questions' : '6 questions'}
+                </div>
               </div>
             </div>
           ))}
@@ -309,7 +379,9 @@ const styles = {
   },
   unitStatus: {
     display: "flex",
-    justifyContent: "flex-end",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: "0.5rem",
   },
   statusBadge: {
     padding: "0.25rem 0.75rem",
@@ -365,5 +437,57 @@ const styles = {
     backgroundColor: "#94A3B8",
     cursor: "not-allowed",
     opacity: 0.7,
+  },
+  adaptiveBadge: {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    color: "#0078C8",
+    backgroundColor: "#E3F2FD",
+    padding: "0.25rem 0.75rem",
+    borderRadius: "1rem",
+    marginLeft: "1rem",
+  },
+  adaptiveSubtitle: {
+    color: "#0078C8",
+    fontWeight: 500,
+  },
+  adaptiveButtonContainer: {
+    backgroundColor: "#F8FAFC",
+    border: "2px solid #0078C8",
+    borderRadius: "1rem",
+    padding: "1.5rem",
+    marginBottom: "1.5rem",
+    textAlign: "center",
+  },
+  adaptiveButton: {
+    padding: "0.85rem 1.75rem",
+    backgroundColor: "#0078C8",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.75rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    fontSize: "1rem",
+    marginBottom: "0.5rem",
+    transition: "all 0.2s ease",
+  },
+  adaptiveButtonDescription: {
+    color: "#64748B",
+    fontSize: "0.9rem",
+    margin: 0,
+    fontStyle: "italic",
+  },
+  authInfo: {
+    color: "#0078C8",
+    fontWeight: 600,
+  },
+  guestInfo: {
+    color: "#64748B",
+    fontStyle: "italic",
+  },
+  questionCountInfo: {
+    fontSize: "0.8rem",
+    color: "#64748B",
+    fontWeight: 500,
   },
 };

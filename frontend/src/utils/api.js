@@ -42,9 +42,10 @@ export async function getUnitsForCourse(courseId) {
 /**
  * Get MCQ questions for a specific course and unit
  */
-export async function getQuestionsForUnit(courseId, unitNumber) {
+export async function getQuestionsForUnit(courseId, unitNumber, isAuthenticated = false) {
   try {
-    const response = await fetch(`${API_URL}/api/questions/${courseId}/${unitNumber}`);
+    const url = `${API_URL}/api/questions/${courseId}/${unitNumber}?isAuthenticated=${isAuthenticated}`;
+    const response = await fetch(url);
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -54,6 +55,31 @@ export async function getQuestionsForUnit(courseId, unitNumber) {
     return await response.json();
   } catch (error) {
     console.error('Error fetching questions:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get adaptive practice questions based on previous performance
+ */
+export async function getAdaptivePracticeQuestions(courseId, unitNumber, previousAnswers = []) {
+  try {
+    const response = await fetch(`${API_URL}/api/questions/adaptive/${courseId}/${unitNumber}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ previousAnswers })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Failed to generate adaptive questions for ${courseId} Unit ${unitNumber}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error generating adaptive questions:', error);
     throw error;
   }
 }

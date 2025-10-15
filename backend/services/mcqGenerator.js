@@ -16,7 +16,7 @@ const MCQQuestionSchema = z.object({
 });
 
 const MCQResponseSchema = z.object({
-  questions: z.array(MCQQuestionSchema).describe('Array of 5-8 multiple choice questions')
+  questions: z.array(MCQQuestionSchema).describe('Array of multiple choice questions')
 });
 
 // Initialize the LLM (only if API key is available)
@@ -46,7 +46,7 @@ const outputParser = StructuredOutputParser.fromZodSchema(MCQResponseSchema);
 
 // Create prompt template
 const promptTemplate = new PromptTemplate({
-  template: `You are an expert AP exam question writer. Generate 5-8 high-quality multiple choice questions based on the provided course content.
+  template: `You are an expert AP exam question writer. Generate {questionCount} high-quality multiple choice questions based on the provided course content.
 
 Course: {courseName}
 Unit: {unitNumber} - {unitTitle}
@@ -63,7 +63,7 @@ Instructions:
 - Keep explanations concise but informative
 
 {format_instructions}`,
-  inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content'],
+  inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content', 'questionCount'],
   partialVariables: {
     format_instructions: outputParser.getFormatInstructions()
   }
@@ -72,14 +72,14 @@ Instructions:
 /**
  * Generate MCQ questions for a specific unit
  */
-export async function generateMCQQuestions(courseName, unitNumber, unitTitle, content) {
+export async function generateMCQQuestions(courseName, unitNumber, unitTitle, content, questionCount = 6) {
   try {
-    console.log(`Generating MCQ questions for ${courseName} Unit ${unitNumber}...`);
+    console.log(`Generating ${questionCount} MCQ questions for ${courseName} Unit ${unitNumber}...`);
     
     // Check if LLM is available
     if (!llm) {
       console.warn('OpenAI API key not configured, returning fallback questions');
-      return generateFallbackQuestions(courseName, unitNumber);
+      return generateFallbackQuestions(courseName, unitNumber, questionCount);
     }
     
     // Truncate content if too long to stay within token limits
@@ -93,7 +93,8 @@ export async function generateMCQQuestions(courseName, unitNumber, unitTitle, co
       courseName,
       unitNumber,
       unitTitle,
-      content: truncatedContent
+      content: truncatedContent,
+      questionCount
     });
     
     // Generate response
@@ -118,15 +119,15 @@ export async function generateMCQQuestions(courseName, unitNumber, unitTitle, co
     console.error('Error generating MCQ questions:', error);
     
     // Return fallback questions if generation fails
-    return generateFallbackQuestions(courseName, unitNumber);
+    return generateFallbackQuestions(courseName, unitNumber, questionCount);
   }
 }
 
 /**
  * Generate fallback questions when AI generation fails
  */
-function generateFallbackQuestions(courseName, unitNumber) {
-  return [
+function generateFallbackQuestions(courseName, unitNumber, questionCount = 6) {
+  const baseQuestions = [
     {
       id: 'q1',
       question: `Based on the content in ${courseName} Unit ${unitNumber}, which of the following best describes the main topic?`,
@@ -152,24 +153,37 @@ function generateFallbackQuestions(courseName, unitNumber) {
       explanation: 'This is a fallback question. Please check the CED content and regenerate questions.'
     }
   ];
+
+  // If we need more questions, duplicate and modify them
+  const questions = [];
+  for (let i = 0; i < questionCount; i++) {
+    const baseQuestion = baseQuestions[i % baseQuestions.length];
+    questions.push({
+      ...baseQuestion,
+      id: `q${i + 1}`,
+      question: baseQuestion.question.replace('q1', `q${i + 1}`)
+    });
+  }
+
+  return questions;
 }
 
 /**
  * Generate questions with retry logic
  */
-export async function generateMCQWithRetry(courseName, unitNumber, unitTitle, content, maxRetries = 3) {
+export async function generateMCQWithRetry(courseName, unitNumber, unitTitle, content, questionCount = 6, maxRetries = 3) {
   let lastError;
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const questions = await generateMCQQuestions(courseName, unitNumber, unitTitle, content);
+      const questions = await generateMCQQuestions(courseName, unitNumber, unitTitle, content, questionCount);
       
       // Validate that we got reasonable questions
-      if (questions && questions.length >= 3) {
+      if (questions && questions.length >= Math.min(3, questionCount)) {
         return questions;
       }
       
-      throw new Error(`Generated only ${questions?.length || 0} questions, expected at least 3`);
+      throw new Error(`Generated only ${questions?.length || 0} questions, expected at least ${Math.min(3, questionCount)}`);
       
     } catch (error) {
       lastError = error;
@@ -184,7 +198,7 @@ export async function generateMCQWithRetry(courseName, unitNumber, unitTitle, co
   }
   
   console.error(`All ${maxRetries} attempts failed, returning fallback questions`);
-  return generateFallbackQuestions(courseName, unitNumber);
+  return generateFallbackQuestions(courseName, unitNumber, questionCount);
 }
 
 /**
@@ -193,6 +207,139 @@ export async function generateMCQWithRetry(courseName, unitNumber, unitTitle, co
 export function estimateTokenUsage(content) {
   // Rough estimation: 1 token ≈ 4 characters for English text
   return Math.ceil(content.length / 4);
+}
+
+/**
+ * Generate adaptive practice questions based on previous performance
+ */
+export async function generateAdaptivePracticeQuestions(courseName, unitNumber, unitTitle, content, previousAnswers = [], questionCount = 6) {
+  try {
+    console.log(`Generating ${questionCount} adaptive practice questions for ${courseName} Unit ${unitNumber}...`);
+    
+    // Check if LLM is available
+    if (!llm) {
+      console.warn('OpenAI API key not configured, returning fallback questions');
+      return generateFallbackQuestions(courseName, unitNumber, questionCount);
+    }
+    
+    // Analyze previous performance to identify weak areas
+    const performanceAnalysis = analyzePerformance(previousAnswers);
+    
+    // Truncate content if too long to stay within token limits
+    const maxContentLength = 3000; // Roughly 750 tokens
+    const truncatedContent = content.length > maxContentLength 
+      ? content.substring(0, maxContentLength) + '...'
+      : content;
+    
+    // Create adaptive prompt template
+    const adaptivePromptTemplate = new PromptTemplate({
+      template: `You are an expert AP exam question writer. Generate {questionCount} high-quality multiple choice questions based on the provided course content, with a focus on areas where the student needs improvement.
+
+Course: {courseName}
+Unit: {unitNumber} - {unitTitle}
+
+Content:
+{content}
+
+Previous Performance Analysis:
+{performanceAnalysis}
+
+Instructions:
+- Create questions that test understanding, not just memorization
+- Focus on concepts and topics where the student has shown weakness
+- Make distractors plausible but clearly incorrect
+- Use AP exam question format and difficulty level
+- Ensure questions align with the specific unit content provided
+- Include a mix of factual recall and analytical thinking questions
+- Keep explanations concise but informative
+- Prioritize questions that address identified knowledge gaps
+
+{format_instructions}`,
+      inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content', 'questionCount', 'performanceAnalysis'],
+      partialVariables: {
+        format_instructions: outputParser.getFormatInstructions()
+      }
+    });
+    
+    // Create the prompt
+    const prompt = await adaptivePromptTemplate.format({
+      courseName,
+      unitNumber,
+      unitTitle,
+      content: truncatedContent,
+      questionCount,
+      performanceAnalysis
+    });
+    
+    // Generate response
+    const response = await llm.invoke(prompt);
+    
+    // Parse the structured output
+    const parsedResponse = await outputParser.parse(response.content);
+    
+    // Validate and clean up the questions
+    const questions = parsedResponse.questions.map((q, index) => ({
+      id: `adaptive_q${index + 1}`,
+      question: q.question.trim(),
+      options: q.options.map(opt => opt.trim()),
+      correctAnswer: q.correctAnswer.trim().toUpperCase(),
+      explanation: q.explanation.trim(),
+      isAdaptive: true
+    }));
+    
+    console.log(`Generated ${questions.length} adaptive practice questions for ${courseName} Unit ${unitNumber}`);
+    return questions;
+    
+  } catch (error) {
+    console.error('Error generating adaptive practice questions:', error);
+    
+    // Return fallback questions if generation fails
+    return generateFallbackQuestions(courseName, unitNumber, questionCount);
+  }
+}
+
+/**
+ * Analyze previous performance to identify weak areas
+ */
+function analyzePerformance(previousAnswers) {
+  if (!previousAnswers || previousAnswers.length === 0) {
+    return "No previous performance data available. Generate general practice questions.";
+  }
+  
+  const totalQuestions = previousAnswers.length;
+  const correctAnswers = previousAnswers.filter(answer => answer.isCorrect).length;
+  const accuracy = (correctAnswers / totalQuestions) * 100;
+  
+  // Analyze patterns in incorrect answers
+  const incorrectAnswers = previousAnswers.filter(answer => !answer.isCorrect);
+  const commonTopics = {};
+  
+  incorrectAnswers.forEach(answer => {
+    if (answer.topic) {
+      commonTopics[answer.topic] = (commonTopics[answer.topic] || 0) + 1;
+    }
+  });
+  
+  const weakTopics = Object.entries(commonTopics)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 3)
+    .map(([topic, count]) => `${topic} (${count} incorrect)`);
+  
+  let analysis = `Overall accuracy: ${accuracy.toFixed(1)}% (${correctAnswers}/${totalQuestions} correct). `;
+  
+  if (weakTopics.length > 0) {
+    analysis += `Areas needing improvement: ${weakTopics.join(', ')}. `;
+  }
+  
+  if (accuracy < 60) {
+    analysis += "Focus on fundamental concepts and basic understanding.";
+  } else if (accuracy < 80) {
+    analysis += "Focus on application and analysis questions.";
+  } else {
+    analysis += "Focus on advanced concepts and complex problem-solving.";
+  }
+  
+  return analysis;
 }
 
 /**

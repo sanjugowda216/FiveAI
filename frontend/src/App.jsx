@@ -371,6 +371,7 @@ function App() {
                 selectedCourse={selectedCourse}
                 onEnsureCourseSelection={ensureCourseSelectionNoPersist}
                 onBackToDashboard={() => navigate("/dashboard")}
+                userProfile={userProfile}
               />
             }
           />
@@ -381,6 +382,7 @@ function App() {
                 selectedCourse={selectedCourse}
                 onEnsureCourseSelection={syncCourseSelection}
                 onBackToDashboard={() => navigate("/dashboard")}
+                userProfile={userProfile}
               />
             }
           />

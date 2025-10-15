@@ -106,78 +106,150 @@
       "questions": [
         {
           "id": "q1",
-          "question": "Which of the following best describes the concept of the 'Global Tapestry' as introduced in Unit 1?",
+          "question": "Which of the following best describes the primary focus of Unit 1: The Global Tapestry?",
           "options": [
-            "A network of trade routes connecting different empires.",
-            "A way to understand the interconnectedness of cultural, political, and economic developments across regions.",
-            "A series of revolutions that led to the rise of modern nation-states.",
-            "A framework for analyzing the impact of industrialization on global societies."
+            "A) The interactions between land-based empires",
+            "B) The development of global trade networks",
+            "C) The cultural, social, and political systems of various civilizations from c. 1200 to c. 1450",
+            "D) The effects of industrialization on world societies"
           ],
-          "correctAnswer": "B",
-          "explanation": "The 'Global Tapestry' refers to the interconnectedness of various cultural, political, and economic developments around the world during the period from 1200 to 1450."
+          "correctAnswer": "C",
+          "explanation": "Unit 1 focuses on the cultural, social, and political systems across different civilizations, highlighting their interactions and developments."
         },
         {
           "id": "q2",
-          "question": "Which of the following developments is most closely associated with the period of c. 1200 to c. 1450?",
+          "question": "What was a key characteristic of societies during the period of c. 1200 to c. 1450?",
           "options": [
-            "The establishment of transoceanic trade routes.",
-            "The rise of land-based empires.",
-            "The spread of the Enlightenment across Europe.",
-            "The onset of the Industrial Revolution."
+            "A) The rise of global empires that controlled vast territories",
+            "B) The establishment of trade routes that facilitated cultural exchange",
+            "C) The predominance of feudal systems in Europe",
+            "D) The absence of significant technological innovations"
           ],
           "correctAnswer": "B",
-          "explanation": "During the period of c. 1200 to c. 1450, land-based empires such as the Mongol Empire and the Ottoman Empire expanded significantly."
+          "explanation": "The period saw the establishment of significant trade routes, such as the Silk Roads and the Indian Ocean trade network, which facilitated cultural exchange."
         },
         {
           "id": "q3",
-          "question": "Which technological innovation had a significant impact on trade networks during the Global Tapestry period?",
+          "question": "Which of the following empires is most closely associated with the period c. 1200 to c. 1450?",
           "options": [
-            "The steam engine",
-            "The compass",
-            "The telegraph",
-            "The airplane"
+            "A) The Roman Empire",
+            "B) The Ottoman Empire",
+            "C) The Mongol Empire",
+            "D) The British Empire"
           ],
-          "correctAnswer": "B",
-          "explanation": "The compass was a crucial technology that improved navigation, enhancing maritime trade and travel during this period."
+          "correctAnswer": "C",
+          "explanation": "The Mongol Empire expanded significantly during this period, connecting vast territories across Asia and Europe."
         },
         {
           "id": "q4",
-          "question": "What was a primary consequence of the increased interactions between different cultures during the Global Tapestry?",
+          "question": "Which of the following best explains the significance of the Indian Ocean trade network during the period c. 1200 to c. 1450?",
           "options": [
-            "The isolation of most civilizations.",
-            "The spread of diseases like the Black Death.",
-            "The development of unique cultural identities.",
-            "The rise of authoritarian governments."
+            "A) It was primarily a route for military conquests",
+            "B) It enabled the exchange of goods, ideas, and cultures among diverse civilizations",
+            "C) It led to the decline of all land-based empires",
+            "D) It was exclusively dominated by European traders"
           ],
           "correctAnswer": "B",
-          "explanation": "Increased interactions through trade and conquest often led to the spread of diseases, such as the Black Death, which had devastating impacts on populations."
+          "explanation": "The Indian Ocean trade network facilitated the exchange of goods, ideas, and cultures among various civilizations, enhancing interconnectedness."
         },
         {
           "id": "q5",
-          "question": "Which of the following best characterizes the governance structures of empires during the Global Tapestry period?",
+          "question": "What role did religion play in the societies of Unit 1: The Global Tapestry?",
           "options": [
-            "Most empires relied solely on democratic principles.",
-            "Centralized bureaucracies were common in many empires.",
-            "All empires had the same administrative techniques.",
-            "Governance was primarily based on local tribal councils."
+            "A) It was a unifying force that eliminated cultural differences",
+            "B) It had no significant impact on trade or social structures",
+            "C) It influenced social hierarchies and political authority",
+            "D) It was primarily used as a tool for military conquest"
           ],
-          "correctAnswer": "B",
-          "explanation": "Many empires during this period developed centralized bureaucracies to manage their vast territories and diverse populations effectively."
+          "correctAnswer": "C",
+          "explanation": "Religion often influenced social hierarchies and political authority, shaping the governance and cultural practices of various societies."
         },
         {
           "id": "q6",
-          "question": "How did cultural interactions during the Global Tapestry influence societal structures?",
+          "question": "Which cultural development is most closely associated with the Islamic Golden Age (c. 800 to c. 1300)?",
           "options": [
-            "They led to the complete dominance of one culture over others.",
-            "They resulted in the blending of traditions and practices.",
-            "They isolated societies from external influences.",
-            "They maintained strict social hierarchies without change."
+            "A) The spread of Buddhism in Asia",
+            "B) Advancements in science, mathematics, and medicine",
+            "C) The establishment of the Silk Road",
+            "D) The development of feudalism in Europe"
           ],
           "correctAnswer": "B",
-          "explanation": "Cultural interactions often resulted in syncretism, where different traditions and practices blended, influencing societal structures and norms."
+          "explanation": "The Islamic Golden Age was marked by significant advancements in various fields, including science, mathematics, and medicine."
+        },
+        {
+          "id": "q7",
+          "question": "What was a significant consequence of the Crusades (c. 1096-1291) during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) They resulted in the permanent conquest of the Holy Land by European powers",
+            "B) They weakened the authority of the Catholic Church",
+            "C) They increased trade and cultural exchange between Europe and the Middle East",
+            "D) They led to the immediate end of feudalism in Europe"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Crusades increased trade and cultural exchange between Europe and the Middle East, leading to greater interconnectedness."
+        },
+        {
+          "id": "q8",
+          "question": "During the period c. 1200 to c. 1450, which of the following innovations had a significant impact on trade?",
+          "options": [
+            "A) The steam engine",
+            "B) The magnetic compass",
+            "C) The printing press",
+            "D) The telephone"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The magnetic compass was crucial for navigation and significantly improved maritime trade during this period."
+        },
+        {
+          "id": "q9",
+          "question": "Which of the following best describes the political structure of the Byzantine Empire during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) A decentralized feudal system",
+            "B) A theocratic monarchy with significant religious influence",
+            "C) A centralized autocracy with a strong bureaucratic system",
+            "D) A democratic republic with elected officials"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Byzantine Empire was characterized by a centralized autocracy, where the emperor held significant power supported by a bureaucratic system."
+        },
+        {
+          "id": "q10",
+          "question": "What was one effect of the agricultural innovations during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) Decreased population growth",
+            "B) Increased urbanization and trade",
+            "C) Decline of social hierarchies",
+            "D) Stagnation of technological development"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Agricultural innovations led to increased food production, which supported urbanization and the growth of trade."
+        },
+        {
+          "id": "q11",
+          "question": "Which of the following civilizations is noted for its contributions to mathematics and astronomy during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) The Aztec Empire",
+            "B) The Song Dynasty",
+            "C) The Roman Empire",
+            "D) The Byzantine Empire"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Song Dynasty made significant contributions to mathematics and astronomy, including advancements in the use of the abacus and celestial navigation."
+        },
+        {
+          "id": "q12",
+          "question": "What was one of the main reasons for the flourishing of trade networks during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) The rise of isolated agricultural communities",
+            "B) The establishment of political stability in various regions",
+            "C) The development of maritime technologies",
+            "D) The decline of urban centers"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Political stability in various regions contributed to the flourishing of trade networks by ensuring safer and more reliable trade routes."
         }
       ],
-      "generatedAt": "2025-10-12T05:11:11.280Z",
+      "generatedAt": "2025-10-15T06:26:38.274Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
     },
     "unit-5": {
@@ -895,6 +967,158 @@
       ],
       "generatedAt": "2025-10-15T00:49:35.184Z",
       "cedHash": null
+    }
+  },
+  "ap-english-language": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following components is NOT part of the rhetorical situation?",
+          "options": [
+            "A) Exigence",
+            "B) Audience",
+            "C) Thesis",
+            "D) Context"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The thesis is a central claim in an argument, but it is not a component of the rhetorical situation itself."
+        },
+        {
+          "id": "q2",
+          "question": "What is the primary purpose of identifying claims and evidence in an argument?",
+          "options": [
+            "A) To summarize the argument",
+            "B) To evaluate its effectiveness",
+            "C) To critique the writer's style",
+            "D) To analyze the rhetorical situation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Identifying claims and evidence helps evaluate the effectiveness of an argument by assessing the support provided."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following best describes the term 'exigence' in the context of the rhetorical situation?",
+          "options": [
+            "A) The emotional appeal of the argument",
+            "B) The urgency or issue that prompts an argument",
+            "C) The intended audience for the argument",
+            "D) The background information provided"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Exigence refers to the urgent issue or problem that prompts the creation of an argument."
+        },
+        {
+          "id": "q4",
+          "question": "In writing an effective argument, what role does evidence play?",
+          "options": [
+            "A) It distracts from the main point",
+            "B) It supports and strengthens the claim",
+            "C) It introduces counterarguments",
+            "D) It provides background information"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Evidence is crucial in supporting and strengthening a claim, making the argument more persuasive."
+        },
+        {
+          "id": "q5",
+          "question": "What is the purpose of the AP English Language and Composition course framework?",
+          "options": [
+            "A) To provide a detailed syllabus for teachers",
+            "B) To outline the skills and knowledge students will develop",
+            "C) To serve as a guide for standardized testing",
+            "D) To promote college-level writing only"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The course framework outlines the skills and knowledge that students will develop throughout the AP English Language and Composition course."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best represents the relationship between claims and evidence?",
+          "options": [
+            "A) Claims are always subjective, while evidence is objective",
+            "B) Claims are unsupported assertions, while evidence is irrelevant",
+            "C) Claims require evidence to be credible and persuasive",
+            "D) Claims and evidence are interchangeable terms"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Claims require evidence to be credible and persuasive; without evidence, a claim lacks support."
+        },
+        {
+          "id": "q7",
+          "question": "What does the term 'audience' refer to in the context of the rhetorical situation?",
+          "options": [
+            "A) The writer's personal perspective",
+            "B) The specific group of people the argument is addressing",
+            "C) The context in which the argument is presented",
+            "D) The purpose behind the argument"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The audience refers specifically to the group of people for whom the argument is intended."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following is NOT a key skill emphasized in Unit 1 of the AP English Language course?",
+          "options": [
+            "A) Identifying rhetorical situations",
+            "B) Developing counterarguments",
+            "C) Analyzing claims and evidence",
+            "D) Organizing effective paragraphs"
+          ],
+          "correctAnswer": "B",
+          "explanation": "While developing counterarguments is important, it is not a key skill emphasized in Unit 1, which focuses on understanding rhetorical situations and claims."
+        },
+        {
+          "id": "q9",
+          "question": "What is the significance of understanding the rhetorical situation in crafting an argument?",
+          "options": [
+            "A) It allows the writer to ignore the audience's values",
+            "B) It helps the writer tailor their argument to be more persuasive",
+            "C) It simplifies the writing process",
+            "D) It eliminates the need for evidence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Understanding the rhetorical situation allows the writer to tailor their argument to the audience, making it more persuasive."
+        },
+        {
+          "id": "q10",
+          "question": "Which statement is an example of an effective claim?",
+          "options": [
+            "A) Many people think that climate change is a problem.",
+            "B) Climate change is caused by human activity and requires immediate action.",
+            "C) Some scientists believe climate change is real.",
+            "D) Climate change affects everyone."
+          ],
+          "correctAnswer": "B",
+          "explanation": "An effective claim makes a clear, specific assertion that can be supported with evidence."
+        },
+        {
+          "id": "q11",
+          "question": "In the context of the AP English Language course framework, what does the acronym 'REO' stand for?",
+          "options": [
+            "A) Rhetorical Effectiveness Organization",
+            "B) Reasoning and Organization",
+            "C) Rhetorical Evidence Outline",
+            "D) Response Evaluation Objective"
+          ],
+          "correctAnswer": "B",
+          "explanation": "In the course framework, 'REO' stands for Reasoning and Organization, which is a key skill area."
+        },
+        {
+          "id": "q12",
+          "question": "Which of the following is a primary goal of the AP English Language and Composition course?",
+          "options": [
+            "A) To enhance students' literary analysis skills",
+            "B) To develop students' ability to write in a variety of genres",
+            "C) To prepare students for college-level writing and critical thinking",
+            "D) To focus exclusively on fiction writing"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The primary goal of the AP English Language and Composition course is to prepare students for college-level writing and critical thinking."
+        }
+      ],
+      "generatedAt": "2025-10-15T06:30:55.365Z",
+      "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
     }
   }
 }
