@@ -4,6 +4,7 @@ import { apCourses } from "../data/apCourses";
 const featuredCourses = apCourses.slice(0, 4);
 
 export default function Dashboard({
+  userName,
   userEmail,
   selectedCourse,
   pinnedCourses = [],
@@ -20,7 +21,7 @@ export default function Dashboard({
       <header style={styles.header}>
         <div>
           <h1 style={styles.heading}>
-            {userEmail ? `Welcome back, ${userEmail}!` : "Welcome to FiveAI 🔥"}
+            {userName ? `Welcome back, ${userName}!` : "Welcome to FiveAI 🔥"}
           </h1>
           <p style={styles.subheading}>
             {hasCourseSelected

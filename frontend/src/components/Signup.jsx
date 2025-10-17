@@ -4,6 +4,7 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 export default function Signup({ onSignupSuccess }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
@@ -19,6 +20,7 @@ export default function Signup({ onSignupSuccess }) {
       const user = credential.user;
 
       const defaultProfile = {
+        name: name.trim(),
         email: user.email ?? email,
         selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
@@ -30,6 +32,7 @@ export default function Signup({ onSignupSuccess }) {
 
       const profileForState = {
         uid: user.uid,
+        name: name.trim(),
         email: user.email ?? email,
         selectedCourse: null,
         stats: { totalQuestions: 0, correct: 0, streak: 0 },
@@ -38,6 +41,7 @@ export default function Signup({ onSignupSuccess }) {
 
       if (onSignupSuccess) onSignupSuccess(profileForState);
       setMsg("Account created! 🎉");
+      setName("");
       setEmail("");
       setPassword("");
     } catch (err) {
@@ -47,6 +51,13 @@ export default function Signup({ onSignupSuccess }) {
 
   return (
     <form onSubmit={handleSignup} className="form">
+      <input
+        type="text"
+        placeholder="Full Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
       <input
         type="email"
         placeholder="Email"

@@ -12,6 +12,9 @@ export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
+  const [showNamePrompt, setShowNamePrompt] = useState(false);
+  const [name, setName] = useState("");
+  const [tempProfileData, setTempProfileData] = useState(null);
 
   const normalizeSelectedCourse = (raw) => {
     if (!raw) return null;
@@ -54,6 +57,7 @@ export default function Login({ onLoginSuccess }) {
 
         const mergedProfile = {
           uid: user.uid,
+          name: data.name || "",
           email: data.email ?? user.email ?? email,
           selectedCourse: normalizedSelection,
           stats: data.stats ?? defaultStats,
@@ -86,6 +90,7 @@ export default function Login({ onLoginSuccess }) {
         profileData = mergedProfile;
       } else {
         const defaultProfile = {
+          name: "",
           email: user.email ?? email,
           selectedCourse: null,
           stats: defaultStats,
@@ -95,6 +100,7 @@ export default function Login({ onLoginSuccess }) {
         await setDoc(userRef, defaultProfile);
         profileData = {
           uid: user.uid,
+          name: "",
           email: defaultProfile.email,
           selectedCourse: null,
           stats: defaultStats,
@@ -102,10 +108,17 @@ export default function Login({ onLoginSuccess }) {
         };
       }
 
-      if (onLoginSuccess) onLoginSuccess(profileData);
-      setMsg("Login successful! 🎉");
-      setEmail("");
-      setPassword("");
+      // Check if user has a name, if not, prompt for it
+      if (!profileData.name || profileData.name.trim() === "") {
+        setTempProfileData(profileData);
+        setShowNamePrompt(true);
+        setMsg("Please enter your name to continue");
+      } else {
+        if (onLoginSuccess) onLoginSuccess(profileData);
+        setMsg("Login successful! 🎉");
+        setEmail("");
+        setPassword("");
+      }
     } catch (err) {
       console.error("Login error:", err);
       console.error("Error code:", err.code);
@@ -127,6 +140,53 @@ export default function Login({ onLoginSuccess }) {
       }
     }
   };
+
+  const handleNameSubmit = async (e) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setMsg("Please enter your name");
+      return;
+    }
+
+    try {
+      // Update the user's profile with the name
+      const userRef = doc(db, "users", tempProfileData.uid);
+      await setDoc(userRef, { name: name.trim() }, { merge: true });
+
+      // Update the profile data with the name
+      const updatedProfile = { ...tempProfileData, name: name.trim() };
+
+      if (onLoginSuccess) onLoginSuccess(updatedProfile);
+      setMsg("Login successful! 🎉");
+      setShowNamePrompt(false);
+      setName("");
+      setEmail("");
+      setPassword("");
+      setTempProfileData(null);
+    } catch (err) {
+      setMsg("Failed to save name. Please try again.");
+    }
+  };
+
+  if (showNamePrompt) {
+    return (
+      <form onSubmit={handleNameSubmit} className="form">
+        <h3 style={{ color: "#0078C8", marginBottom: "1rem", textAlign: "center" }}>
+          Welcome! What's your name?
+        </h3>
+        <input
+          type="text"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          autoFocus
+        />
+        <button type="submit">Continue</button>
+        {msg && <p className="msg">{msg}</p>}
+      </form>
+    );
+  }
 
   return (
     <form onSubmit={handleLogin} className="form">

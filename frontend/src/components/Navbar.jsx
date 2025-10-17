@@ -15,8 +15,9 @@ export default function Navbar({ onLogout }) {
   return (
     <header style={styles.container}>
       <div style={styles.inner}>
-        <NavLink to="/dashboard" style={styles.brand}>
-          FiveAI 🔥
+        <NavLink to="/dashboard" style={styles.brandContainer}>
+          <div style={styles.brandIcon}>✋</div>
+          <span style={styles.brandText}>FiveAI</span>
         </NavLink>
         <nav style={styles.nav}>
           {navItems.map((item) => {
@@ -67,11 +68,29 @@ const styles = {
     justifyContent: "space-between",
     boxSizing: "border-box",
   },
-  brand: {
+  brandContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    textDecoration: "none",
+  },
+  brandIcon: {
+    width: "28px",
+    height: "28px",
+    borderRadius: "6px",
+    background: "linear-gradient(135deg, #0078C8 0%, #266fb5 100%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    color: "#fff",
+    fontWeight: "bold",
+    boxShadow: "0 2px 8px rgba(0, 120, 200, 0.3)",
+  },
+  brandText: {
     color: "#0078C8",
     fontSize: "1.25rem",
     fontWeight: 700,
-    textDecoration: "none",
   },
   nav: {
     display: "flex",

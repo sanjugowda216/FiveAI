@@ -73,6 +73,7 @@ function App() {
 
           profileData = {
             uid: user.uid,
+            name: data.name || "",
             email: data.email ?? fallbackEmail,
             selectedCourse: normalizedSelection,
             stats: data.stats ?? DEFAULT_STATS,
@@ -328,6 +329,7 @@ function App() {
             path="/dashboard"
             element={
               <Dashboard
+                userName={userProfile?.name}
                 userEmail={userProfile?.email}
                 selectedCourse={selectedCourse}
                 pinnedCourses={pinnedCourses}

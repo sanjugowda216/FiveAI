@@ -18,10 +18,53 @@ import { useState, useEffect, useRef, useMemo } from "react";
  */
 
 export default function Home() {
+  // Add CSS for animations
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
   const [typingText, setTypingText] = useState("");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showFounders, setShowFounders] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
@@ -157,6 +200,16 @@ export default function Home() {
     };
   }, []);
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // reveal on scroll using IntersectionObserver (applies inline transforms)
   useEffect(() => {
     const elements = [heroRef.current, howRef.current, featuresRef.current].filter(Boolean);
@@ -196,58 +249,100 @@ export default function Home() {
       color: "#000",
       fontFamily:
         '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      paddingTop: "80px",
+      paddingTop: isMobile ? "80px" : "88px",
     },
     header: {
       position: "fixed",
       top: 0,
       left: 0,
       right: 0,
-      height: "72px",
+      height: isMobile ? "72px" : "80px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      padding: "0 28px",
-      background: "rgba(255,255,255,0.7)",
-      backdropFilter: "blur(8px)",
-      borderBottom: "1px solid rgba(0,0,0,0.06)",
+      padding: isMobile ? "0 20px" : "0 32px",
+      background: "rgba(255,255,255,0.85)",
+      backdropFilter: "blur(20px)",
+      borderBottom: "1px solid rgba(0,120,200,0.08)",
       zIndex: 1200,
+      boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
     },
-    logo: {
-      color: "#0078C8",
-      fontWeight: 800,
-      fontSize: "20px",
+    logoContainer: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
       cursor: "pointer",
+      transition: "all 200ms ease",
+    },
+    logoIcon: {
+      width: "32px",
+      height: "32px",
+      borderRadius: "8px",
+      background: "linear-gradient(135deg, #0078C8 0%, #266fb5 100%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "16px",
+      color: "#fff",
+      fontWeight: "bold",
+      boxShadow: "0 4px 12px rgba(0, 120, 200, 0.3)",
+    },
+    logoText: {
+      color: "#0078C8",
+      fontWeight: 900,
+      fontSize: "22px",
       letterSpacing: "-0.5px",
+      background: "linear-gradient(135deg, #0078C8 0%, #266fb5 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      transition: "all 200ms ease",
     },
     nav: {
       display: "flex",
-      gap: "18px",
+      gap: isMobile ? "16px" : "24px",
       alignItems: "center",
     },
     navLink: {
       color: "#022037",
       fontWeight: 600,
       cursor: "pointer",
-      padding: "6px 8px",
+      padding: isMobile ? "6px 10px" : "8px 12px",
+      borderRadius: "8px",
+      transition: "all 200ms ease",
+      fontSize: isMobile ? "14px" : "15px",
     },
     getStartedBtn: {
-      background: "linear-gradient(90deg, #0078C8, #2aa3f2)",
+      background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
       color: "#fff",
-      padding: "10px 16px",
-      borderRadius: "999px",
+      padding: "14px 28px",
+      borderRadius: "16px",
       fontWeight: 700,
       border: "none",
       cursor: "pointer",
-      boxShadow: "0 6px 20px rgba(0,120,200,0.18)",
-      transition: "transform 160ms ease, box-shadow 160ms ease",
+      boxShadow: "0 8px 32px rgba(0,120,200,0.25)",
+      transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+      fontSize: "16px",
+      position: "relative",
+      overflow: "hidden",
+    },
+    secondaryBtn: {
+      background: "rgba(255,255,255,0.9)",
+      color: "#0078C8",
+      padding: "14px 28px",
+      borderRadius: "16px",
+      fontWeight: 700,
+      border: "2px solid rgba(0,120,200,0.2)",
+      cursor: "pointer",
+      transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+      fontSize: "16px",
+      backdropFilter: "blur(10px)",
     },
 
     // HERO
     heroWrap: {
-      maxWidth: "1100px",
+      maxWidth: "1200px",
       margin: "0 auto",
-      padding: "68px 24px 56px",
+      padding: isMobile ? "60px 20px" : "80px 24px 80px",
       position: "relative",
       overflow: "visible",
     },
@@ -256,114 +351,194 @@ export default function Home() {
       inset: 0,
       zIndex: 0,
       pointerEvents: "none",
-      opacity: 0.55,
+      opacity: 0.6,
     },
     heroCard: {
       position: "relative",
       zIndex: 1,
-      borderRadius: "18px",
-      background: "linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,250,0.9))",
-      padding: "46px 36px",
-      boxShadow: "0 18px 40px rgba(2,24,48,0.08)",
+      borderRadius: "24px",
+      background: "linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%)",
+      padding: isMobile ? "48px 24px" : "64px 48px",
+      boxShadow: "0 32px 64px rgba(2,24,48,0.12), 0 0 0 1px rgba(0,120,200,0.08)",
       border: "1px solid rgba(0,0,0,0.04)",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      gap: "18px",
+      gap: "24px",
       textAlign: "center",
+      backdropFilter: "blur(20px)",
     },
     heroTitle: {
-      fontSize: "44px",
-      lineHeight: 1.03,
+      fontSize: "clamp(36px, 5vw, 56px)",
+      lineHeight: 1.1,
       margin: 0,
-      fontWeight: 800,
+      fontWeight: 900,
       color: "#022037",
-      background: "linear-gradient(90deg, #0078C8, #266fb5)",
+      background: "linear-gradient(135deg, #0078C8 0%, #266fb5 50%, #1e5a8a 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
+      letterSpacing: "-0.02em",
+      textShadow: "0 4px 8px rgba(0,120,200,0.1)",
     },
     heroSubtitle: {
-      fontSize: "18px",
+      fontSize: "clamp(16px, 2.5vw, 20px)",
       color: "#0b1b2b",
-      marginTop: 8,
-      minHeight: "26px",
+      marginTop: 12,
+      minHeight: "28px",
+      fontWeight: 600,
+      opacity: 0.9,
     },
     heroDesc: {
-      fontSize: "15px",
+      fontSize: "clamp(14px, 1.8vw, 17px)",
       color: "#234456",
-      maxWidth: "820px",
+      maxWidth: "680px",
       margin: "0 auto",
-      lineHeight: 1.6,
+      lineHeight: 1.7,
+      fontWeight: 400,
     },
 
     // HOW IT WORKS
     howSection: {
-      padding: "64px 20px",
-      maxWidth: "1000px",
+      padding: "80px 20px",
+      maxWidth: "1200px",
       margin: "0 auto",
       textAlign: "center",
+      background: "linear-gradient(180deg, rgba(248,250,252,0.6) 0%, rgba(255,255,255,0.8) 100%)",
+      borderRadius: "32px",
+      marginTop: "40px",
     },
     howTitle: {
-      fontSize: "28px",
-      color: "#0078C8",
-      marginBottom: "18px",
+      fontSize: "clamp(28px, 4vw, 36px)",
+      color: "#022037",
+      marginBottom: 16,
       fontWeight: 800,
+      background: "linear-gradient(135deg, #0078C8 0%, #266fb5 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+    },
+    howSubtitle: {
+      fontSize: "18px",
+      color: "#234456",
+      marginBottom: 48,
+      maxWidth: "600px",
+      margin: "0 auto 48px",
+      lineHeight: 1.6,
     },
     howGrid: {
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-      gap: "18px",
-      marginTop: "18px",
+      gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))",
+      gap: isMobile ? "20px" : "24px",
+      marginTop: "24px",
     },
     howCard: {
-      background: "#fff",
-      borderRadius: "12px",
-      padding: "18px",
-      border: "1px solid rgba(0,0,0,0.04)",
-      boxShadow: "0 6px 18px rgba(2,24,48,0.04)",
-      color: "#0b1b2b",
+      background: "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%)",
+      borderRadius: "20px",
+      padding: "32px 24px",
+      border: "1px solid rgba(0,120,200,0.08)",
+      boxShadow: "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)",
+      color: "#022037",
       fontWeight: 600,
+      fontSize: "16px",
+      lineHeight: 1.5,
+      position: "relative",
+      transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
     },
 
     // FEATURES
     featuresSection: {
-      padding: "64px 20px",
-      maxWidth: "1100px",
+      padding: "80px 20px",
+      maxWidth: "1200px",
       margin: "0 auto",
+      background: "linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.4) 100%)",
+      borderRadius: "32px",
+      marginTop: "40px",
+    },
+    featuresTitle: {
+      fontSize: "clamp(28px, 4vw, 36px)",
+      fontWeight: 800,
+      color: "#022037",
+      marginBottom: 16,
+      textAlign: "center",
+      background: "linear-gradient(135deg, #0078C8 0%, #266fb5 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+    },
+    featuresSubtitle: {
+      fontSize: "18px",
+      color: "#234456",
+      textAlign: "center",
+      marginBottom: 48,
+      maxWidth: "600px",
+      margin: "0 auto 48px",
+      lineHeight: 1.6,
     },
     featuresGrid: {
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-      gap: "20px",
+      gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))",
+      gap: isMobile ? "20px" : "24px",
     },
     featureCard: {
-      background: "linear-gradient(180deg,#fff,#fbfdff)",
-      borderRadius: "14px",
-      padding: "20px",
-      border: "1px solid rgba(0,120,200,0.06)",
-      boxShadow: "0 10px 30px rgba(2,24,48,0.04)",
-      transition: "transform 220ms ease, box-shadow 220ms ease",
+      background: "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%)",
+      borderRadius: "20px",
+      padding: "32px 24px",
+      border: "1px solid rgba(0,120,200,0.08)",
+      boxShadow: "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)",
+      transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+      position: "relative",
+      overflow: "hidden",
+      backdropFilter: "blur(20px)",
+    },
+    featureIcon: {
+      width: "48px",
+      height: "48px",
+      borderRadius: "12px",
+      background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: "20px",
+      fontSize: "20px",
+      color: "#fff",
+      fontWeight: "bold",
     },
     featureTitle: {
-      fontSize: "18px",
+      fontSize: "20px",
       fontWeight: 700,
-      color: "#0078C8",
-      marginBottom: 8,
+      color: "#022037",
+      marginBottom: 12,
+      lineHeight: 1.3,
     },
     featureText: {
-      color: "#123945",
+      color: "#234456",
       lineHeight: 1.6,
+      fontSize: "15px",
     },
 
     // Footer
     footer: {
-      padding: "36px 20px",
+      padding: "48px 20px",
       textAlign: "center",
       color: "#fff",
-      background: "#0078C8",
-      marginTop: "40px",
-      borderTopLeftRadius: "10px",
-      borderTopRightRadius: "10px",
+      background: "linear-gradient(135deg, #0078C8 0%, #266fb5 100%)",
+      marginTop: "60px",
+      borderTopLeftRadius: "24px",
+      borderTopRightRadius: "24px",
+      boxShadow: "0 -8px 32px rgba(0,120,200,0.15)",
+    },
+    footerContent: {
+      maxWidth: "1000px",
+      margin: "0 auto",
+    },
+    footerBrand: {
+      marginBottom: 12,
+      fontWeight: 800,
+      fontSize: "20px",
+      letterSpacing: "-0.5px",
+    },
+    footerTagline: {
+      opacity: 0.9,
+      fontSize: "14px",
+      lineHeight: 1.6,
     },
   };
 
@@ -371,28 +546,74 @@ export default function Home() {
     <div style={styles.page}>
       {/* Header / Navbar */}
       <header style={styles.header}>
-        <div onClick={() => scrollTo("top")} style={styles.logo}>
-          FiveAI
+        <div 
+          onClick={() => scrollTo("top")} 
+          style={styles.logoContainer}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+        >
+          <div style={styles.logoIcon}>✋</div>
+          <span style={styles.logoText}>FiveAI</span>
         </div>
 
         <nav style={styles.nav}>
-          <div style={styles.navLink} onClick={() => scrollTo("how")}>
+          <div 
+            style={styles.navLink} 
+            onClick={() => scrollTo("how")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(0,120,200,0.1)";
+              e.currentTarget.style.color = "#0078C8";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "#022037";
+            }}
+          >
             How
           </div>
-          <div style={styles.navLink} onClick={() => scrollTo("features")}>
+          <div 
+            style={styles.navLink} 
+            onClick={() => scrollTo("features")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(0,120,200,0.1)";
+              e.currentTarget.style.color = "#0078C8";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "#022037";
+            }}
+          >
             Features
           </div>
           <div
-            style={{ ...styles.navLink, marginRight: 6 }}
+            style={{ ...styles.navLink, marginRight: 8 }}
             onClick={() => setShowFounders((s) => !s)}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(0,120,200,0.1)";
+              e.currentTarget.style.color = "#0078C8";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "#022037";
+            }}
           >
             {showFounders ? "Close" : "Founders"}
           </div>
 
           <button
-            style={styles.getStartedBtn}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-3px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            style={{...styles.getStartedBtn, padding: "12px 24px", fontSize: "14px"}}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,120,200,0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,120,200,0.18)";
+            }}
             onClick={() => (window.location.href = "/login")}
           >
             Get Started
@@ -429,22 +650,32 @@ export default function Home() {
             instant feedback, and progress tracking that helps you level up efficiently.
           </p>
 
-          <div style={{ display: "flex", gap: 12 }}>
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
             <button
               style={styles.getStartedBtn}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,120,200,0.35)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0) scale(1)";
+                e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,120,200,0.25)";
+              }}
               onClick={() => (window.location.href = "/login")}
             >
               Get Started
             </button>
             <button
-              style={{
-                padding: "10px 16px",
-                borderRadius: 12,
-                border: "1px solid rgba(0,120,200,0.12)",
-                background: "#fff",
-                cursor: "pointer",
-                fontWeight: 700,
-                color: "#0078C8",
+              style={styles.secondaryBtn}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.borderColor = "rgba(0,120,200,0.4)";
+                e.currentTarget.style.background = "rgba(255,255,255,1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.borderColor = "rgba(0,120,200,0.2)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.9)";
               }}
               onClick={() => scrollTo("features")}
             >
@@ -457,25 +688,128 @@ export default function Home() {
       {/* HOW IT WORKS */}
       <section id="how" ref={howRef} style={styles.howSection}>
         <h3 style={styles.howTitle}>How it works — in three steps</h3>
+        <p style={styles.howSubtitle}>
+          Get started with FiveAI in minutes and see immediate improvements in your AP exam preparation.
+        </p>
         <div style={styles.howGrid}>
-          <div style={styles.howCard}>Choose a subject & set a study goal</div>
-          <div style={styles.howCard}>Practice with targeted questions and FRQs</div>
-          <div style={styles.howCard}>Get instant feedback, analytics & next-step guidance</div>
+          <div 
+            style={styles.howCard}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "0 20px 50px rgba(2,24,48,0.1), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
+          >
+            <div style={{ 
+              position: "absolute", 
+              top: "-12px", 
+              left: "50%", 
+              transform: "translateX(-50%)",
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: "14px"
+            }}>
+              1
+            </div>
+            Choose a subject & set a study goal
+          </div>
+          <div 
+            style={styles.howCard}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "0 20px 50px rgba(2,24,48,0.1), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
+          >
+            <div style={{ 
+              position: "absolute", 
+              top: "-12px", 
+              left: "50%", 
+              transform: "translateX(-50%)",
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: "14px"
+            }}>
+              2
+            </div>
+            Practice with targeted questions and FRQs
+          </div>
+          <div 
+            style={styles.howCard}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "0 20px 50px rgba(2,24,48,0.1), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
+          >
+            <div style={{ 
+              position: "absolute", 
+              top: "-12px", 
+              left: "50%", 
+              transform: "translateX(-50%)",
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: "14px"
+            }}>
+              3
+            </div>
+            Get instant feedback, analytics & next-step guidance
+          </div>
         </div>
       </section>
 
       {/* FEATURES */}
       <section id="features" ref={featuresRef} style={styles.featuresSection}>
-        <h3 style={{ color: "#022037", fontSize: 24, fontWeight: 800, marginBottom: 18 }}>
+        <h3 style={styles.featuresTitle}>
           Why FiveAI
         </h3>
+        <p style={styles.featuresSubtitle}>
+          Powerful AI-driven tools designed specifically for AP students to maximize learning efficiency and exam success.
+        </p>
 
         <div style={styles.featuresGrid}>
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 24px 60px rgba(2,24,48,0.12), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
           >
+            <div style={styles.featureIcon}>🧠</div>
             <div style={styles.featureTitle}>Adaptive Practice</div>
             <div style={styles.featureText}>
               The system focuses on your weak areas and reduces repetition for topics you've mastered,
@@ -485,9 +819,16 @@ export default function Home() {
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 24px 60px rgba(2,24,48,0.12), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
           >
+            <div style={styles.featureIcon}>💡</div>
             <div style={styles.featureTitle}>AI-Powered Explanations</div>
             <div style={styles.featureText}>
               Get clear, step-by-step explanations for multiple choice and free-response questions,
@@ -497,9 +838,16 @@ export default function Home() {
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 24px 60px rgba(2,24,48,0.12), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
           >
+            <div style={styles.featureIcon}>📊</div>
             <div style={styles.featureTitle}>Progress & Insights</div>
             <div style={styles.featureText}>
               Track performance over time, identify trending weaknesses, and get a personalized revision plan.
@@ -508,9 +856,16 @@ export default function Home() {
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 24px 60px rgba(2,24,48,0.12), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
           >
+            <div style={styles.featureIcon}>🔍</div>
             <div style={styles.featureTitle}>Fast, Localized Search</div>
             <div style={styles.featureText}>
               Search topics quickly and get context-aware answers with references. (CED-based source material is used behind the scenes for accuracy.)
@@ -519,9 +874,16 @@ export default function Home() {
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 24px 60px rgba(2,24,48,0.12), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
           >
+            <div style={styles.featureIcon}>✍️</div>
             <div style={styles.featureTitle}>FRQ Mode & Smart Grading</div>
             <div style={styles.featureText}>
               Practice free-response prompts and receive constructive feedback plus a suggested rubric score to guide improvements.
@@ -530,12 +892,19 @@ export default function Home() {
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+              e.currentTarget.style.boxShadow = "0 24px 60px rgba(2,24,48,0.12), 0 0 0 1px rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(2,24,48,0.06), 0 0 0 1px rgba(255,255,255,0.8)";
+            }}
           >
+            <div style={styles.featureIcon}>🔒</div>
             <div style={styles.featureTitle}>Privacy First</div>
             <div style={styles.featureText}>
-              We only store what helps you learn — session data and progress. You control what stays and what’s removed.
+              We only store what helps you learn — session data and progress. You control what stays and what's removed.
             </div>
           </div>
         </div>
@@ -572,9 +941,9 @@ export default function Home() {
 
       {/* Footer */}
       <footer style={styles.footer}>
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <div style={{ marginBottom: 8, fontWeight: 700 }}>FiveAI</div>
-          <div style={{ opacity: 0.95, fontSize: 13 }}>
+        <div style={styles.footerContent}>
+          <div style={styles.footerBrand}>FiveAI</div>
+          <div style={styles.footerTagline}>
             © 2025 FiveAI — Built by students. Powered by curiosity.
           </div>
         </div>
