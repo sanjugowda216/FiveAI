@@ -1468,78 +1468,150 @@
       "questions": [
         {
           "id": "q1",
-          "question": "What is the primary goal of the AP Capstone Diploma Program?",
+          "question": "What does AP stand for in the context of the AP Seminar course?",
           "options": [
-            "A) To provide a standardized test for college admissions.",
-            "B) To allow schools to offer college-level courses without any prerequisites.",
-            "C) To develop students' independent thinking and research skills.",
-            "D) To ensure all students pass advanced placement exams."
+            "A) Advanced Placement",
+            "B) Academic Proficiency",
+            "C) Advanced Program",
+            "D) Academic Placement"
           ],
-          "correctAnswer": "C",
-          "explanation": "The AP Capstone Diploma Program aims to develop students' independent thinking and research skills, enabling them to engage with complex issues."
+          "correctAnswer": "A",
+          "explanation": "AP stands for Advanced Placement, which signifies a program designed to offer college-level courses and exams to high school students."
         },
         {
           "id": "q2",
-          "question": "Which principle emphasizes the importance of transparency in AP courses?",
+          "question": "Which of the following principles emphasizes the importance of evidence in AP courses?",
           "options": [
             "A) Clarity and transparency",
-            "B) Evidence-based learning",
-            "C) Academic freedom",
+            "B) Unflinching encounter with evidence",
+            "C) Intellectual freedom",
             "D) Opposing indoctrination"
           ],
-          "correctAnswer": "A",
-          "explanation": "The principle of 'clarity and transparency' highlights the need for clear expectations in AP courses, ensuring that both teachers and students understand the course framework."
+          "correctAnswer": "B",
+          "explanation": "The principle of 'unflinching encounter with evidence' highlights that AP courses enable students to develop independent thinking by starting with evidence."
         },
         {
           "id": "q3",
-          "question": "According to the AP Seminar curriculum framework, which of the following is NOT a focus of the course?",
+          "question": "According to the AP Seminar course framework, what is a crucial aspect of the curriculum?",
           "options": [
-            "A) Analyzing various perspectives",
-            "B) Developing memorization skills",
-            "C) Assessing the credibility of sources",
-            "D) Drawing independent conclusions"
+            "A) Memorization of facts",
+            "B) Critical analysis of multiple perspectives",
+            "C) Agreement with the instructor's viewpoint",
+            "D) Focus solely on scientific methods"
           ],
           "correctAnswer": "B",
-          "explanation": "AP Seminar focuses on critical thinking skills, analysis, and independent conclusions rather than memorization."
+          "explanation": "A crucial aspect of the curriculum is the critical analysis of multiple perspectives, which helps students develop their own conclusions."
         },
         {
           "id": "q4",
-          "question": "What action does the AP Program take if a school censors required topics from its AP courses?",
+          "question": "What is required of schools offering AP Seminar or AP Research starting from the 2024-25 school year?",
           "options": [
-            "A) It allows the school to keep the AP designation temporarily.",
-            "B) It requires a review of the curriculum.",
-            "C) It removes the AP designation from the course.",
-            "D) It provides additional resources to the school."
+            "A) Complete an application process",
+            "B) Ensure teachers complete required summer professional learning",
+            "C) Limit course content to specific topics",
+            "D) Offer only one AP course"
           ],
-          "correctAnswer": "C",
-          "explanation": "If a school censors required topics, the AP Program will remove the AP designation from that course to maintain academic integrity."
+          "correctAnswer": "B",
+          "explanation": "Starting from the 2024-25 school year, schools must ensure that teachers complete the required summer professional learning prior to teaching AP Seminar or AP Research."
         },
         {
           "id": "q5",
-          "question": "What is a key characteristic of the evidence-based learning principle in AP courses?",
+          "question": "Which principle states that AP students are expected to analyze different perspectives?",
           "options": [
-            "A) It encourages students to memorize facts.",
-            "B) It promotes discussions based on personal beliefs.",
-            "C) It requires students to use the scientific method.",
-            "D) It emphasizes the importance of teacher-led instruction."
+            "A) Clarity and transparency",
+            "B) Evidence-based learning",
+            "C) Intellectual freedom",
+            "D) Opposing indoctrination"
           ],
-          "correctAnswer": "C",
-          "explanation": "The evidence-based learning principle emphasizes the use of the scientific method as a foundation for discussions and critical thinking in AP courses."
+          "correctAnswer": "D",
+          "explanation": "The principle of opposing indoctrination makes clear that AP students should analyze different perspectives and not just agree with one viewpoint."
         },
         {
           "id": "q6",
-          "question": "Which of the following best describes 'academic freedom' as outlined in the AP Seminar course principles?",
+          "question": "What consequence does a school face if it censors required topics from its AP courses?",
           "options": [
-            "A) Teachers can teach any subject they prefer.",
-            "B) Students are free to express personal opinions in assessments.",
-            "C) Both teachers and students have the right to explore various viewpoints.",
-            "D) Schools can limit discussions to approved topics only."
+            "A) It will receive a warning",
+            "B) It will lose its AP designation for that course",
+            "C) It will be required to enhance teacher training",
+            "D) It will be ineligible for federal funding"
+          ],
+          "correctAnswer": "B",
+          "explanation": "If a school censors required topics, the AP Program removes the AP designation from that course, indicating its importance for academic integrity."
+        },
+        {
+          "id": "q7",
+          "question": "What is emphasized as essential for the transparency of AP courses?",
+          "options": [
+            "A) Publicly available course frameworks",
+            "B) Private teacher assessments",
+            "C) Limited access to course materials",
+            "D) Non-disclosure of exam content"
+          ],
+          "correctAnswer": "A",
+          "explanation": "Transparency in AP courses is ensured through publicly available course frameworks and sample assessments."
+        },
+        {
+          "id": "q8",
+          "question": "How does the AP program view censorship in education?",
+          "options": [
+            "A) As an acceptable practice",
+            "B) As a necessary evil",
+            "C) As detrimental to academic integrity",
+            "D) As a way to control classroom discussions"
           ],
           "correctAnswer": "C",
-          "explanation": "Academic freedom in the AP context means that both teachers and students are encouraged to explore a range of viewpoints without censorship."
+          "explanation": "The AP program views censorship as detrimental to academic integrity, emphasizing the need for intellectual freedom."
+        },
+        {
+          "id": "q9",
+          "question": "In AP Seminar, what is encouraged among students regarding their viewpoints?",
+          "options": [
+            "A) To conform to the teacher's beliefs",
+            "B) To adopt popular opinions",
+            "C) To develop their own conclusions",
+            "D) To avoid controversial topics"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Students are encouraged to develop their own conclusions rather than simply agreeing with a specific viewpoint."
+        },
+        {
+          "id": "q10",
+          "question": "What is the primary goal of the AP Capstone Diploma Program?",
+          "options": [
+            "A) To provide vocational training",
+            "B) To enable students to earn college credits",
+            "C) To develop independent research and critical thinking skills",
+            "D) To prepare students for standardized testing"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The AP Capstone Diploma Program aims to develop students' independent research and critical thinking skills, preparing them for college-level work."
+        },
+        {
+          "id": "q11",
+          "question": "Which of the following is NOT a principle of the AP program as outlined in the course description?",
+          "options": [
+            "A) Clarity and transparency",
+            "B) Censorship of controversial topics",
+            "C) Unflinching encounter with evidence",
+            "D) Opposing indoctrination"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Censorship of controversial topics contradicts the principles of the AP program, which values intellectual freedom."
+        },
+        {
+          "id": "q12",
+          "question": "What is a key focus of the AP Seminar curriculum framework?",
+          "options": [
+            "A) Rote memorization",
+            "B) Development of communication skills",
+            "C) Critical evaluation of sources",
+            "D) Team-based projects"
+          ],
+          "correctAnswer": "C",
+          "explanation": "A key focus of the AP Seminar curriculum is the critical evaluation of sources, which helps students assess credibility and draw conclusions."
         }
       ],
-      "generatedAt": "2025-10-15T20:11:22.458Z",
+      "generatedAt": "2025-10-18T22:23:51.525Z",
       "cedHash": "153f8ec8005927e43dcb68c18d2e228f"
     }
   },

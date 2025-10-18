@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 export default function QuestionCard({
   question,
@@ -11,6 +12,64 @@ export default function QuestionCard({
   canGoPrevious,
   courseId
 }) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
+  // Dark theme style overrides
+  const darkStyles = {
+    container: {
+      backgroundColor: '#1F2937',
+      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
+    },
+    option: {
+      border: '2px solid #374151',
+      backgroundColor: '#374151',
+    },
+    selectedOption: {
+      backgroundColor: '#1E3A8A',
+      borderColor: '#0078C8',
+    },
+    correctOption: {
+      backgroundColor: '#14532D',
+      borderColor: '#16A34A',
+    },
+    incorrectOption: {
+      backgroundColor: '#7F1D1D',
+      borderColor: '#DC2626',
+    },
+    disabledOption: {
+      backgroundColor: '#2C2C2C',
+      borderColor: '#374151',
+    },
+    progressText: {
+      color: '#94A3B8',
+    },
+    questionText: {
+      color: '#F1F5F9',
+    },
+    optionLetter: {
+      color: '#CBD5E1',
+    },
+    optionText: {
+      color: '#E2E8F0',
+    },
+    explanationContainer: {
+      backgroundColor: '#374151',
+    },
+    explanationTitle: {
+      color: '#E2E8F0',
+    },
+    explanationText: {
+      color: '#CBD5E1',
+    },
+    secondaryButton: {
+      backgroundColor: '#374151',
+      color: '#F8FAFC',
+    },
+    backButton: {
+      color: '#94A3B8',
+    },
+  };
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -100,17 +159,17 @@ export default function QuestionCard({
   }
 
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container, ...(isDark ? darkStyles.container : {}) }}>
       <div style={styles.header}>
         <div style={styles.progress}>
-          <span style={styles.progressText}>
+          <span style={{ ...styles.progressText, ...(isDark ? darkStyles.progressText : {}) }}>
             Question {questionNumber} of {totalQuestions}
           </span>
         </div>
       </div>
 
       <div style={styles.questionContainer}>
-        <h2 style={styles.questionText}>{question.question}</h2>
+        <h2 style={{ ...styles.questionText, ...(isDark ? darkStyles.questionText : {}) }}>{question.question}</h2>
 
         <div style={styles.optionsContainer}>
           {question.options.map((option, index) => {
@@ -118,17 +177,17 @@ export default function QuestionCard({
             const isSelected = selectedAnswer === optionLetter;
             const isCorrectOption = optionLetter === question.correctAnswer;
             
-            let optionStyle = styles.option;
+            let optionStyle = { ...styles.option, ...(isDark ? darkStyles.option : {}) };
             if (submitted) {
               if (isCorrectOption) {
-                optionStyle = { ...optionStyle, ...styles.correctOption };
+                optionStyle = { ...optionStyle, ...styles.correctOption, ...(isDark ? darkStyles.correctOption : {}) };
               } else if (isSelected && !isCorrectOption) {
-                optionStyle = { ...optionStyle, ...styles.incorrectOption };
+                optionStyle = { ...optionStyle, ...styles.incorrectOption, ...(isDark ? darkStyles.incorrectOption : {}) };
               } else {
-                optionStyle = { ...optionStyle, ...styles.disabledOption };
+                optionStyle = { ...optionStyle, ...styles.disabledOption, ...(isDark ? darkStyles.disabledOption : {}) };
               }
             } else if (isSelected) {
-              optionStyle = { ...optionStyle, ...styles.selectedOption };
+              optionStyle = { ...optionStyle, ...styles.selectedOption, ...(isDark ? darkStyles.selectedOption : {}) };
             }
 
             return (
@@ -137,8 +196,8 @@ export default function QuestionCard({
                 style={optionStyle}
                 onClick={() => handleAnswerSelect(optionLetter)}
               >
-                <span style={styles.optionLetter}>{optionLetter}.</span>
-                <span style={styles.optionText}>{option}</span>
+                <span style={{ ...styles.optionLetter, ...(isDark ? darkStyles.optionLetter : {}) }}>{optionLetter}.</span>
+                <span style={{ ...styles.optionText, ...(isDark ? darkStyles.optionText : {}) }}>{option}</span>
               </div>
             );
           })}
@@ -169,9 +228,9 @@ export default function QuestionCard({
             </div>
 
             {showExplanation && (
-              <div style={styles.explanationContainer}>
-                <h4 style={styles.explanationTitle}>Explanation:</h4>
-                <p style={styles.explanationText}>{question.explanation}</p>
+              <div style={{ ...styles.explanationContainer, ...(isDark ? darkStyles.explanationContainer : {}) }}>
+                <h4 style={{ ...styles.explanationTitle, ...(isDark ? darkStyles.explanationTitle : {}) }}>Explanation:</h4>
+                <p style={{ ...styles.explanationText, ...(isDark ? darkStyles.explanationText : {}) }}>{question.explanation}</p>
               </div>
             )}
 
@@ -180,6 +239,7 @@ export default function QuestionCard({
                 style={{
                   ...styles.navButton,
                   ...styles.secondaryButton,
+                  ...(isDark ? darkStyles.secondaryButton : {}),
                   ...(!canGoPrevious ? styles.disabledButton : {})
                 }}
                 onClick={handlePrevious}
@@ -205,7 +265,7 @@ export default function QuestionCard({
       </div>
 
       <div style={styles.footer}>
-        <button style={styles.backButton} onClick={onBackToUnits}>
+        <button style={{ ...styles.backButton, ...(isDark ? darkStyles.backButton : {}) }} onClick={onBackToUnits}>
           ← Back to Units
         </button>
       </div>
