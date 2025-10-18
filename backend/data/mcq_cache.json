@@ -1,0 +1,1698 @@
+{
+  "ap-world-history": {
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the primary function of the Silk Roads during the period from c. 1200 to c. 1450?",
+          "options": [
+            "A. To facilitate the spread of Christianity",
+            "B. To enable the exchange of goods and culture across Eurasia",
+            "C. To establish military alliances between empires",
+            "D. To serve as a route for European exploration of the Americas"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Silk Roads connected various civilizations, allowing for the exchange of not only goods but also cultural practices and ideas."
+        },
+        {
+          "id": "q2",
+          "question": "What was one significant outcome of the maritime trade networks established during the period c. 1200 to c. 1450?",
+          "options": [
+            "A. The decline of land-based empires in Asia",
+            "B. The rise of the Mongol Empire",
+            "C. The increased spread of the bubonic plague",
+            "D. The establishment of new trading cities along coastlines"
+          ],
+          "correctAnswer": "D",
+          "explanation": "Maritime trade networks led to the establishment of vibrant trading cities, particularly along the coasts of Africa and Asia."
+        },
+        {
+          "id": "q3",
+          "question": "Which technological innovation had the greatest impact on trade in the Indian Ocean during this period?",
+          "options": [
+            "A. The compass",
+            "B. The astrolabe",
+            "C. The lateen sail",
+            "D. The steam engine"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The lateen sail allowed ships to navigate more effectively against the wind, facilitating trade across the Indian Ocean."
+        },
+        {
+          "id": "q4",
+          "question": "The term 'Dar al-Islam' during the period c. 1200 to c. 1450 refers to which of the following?",
+          "options": [
+            "A. The lands under Christian rule",
+            "B. Regions where Islam was the dominant religion",
+            "C. The trade routes of the Mongol Empire",
+            "D. The areas of Africa that resisted Islamic influence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Dar al-Islam refers to regions where Islam was practiced and where Islamic law was upheld."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following was a key factor in the growth of cities along the trans-Saharan trade routes?",
+          "options": [
+            "A. The introduction of the printing press",
+            "B. The establishment of democratic governments",
+            "C. The availability of camels for transportation",
+            "D. The discovery of gold in Europe"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The use of camels allowed for more efficient transportation across the Sahara, leading to the growth of trade cities."
+        },
+        {
+          "id": "q6",
+          "question": "What was one effect of the exchange of goods and ideas along the networks of exchange from c. 1200 to c. 1450?",
+          "options": [
+            "A. Decreased cultural diversity",
+            "B. The spread of religious beliefs",
+            "C. The isolation of civilizations",
+            "D. The decline of trade routes"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The exchange networks facilitated the spread of religious beliefs, such as Buddhism and Islam, across different regions."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following statements best describes the role of women in the trade networks during c. 1200 to c. 1450?",
+          "options": [
+            "A. Women had no roles in trade and commerce.",
+            "B. Women were primarily responsible for long-distance trade.",
+            "C. Women often managed household production and local markets.",
+            "D. Women were only involved in trade in Europe."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Women played important roles in managing local economies and household production, contributing to trade indirectly."
+        },
+        {
+          "id": "q8",
+          "question": "What was a significant reason for the expansion of the Mongol Empire in the 13th century?",
+          "options": [
+            "A. The establishment of the Silk Roads",
+            "B. The use of superior military technology",
+            "C. The decline of the Byzantine Empire",
+            "D. The spread of Islam"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Mongol Empire expanded largely due to their highly organized and technologically advanced military strategies."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:09:10.342Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the primary focus of Unit 1: The Global Tapestry?",
+          "options": [
+            "A) The interactions between land-based empires",
+            "B) The development of global trade networks",
+            "C) The cultural, social, and political systems of various civilizations from c. 1200 to c. 1450",
+            "D) The effects of industrialization on world societies"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Unit 1 focuses on the cultural, social, and political systems across different civilizations, highlighting their interactions and developments."
+        },
+        {
+          "id": "q2",
+          "question": "What was a key characteristic of societies during the period of c. 1200 to c. 1450?",
+          "options": [
+            "A) The rise of global empires that controlled vast territories",
+            "B) The establishment of trade routes that facilitated cultural exchange",
+            "C) The predominance of feudal systems in Europe",
+            "D) The absence of significant technological innovations"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The period saw the establishment of significant trade routes, such as the Silk Roads and the Indian Ocean trade network, which facilitated cultural exchange."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following empires is most closely associated with the period c. 1200 to c. 1450?",
+          "options": [
+            "A) The Roman Empire",
+            "B) The Ottoman Empire",
+            "C) The Mongol Empire",
+            "D) The British Empire"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Mongol Empire expanded significantly during this period, connecting vast territories across Asia and Europe."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following best explains the significance of the Indian Ocean trade network during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) It was primarily a route for military conquests",
+            "B) It enabled the exchange of goods, ideas, and cultures among diverse civilizations",
+            "C) It led to the decline of all land-based empires",
+            "D) It was exclusively dominated by European traders"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Indian Ocean trade network facilitated the exchange of goods, ideas, and cultures among various civilizations, enhancing interconnectedness."
+        },
+        {
+          "id": "q5",
+          "question": "What role did religion play in the societies of Unit 1: The Global Tapestry?",
+          "options": [
+            "A) It was a unifying force that eliminated cultural differences",
+            "B) It had no significant impact on trade or social structures",
+            "C) It influenced social hierarchies and political authority",
+            "D) It was primarily used as a tool for military conquest"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Religion often influenced social hierarchies and political authority, shaping the governance and cultural practices of various societies."
+        },
+        {
+          "id": "q6",
+          "question": "Which cultural development is most closely associated with the Islamic Golden Age (c. 800 to c. 1300)?",
+          "options": [
+            "A) The spread of Buddhism in Asia",
+            "B) Advancements in science, mathematics, and medicine",
+            "C) The establishment of the Silk Road",
+            "D) The development of feudalism in Europe"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Islamic Golden Age was marked by significant advancements in various fields, including science, mathematics, and medicine."
+        },
+        {
+          "id": "q7",
+          "question": "What was a significant consequence of the Crusades (c. 1096-1291) during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) They resulted in the permanent conquest of the Holy Land by European powers",
+            "B) They weakened the authority of the Catholic Church",
+            "C) They increased trade and cultural exchange between Europe and the Middle East",
+            "D) They led to the immediate end of feudalism in Europe"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Crusades increased trade and cultural exchange between Europe and the Middle East, leading to greater interconnectedness."
+        },
+        {
+          "id": "q8",
+          "question": "During the period c. 1200 to c. 1450, which of the following innovations had a significant impact on trade?",
+          "options": [
+            "A) The steam engine",
+            "B) The magnetic compass",
+            "C) The printing press",
+            "D) The telephone"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The magnetic compass was crucial for navigation and significantly improved maritime trade during this period."
+        },
+        {
+          "id": "q9",
+          "question": "Which of the following best describes the political structure of the Byzantine Empire during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) A decentralized feudal system",
+            "B) A theocratic monarchy with significant religious influence",
+            "C) A centralized autocracy with a strong bureaucratic system",
+            "D) A democratic republic with elected officials"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Byzantine Empire was characterized by a centralized autocracy, where the emperor held significant power supported by a bureaucratic system."
+        },
+        {
+          "id": "q10",
+          "question": "What was one effect of the agricultural innovations during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) Decreased population growth",
+            "B) Increased urbanization and trade",
+            "C) Decline of social hierarchies",
+            "D) Stagnation of technological development"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Agricultural innovations led to increased food production, which supported urbanization and the growth of trade."
+        },
+        {
+          "id": "q11",
+          "question": "Which of the following civilizations is noted for its contributions to mathematics and astronomy during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) The Aztec Empire",
+            "B) The Song Dynasty",
+            "C) The Roman Empire",
+            "D) The Byzantine Empire"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Song Dynasty made significant contributions to mathematics and astronomy, including advancements in the use of the abacus and celestial navigation."
+        },
+        {
+          "id": "q12",
+          "question": "What was one of the main reasons for the flourishing of trade networks during the period c. 1200 to c. 1450?",
+          "options": [
+            "A) The rise of isolated agricultural communities",
+            "B) The establishment of political stability in various regions",
+            "C) The development of maritime technologies",
+            "D) The decline of urban centers"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Political stability in various regions contributed to the flourishing of trade networks by ensuring safer and more reliable trade routes."
+        }
+      ],
+      "generatedAt": "2025-10-15T06:26:38.274Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-5": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following revolutions is characterized by the rise of Enlightenment ideas and resulted in the establishment of a constitutional monarchy in its country?",
+          "options": [
+            "A) The American Revolution",
+            "B) The Haitian Revolution",
+            "C) The Industrial Revolution",
+            "D) The French Revolution"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The French Revolution was significantly influenced by Enlightenment ideas, leading to the establishment of a constitutional monarchy after the overthrow of the monarchy."
+        },
+        {
+          "id": "q2",
+          "question": "What was one major consequence of the revolutions that occurred between 1750 and 1900?",
+          "options": [
+            "A) The spread of feudalism in Europe",
+            "B) The decline of monarchies in favor of republics",
+            "C) An increase in global trade networks",
+            "D) The rise of agrarian societies"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The revolutions led to the decline of absolute monarchies and the rise of republics and democratic governments in many parts of the world."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following best describes how the Industrial Revolution impacted social structures in the 19th century?",
+          "options": [
+            "A) It resulted in a more rigid caste system.",
+            "B) It led to the emergence of a middle class.",
+            "C) It decreased urbanization significantly.",
+            "D) It strengthened the power of feudal lords."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Industrial Revolution facilitated the growth of a middle class comprised of industrialists and urban workers, altering traditional social hierarchies."
+        },
+        {
+          "id": "q4",
+          "question": "What was a significant factor that contributed to the spread of revolutions in the late 18th and 19th centuries?",
+          "options": [
+            "A) The dominance of monarchies across the globe",
+            "B) The influence of Enlightenment ideas",
+            "C) The lack of communication technology",
+            "D) The stability of empires"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Enlightenment ideas emphasizing liberty, equality, and democracy inspired many revolutionary movements during this period."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following revolutions directly led to the end of slavery in its territory as a result of a successful slave uprising?",
+          "options": [
+            "A) The American Revolution",
+            "B) The Haitian Revolution",
+            "C) The French Revolution",
+            "D) The Latin American Wars of Independence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Haitian Revolution successfully ended slavery in Haiti and established it as the first independent black-led nation."
+        },
+        {
+          "id": "q6",
+          "question": "How did the American and French Revolutions differ in their outcomes regarding governance?",
+          "options": [
+            "A) Both resulted in absolute monarchies.",
+            "B) The American Revolution led to a stable republic, while the French Revolution resulted in political turmoil.",
+            "C) Both established democratic governments immediately.",
+            "D) The American Revolution led to a dictatorship, while the French Revolution established a monarchy."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The American Revolution resulted in a stable republic, while the French Revolution led to significant political instability and radical changes before settling into a more stable government."
+        },
+        {
+          "id": "q7",
+          "question": "What role did women play during the revolutions of the late 18th and 19th centuries?",
+          "options": [
+            "A) Women were completely excluded from revolutionary activities.",
+            "B) Women organized and participated in protests but gained little political power afterwards.",
+            "C) Women were the primary leaders of all revolutionary movements.",
+            "D) Women were solely responsible for the success of the revolutions."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Women were actively involved in revolutionary activities and protests, but they often did not achieve significant political power or rights following the revolutions."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following best describes the relationship between the Enlightenment and the revolutions of the late 18th century?",
+          "options": [
+            "A) Enlightenment ideas had little influence on the revolutions.",
+            "B) Enlightenment thinkers opposed revolutionary change.",
+            "C) Enlightenment ideas inspired revolutionary thought and action.",
+            "D) Enlightenment thinkers rejected the principles of government during revolutions."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Enlightenment ideas such as liberty, equality, and fraternity inspired revolutionary thought and actions in movements like the American and French Revolutions."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:11:27.683Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-3": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following factors contributed most significantly to the expansion of land-based empires between 1450 and 1750?",
+          "options": [
+            "A. Technological advancements in navigation",
+            "B. The establishment of maritime empires",
+            "C. Military conquests and territorial expansion",
+            "D. The rise of global trade networks"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Military conquests and territorial expansion were crucial for the growth of land-based empires during this period, allowing them to control more territory and resources."
+        },
+        {
+          "id": "q2",
+          "question": "What was a common administrative feature of land-based empires during the period from 1450 to 1750?",
+          "options": [
+            "A. Parliamentary systems of governance",
+            "B. Centralized bureaucracies",
+            "C. Direct democracy",
+            "D. Stateless societies"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Centralized bureaucracies were a hallmark of land-based empires, allowing for more effective governance and control over vast territories."
+        },
+        {
+          "id": "q3",
+          "question": "Which belief system was most often used to legitimize the rule of land-based empires during the early modern period?",
+          "options": [
+            "A. Buddhism",
+            "B. Confucianism",
+            "C. Divine Right of Kings",
+            "D. Humanism"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Divine Right of Kings was commonly used to justify monarchical rule in many land-based empires, reinforcing the authority of rulers."
+        },
+        {
+          "id": "q4",
+          "question": "Which empire is best known for its administrative innovations and effective governance during the period from 1450 to 1750?",
+          "options": [
+            "A. Ottoman Empire",
+            "B. Aztec Empire",
+            "C. Mongol Empire",
+            "D. Inca Empire"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The Ottoman Empire is renowned for its sophisticated administrative system, including the use of devshirme and millet systems for governance."
+        },
+        {
+          "id": "q5",
+          "question": "How did land-based empires typically respond to the challenges posed by rival states during the period 1450-1750?",
+          "options": [
+            "A. They formed alliances with one another",
+            "B. They expanded their military capabilities",
+            "C. They focused solely on economic trade",
+            "D. They adopted democratic governance"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Land-based empires often expanded their military capabilities to defend against rivals and assert their dominance in the region."
+        },
+        {
+          "id": "q6",
+          "question": "What role did cultural developments play in the administration of land-based empires in the early modern period?",
+          "options": [
+            "A. They had little impact on governance",
+            "B. They were used to unify diverse populations",
+            "C. They led to the decline of empires",
+            "D. They solely focused on art and literature"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Cultural developments were often utilized to unify diverse populations within empires, promoting a shared identity and loyalty to the state."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following best describes a significant economic characteristic of land-based empires from 1450 to 1750?",
+          "options": [
+            "A. Focus on industrial production",
+            "B. Reliance on tribute systems",
+            "C. Development of global stock markets",
+            "D. Widespread use of cryptocurrency"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Land-based empires often relied on tribute systems as a means of economic control and resource acquisition from conquered territories."
+        },
+        {
+          "id": "q8",
+          "question": "What was one significant impact of land-based empires on social structures during the period from 1450 to 1750?",
+          "options": [
+            "A. The abolition of social classes",
+            "B. The strengthening of feudal systems",
+            "C. The emergence of new social hierarchies based on ethnicity",
+            "D. The establishment of universal suffrage"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Land-based empires often created new social hierarchies based on ethnicity and religion, affecting the social fabric of their diverse populations."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:11:31.347Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-7": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "What was a primary motivation for imperialism from 1750 to 1900?",
+          "options": [
+            "A) The desire to spread democracy",
+            "B) The quest for new markets and raw materials",
+            "C) The promotion of humanitarian efforts",
+            "D) The establishment of global peace"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The quest for new markets and raw materials was a significant driver of imperialism during this period, as industrialized nations sought to fuel their economies."
+        },
+        {
+          "id": "q2",
+          "question": "Which of the following best describes the impact of industrialization on social classes in the 19th century?",
+          "options": [
+            "A) It eliminated class distinctions completely",
+            "B) It created a more rigid class structure",
+            "C) It led to the rise of a middle class",
+            "D) It only affected the working class"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Industrialization led to the rise of a middle class due to the demand for skilled labor and new job opportunities, while also significantly impacting the working class."
+        },
+        {
+          "id": "q3",
+          "question": "What was a consequence of the state expansion from 1750 to 1900?",
+          "options": [
+            "A) Increased focus on local governance",
+            "B) The spread of nationalism",
+            "C) Decreased military conflicts",
+            "D) A reduction in international trade"
+          ],
+          "correctAnswer": "B",
+          "explanation": "State expansion during this period often fueled nationalist sentiments, as newly acquired territories and peoples were integrated into larger national frameworks."
+        },
+        {
+          "id": "q4",
+          "question": "How did indigenous populations respond to imperialism in the 19th century?",
+          "options": [
+            "A) They uniformly accepted foreign rule",
+            "B) They often engaged in resistance movements",
+            "C) They were largely indifferent",
+            "D) They cooperated without exception"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Indigenous populations frequently resisted imperialism through various forms of resistance, including uprisings and the formation of new alliances."
+        },
+        {
+          "id": "q5",
+          "question": "Which technological innovation was crucial for facilitating imperial expansion in the late 19th century?",
+          "options": [
+            "A) The steam engine",
+            "B) The printing press",
+            "C) The telephone",
+            "D) The internal combustion engine"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The steam engine was essential for transportation and communication, enabling faster movement of goods and military forces, which facilitated imperial expansion."
+        },
+        {
+          "id": "q6",
+          "question": "What was one major ideological justification for imperialism during the late 19th century?",
+          "options": [
+            "A) Social Darwinism",
+            "B) Environmentalism",
+            "C) Isolationism",
+            "D) Anti-imperialism"
+          ],
+          "correctAnswer": "A",
+          "explanation": "Social Darwinism was used to justify imperialism by suggesting that stronger nations had a right to dominate weaker ones, reflecting a belief in racial superiority."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following best characterizes a consequence of industrialization on global economies?",
+          "options": [
+            "A) Decreased interdependence among nations",
+            "B) Increased trade and global economic networks",
+            "C) A rise in agrarian economies",
+            "D) The establishment of isolationist policies"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Industrialization led to increased trade and the development of global economic networks as nations sought resources and markets for their manufactured goods."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:14:26.312Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-8": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the primary motivation for imperialism in the late 19th century?",
+          "options": [
+            "A) The desire to spread democracy and freedom",
+            "B) The quest for new markets and resources",
+            "C) The need to protect national borders",
+            "D) The pursuit of cultural exchange"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The primary motivation for imperialism during this period was the quest for new markets and resources to fuel industrial growth, rather than ideals of democracy or cultural exchange."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant consequence of industrialization in the 19th century?",
+          "options": [
+            "A) A decrease in urban populations",
+            "B) The establishment of labor unions",
+            "C) Reduced global trade",
+            "D) A decline in technological innovation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Industrialization led to the establishment of labor unions as workers sought to improve their conditions and rights in response to the harsh realities of factory work."
+        },
+        {
+          "id": "q3",
+          "question": "How did the concept of nationalism influence global conflicts in the early 20th century?",
+          "options": [
+            "A) It promoted international cooperation and peace",
+            "B) It led to the dissolution of empires and the rise of nation-states",
+            "C) It decreased tensions between ethnic groups within empires",
+            "D) It encouraged the spread of communism worldwide"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Nationalism fueled desires for self-determination, leading to the dissolution of empires and the establishment of new nation-states, which often resulted in conflict."
+        },
+        {
+          "id": "q4",
+          "question": "What was one effect of the Cold War on global politics?",
+          "options": [
+            "A) The establishment of a multipolar world order",
+            "B) The increase of political neutrality among nations",
+            "C) The division of Europe into Eastern and Western blocs",
+            "D) The elimination of colonial powers"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Cold War resulted in the division of Europe into Eastern (communist) and Western (capitalist) blocs, significantly shaping global political dynamics."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following was a common characteristic of revolutions in the late 18th and 19th centuries?",
+          "options": [
+            "A) They were all successful in establishing democratic governments",
+            "B) They were primarily driven by the working class",
+            "C) They often incorporated Enlightenment ideas about rights and governance",
+            "D) They occurred in isolation, with no global influence"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Many revolutions of this period were influenced by Enlightenment ideas, emphasizing individual rights, liberty, and self-governance."
+        }
+      ],
+      "generatedAt": "2025-10-12T05:53:03.735Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-9": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following technological advancements significantly contributed to the acceleration of globalization after 1900?",
+          "options": [
+            "A) Steam engine",
+            "B) Internet",
+            "C) Printing press",
+            "D) Telegraph"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Internet revolutionized global communication and commerce, significantly accelerating the pace of globalization after 1900."
+        },
+        {
+          "id": "q2",
+          "question": "What was a major limitation of technological advances in the 20th century regarding public health?",
+          "options": [
+            "A) Increased global travel",
+            "B) Access to clean water",
+            "C) Development of vaccines",
+            "D) Spread of infectious diseases"
+          ],
+          "correctAnswer": "D",
+          "explanation": "While technology advanced significantly, it also facilitated the rapid spread of infectious diseases due to increased global travel, posing challenges to public health."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following best describes the impact of globalization on cultural interactions in the 20th century?",
+          "options": [
+            "A) Isolation of cultures",
+            "B) Homogenization of cultures",
+            "C) Decline of trade networks",
+            "D) Decrease in migration"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Globalization led to the homogenization of cultures as ideas and products spread rapidly across borders, influencing lifestyles and traditions worldwide."
+        },
+        {
+          "id": "q4",
+          "question": "In what way did technological advancements in communication contribute to global conflicts in the 20th century?",
+          "options": [
+            "A) By reducing the need for diplomacy",
+            "B) By allowing rapid dissemination of propaganda",
+            "C) By limiting access to information",
+            "D) By fostering international cooperation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Technological advancements in communication, such as radio and television, allowed for the rapid dissemination of propaganda, which often exacerbated tensions and contributed to global conflicts."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following processes is most directly associated with the economic aspect of globalization?",
+          "options": [
+            "A) Cultural exchange",
+            "B) International trade agreements",
+            "C) Environmental degradation",
+            "D) Technological innovation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "International trade agreements are a key economic aspect of globalization, facilitating trade between nations and promoting economic interdependence."
+        },
+        {
+          "id": "q6",
+          "question": "What role did multinational corporations play in the process of globalization in the late 20th century?",
+          "options": [
+            "A) They created barriers to trade",
+            "B) They limited technological exchange",
+            "C) They expanded global supply chains",
+            "D) They promoted isolationism"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Multinational corporations expanded global supply chains, which is a fundamental aspect of economic globalization, allowing for production and distribution across multiple countries."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following best characterizes the relationship between technology and environmental issues in the context of globalization?",
+          "options": [
+            "A) Technology has always improved environmental conditions",
+            "B) Technological advancements have led to environmental sustainability",
+            "C) Globalization has reduced the impact of technology on the environment",
+            "D) Technological advancements have often exacerbated environmental degradation"
+          ],
+          "correctAnswer": "D",
+          "explanation": "Technological advancements, while beneficial in many aspects, have often led to environmental degradation due to increased industrial activity and resource extraction associated with globalization."
+        },
+        {
+          "id": "q8",
+          "question": "How did the concept of global citizenship emerge in the context of globalization?",
+          "options": [
+            "A) Through nationalistic movements",
+            "B) As a response to environmental challenges",
+            "C) By promoting local traditions",
+            "D) Through increased interconnectedness and shared global issues"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The concept of global citizenship emerged as people recognized their interconnectedness and shared responsibilities in addressing global issues such as climate change, poverty, and human rights."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:08:50.697Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
+    }
+  },
+  "ap-united-states-history": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the period from 1491 to 1607 in North America?",
+          "options": [
+            "A) The establishment of permanent European settlements",
+            "B) The rise of major Native American empires",
+            "C) The initial contacts between European explorers and Native Americans",
+            "D) The beginning of the transatlantic slave trade"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The period from 1491 to 1607 is marked primarily by the initial contacts between European explorers and Native Americans, which set the stage for future interactions."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant consequence of European exploration in the Americas during the late 15th and early 16th centuries?",
+          "options": [
+            "A) The immediate establishment of democratic governments",
+            "B) The exchange of goods and ideas in the Columbian Exchange",
+            "C) The decline of European population due to disease",
+            "D) The isolation of Native American tribes from European influence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Columbian Exchange was a significant consequence of European exploration, involving the widespread transfer of plants, animals, and cultures between the Americas and the Old World."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following was a primary motivation for European exploration during the late 15th century?",
+          "options": [
+            "A) The desire to establish peace with Native Americans",
+            "B) The search for new trade routes and resources",
+            "C) The interest in spreading democratic ideals",
+            "D) The goal of expanding the territory of existing empires"
+          ],
+          "correctAnswer": "B",
+          "explanation": "A primary motivation for European exploration was the search for new trade routes and resources, particularly in light of the lucrative spice trade."
+        },
+        {
+          "id": "q4",
+          "question": "How did Native American societies in North America primarily respond to European contact in the early 16th century?",
+          "options": [
+            "A) They uniformly resisted all European influence",
+            "B) They engaged in trade and cultural exchange",
+            "C) They quickly adopted European political structures",
+            "D) They migrated away from areas of contact"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Many Native American societies engaged in trade and cultural exchange with Europeans, although responses varied widely among different tribes."
+        },
+        {
+          "id": "q5",
+          "question": "Which technological advancement played a crucial role in facilitating European exploration during the Age of Discovery?",
+          "options": [
+            "A) The steam engine",
+            "B) The compass",
+            "C) The printing press",
+            "D) The telephone"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The compass was a crucial technological advancement that aided European navigators in exploring and charting new territories."
+        },
+        {
+          "id": "q6",
+          "question": "What was a significant effect of the Spanish conquests in the Americas during the early 16th century?",
+          "options": [
+            "A) The establishment of a permanent British colony",
+            "B) The rapid decline of indigenous populations due to disease and warfare",
+            "C) The creation of a multi-ethnic society without conflict",
+            "D) The immediate abolition of the encomienda system"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Spanish conquests led to a rapid decline in indigenous populations primarily due to European diseases and violent conflicts."
+        }
+      ],
+      "generatedAt": "2025-10-13T21:09:40.594Z",
+      "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
+    },
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the significance of the year 1607 in American history?",
+          "options": [
+            "A. The establishment of the first permanent English settlement in North America",
+            "B. The signing of the Mayflower Compact",
+            "C. The beginning of the Spanish colonization of Florida",
+            "D. The birth of George Washington"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The year 1607 marks the founding of Jamestown, the first permanent English settlement in North America, which had a lasting impact on future colonization efforts."
+        },
+        {
+          "id": "q2",
+          "question": "What was a primary motivation for the establishment of the English colonies in North America during the early 17th century?",
+          "options": [
+            "A. The spread of democracy",
+            "B. The search for economic opportunities",
+            "C. The desire to convert Native Americans to Christianity",
+            "D. The establishment of a penal colony"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Economic opportunities, including the pursuit of resources and land for agriculture, were primary motivations for the establishment of English colonies."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following statements about the relationship between Native Americans and European settlers during the early colonial period is most accurate?",
+          "options": [
+            "A. Native Americans universally welcomed European settlers as allies in trade",
+            "B. European settlers often viewed Native Americans as obstacles to expansion",
+            "C. Native Americans and European settlers maintained equal power in negotiations",
+            "D. European settlers and Native Americans had no significant interactions"
+          ],
+          "correctAnswer": "B",
+          "explanation": "European settlers often viewed Native Americans as obstacles to their expansion and sought to take their land, leading to conflict."
+        },
+        {
+          "id": "q4",
+          "question": "The period from 1607 to 1754 in colonial America is characterized by which of the following developments?",
+          "options": [
+            "A. The establishment of a unified colonial government",
+            "B. The dominance of French influence in North America",
+            "C. The growth of slavery in the southern colonies",
+            "D. The absence of any form of colonial resistance to British rule"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The growth of slavery in the southern colonies became a major development during this period as plantations expanded."
+        },
+        {
+          "id": "q5",
+          "question": "What role did the transatlantic slave trade play in the development of the British colonies in North America?",
+          "options": [
+            "A. It significantly decreased the population of the colonies",
+            "B. It provided labor for the agricultural economy, particularly in the South",
+            "C. It led to the immediate abolition of slavery in the colonies",
+            "D. It was primarily focused on trade with Native American tribes"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The transatlantic slave trade provided a large labor force for the agricultural economy, particularly in the Southern colonies, where labor-intensive crops were grown."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best describes the impact of the Enlightenment on colonial American society in the 17th and 18th centuries?",
+          "options": [
+            "A. It led to a decline in religious beliefs among colonists",
+            "B. It encouraged the questioning of traditional authority and the promotion of individual rights",
+            "C. It resulted in the establishment of a monarchy in the colonies",
+            "D. It had no significant impact on colonial thought"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Enlightenment encouraged colonists to question traditional authority, leading to a greater emphasis on individual rights and governance."
+        },
+        {
+          "id": "q7",
+          "question": "Which event in the early 18th century exemplified the growing tensions between colonial interests and British imperial policies?",
+          "options": [
+            "A. The establishment of the Dominion of New England",
+            "B. The navigation acts",
+            "C. The Glorious Revolution",
+            "D. The Great Awakening"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The navigation acts, which restricted colonial trade to benefit England, exemplified the growing tensions between colonial interests and British policies."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:01:59.264Z",
+      "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
+    },
+    "unit-3": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following documents most directly influenced the development of American political thought during the late 18th century?",
+          "options": [
+            "A. The Declaration of Independence",
+            "B. The Articles of Confederation",
+            "C. The Magna Carta",
+            "D. The Federalist Papers"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The Declaration of Independence articulated the foundational principles of American political thought, emphasizing individual rights and government by consent."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant outcome of the French and Indian War (1754-1763) that contributed to colonial unrest?",
+          "options": [
+            "A. Increased British military presence in the colonies",
+            "B. Expansion of colonial territory",
+            "C. Decreased taxes on the colonies",
+            "D. Strengthening of colonial assemblies"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The French and Indian War led to increased British military presence to protect new territories, which fueled colonial resentment and resistance."
+        },
+        {
+          "id": "q3",
+          "question": "The principle of 'no taxation without representation' is most closely associated with which of the following events?",
+          "options": [
+            "A. The Boston Tea Party",
+            "B. The signing of the Declaration of Independence",
+            "C. The Intolerable Acts",
+            "D. The First Continental Congress"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The phrase 'no taxation without representation' became a rallying cry for the Boston Tea Party, expressing colonial opposition to British taxation without legislative representation."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following best describes the impact of the Enlightenment on the American Revolution?",
+          "options": [
+            "A. It promoted absolute monarchies across the colonies.",
+            "B. It encouraged the questioning of traditional authority and the promotion of individual rights.",
+            "C. It led to the establishment of a theocracy in the colonies.",
+            "D. It resulted in a unified colonial response to British rule."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Enlightenment encouraged colonists to question traditional authority and assert their rights, which significantly influenced revolutionary thought."
+        },
+        {
+          "id": "q5",
+          "question": "Which event directly led to the first shots fired in the American Revolutionary War?",
+          "options": [
+            "A. The Boston Massacre",
+            "B. The Battles of Lexington and Concord",
+            "C. The Boston Tea Party",
+            "D. The signing of the Treaty of Paris"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Battles of Lexington and Concord marked the first military engagements of the American Revolutionary War between colonial militia and British troops."
+        },
+        {
+          "id": "q6",
+          "question": "The Articles of Confederation created a government that was intentionally weak. Which of the following was a direct consequence of this weakness?",
+          "options": [
+            "A. The establishment of a strong centralized government",
+            "B. An inability to levy taxes or regulate commerce effectively",
+            "C. The rapid expansion of U.S. territory",
+            "D. The drafting of the Bill of Rights"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Articles of Confederation's weakness included the inability to levy taxes or regulate commerce, leading to financial instability and calls for a stronger federal government."
+        },
+        {
+          "id": "q7",
+          "question": "What was a primary goal of the Constitutional Convention of 1787?",
+          "options": [
+            "A. To abolish slavery in the United States",
+            "B. To create a stronger federal government",
+            "C. To establish a monarchy",
+            "D. To extend voting rights to all citizens"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Constitutional Convention aimed to address the weaknesses of the Articles of Confederation by creating a stronger federal government with an effective system of checks and balances."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:11:20.005Z",
+      "cedHash": "f241c5ef2afcb45dfc2af8c8bc2269f7"
+    }
+  },
+  "ap-music-theory": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes a major scale?",
+          "options": [
+            "A sequence of pitches with a specific pattern of whole and half steps",
+            "A scale that includes only whole steps",
+            "A scale that can only be played on a piano",
+            "A sequence of pitches that contains no accidentals"
+          ],
+          "correctAnswer": "A",
+          "explanation": "A major scale consists of a specific pattern of whole and half steps: whole, whole, half, whole, whole, whole, half."
+        },
+        {
+          "id": "q2",
+          "question": "What is the primary function of a key signature in music notation?",
+          "options": [
+            "To indicate the tempo of a piece",
+            "To specify the dynamics to be used",
+            "To determine which notes are sharp or flat throughout the piece",
+            "To provide information about the form of the music"
+          ],
+          "correctAnswer": "C",
+          "explanation": "A key signature indicates which notes are sharp or flat in a piece of music, affecting the overall tonality."
+        },
+        {
+          "id": "q3",
+          "question": "In the context of rhythm, what is 'meter'?",
+          "options": [
+            "The speed of the music",
+            "The organization of beats into regular groups",
+            "The loudness of the music",
+            "The arrangement of different musical instruments"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Meter refers to the organization of beats into regular groups, typically defined by the time signature."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following is an example of an expressive element in music?",
+          "options": [
+            "Key signature",
+            "Tempo markings",
+            "Time signature",
+            "Note values"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Tempo markings are considered expressive elements as they indicate the speed at which a piece should be played, affecting the emotional feel."
+        },
+        {
+          "id": "q5",
+          "question": "What defines the term 'pitch' in music theory?",
+          "options": [
+            "The duration of a sound",
+            "The loudness of a sound",
+            "The quality that makes a sound high or low",
+            "The pattern of notes in a scale"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Pitch refers to the perceived frequency of a sound, determining how high or low it sounds."
+        },
+        {
+          "id": "q6",
+          "question": "How does a time signature affect a piece of music?",
+          "options": [
+            "It specifies the key of the piece",
+            "It indicates the instruments to be used",
+            "It tells performers how many beats are in each measure and what note value receives one beat",
+            "It determines the dynamics throughout the piece"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The time signature indicates how many beats are in each measure and which note value represents one beat, helping to organize the rhythm."
+        },
+        {
+          "id": "q7",
+          "question": "Which of the following scales includes the notes A, B, C#, D, E, F#, and G#?",
+          "options": [
+            "A Major Scale",
+            "C Major Scale",
+            "E Minor Scale",
+            "D Major Scale"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The notes A, B, C#, D, E, F#, and G# correspond to the A Major scale."
+        },
+        {
+          "id": "q8",
+          "question": "What is the relationship between pitch and frequency?",
+          "options": [
+            "Higher pitches correspond to lower frequencies",
+            "Higher pitches correspond to higher frequencies",
+            "Frequency has no effect on pitch",
+            "Pitches are measured in decibels"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Higher pitches correspond to higher frequencies, as pitch is determined by the frequency of sound waves."
+        }
+      ],
+      "generatedAt": "2025-10-13T21:15:24.048Z",
+      "cedHash": "b38c1db0ecaff2a1235bd5a361fef0be"
+    }
+  },
+  "ap-research": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "What is the main purpose of the AP Research course?",
+          "options": [
+            "A) To prepare students for standardized testing",
+            "B) To develop independent research skills",
+            "C) To provide college credit for high school courses",
+            "D) To teach students how to write essays"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The AP Research course aims to develop students' independent research skills, allowing them to conduct in-depth investigations on topics of their choice."
+        },
+        {
+          "id": "q2",
+          "question": "Which of the following statements best reflects the AP Research philosophy?",
+          "options": [
+            "A) Students should only study topics approved by their teachers",
+            "B) Students are encouraged to analyze and evaluate multiple perspectives",
+            "C) Teachers should dictate all aspects of the research process",
+            "D) Evidence is less important than personal opinion in research"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Research emphasizes the importance of analyzing and evaluating multiple perspectives, fostering critical thinking and independent thought."
+        },
+        {
+          "id": "q3",
+          "question": "What is required for schools to offer AP Research?",
+          "options": [
+            "A) Schools must apply for special accreditation",
+            "B) Teachers must complete required summer professional learning",
+            "C) Schools must have a minimum number of AP students",
+            "D) Schools must offer AP Seminar as a prerequisite"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Teachers must complete required summer professional learning prior to teaching the AP Research course."
+        },
+        {
+          "id": "q4",
+          "question": "What happens if a school bans required topics from their AP courses?",
+          "options": [
+            "A) The school loses funding for AP programs",
+            "B) The AP designation is removed from the affected course",
+            "C) Students are given alternative assignments",
+            "D) Teachers are reassigned to different subjects"
+          ],
+          "correctAnswer": "B",
+          "explanation": "If a school bans required topics, the AP Program removes the AP designation from that course, reflecting the importance of academic freedom."
+        },
+        {
+          "id": "q5",
+          "question": "Which principle ensures clarity and transparency in AP courses?",
+          "options": [
+            "A) Students must conform to teacher expectations",
+            "B) Course frameworks and assessments are made public",
+            "C) Teachers have complete control over content",
+            "D) Only certain textbooks are allowed in AP courses"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The principle of clarity and transparency ensures that course frameworks and assessments are publicly available to guide teachers and students."
+        },
+        {
+          "id": "q6",
+          "question": "In the context of AP Research, what does 'evidence' refer to?",
+          "options": [
+            "A) Personal beliefs of the researcher",
+            "B) Data and findings from credible sources",
+            "C) Opinions from peers",
+            "D) Anecdotal experiences"
+          ],
+          "correctAnswer": "B",
+          "explanation": "In AP Research, 'evidence' refers to data and findings from credible sources that support research conclusions."
+        },
+        {
+          "id": "q7",
+          "question": "What is the sequence of courses in the AP Capstone program?",
+          "options": [
+            "A) AP Research followed by AP Seminar",
+            "B) AP Seminar followed by AP Research",
+            "C) AP Research only",
+            "D) AP Seminar only"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Research is offered as the second course in the AP Capstone sequence, following AP Seminar."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following is NOT a principle articulated in the AP Research course description?",
+          "options": [
+            "A) Clarity and transparency",
+            "B) Intellectual freedom",
+            "C) Indoctrination",
+            "D) Evidence-based analysis"
+          ],
+          "correctAnswer": "C",
+          "explanation": "AP Research opposes indoctrination, emphasizing the importance of intellectual freedom and evidence-based analysis."
+        },
+        {
+          "id": "q9",
+          "question": "What is a key expectation of AP students when analyzing research topics?",
+          "options": [
+            "A) They must agree with their sources",
+            "B) They are required to present their own opinions",
+            "C) They should analyze different perspectives",
+            "D) They can ignore conflicting evidence"
+          ],
+          "correctAnswer": "C",
+          "explanation": "AP students are expected to analyze different perspectives, which fosters critical thinking and independent reasoning."
+        },
+        {
+          "id": "q10",
+          "question": "Which of the following best defines the term 'academic freedom' as it pertains to AP courses?",
+          "options": [
+            "A) Freedom to choose any topic without guidelines",
+            "B) The right to express personal viewpoints without evidence",
+            "C) The ability for teachers and students to explore diverse ideas",
+            "D) The requirement to follow a strict curriculum"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Academic freedom in AP courses allows teachers and students to explore diverse ideas and topics, essential for a comprehensive education."
+        },
+        {
+          "id": "q11",
+          "question": "Why is it important for AP courses to encounter evidence critically?",
+          "options": [
+            "A) To ensure all students agree with the material",
+            "B) To promote surface-level understanding",
+            "C) To develop independent thinkers who can draw conclusions",
+            "D) To limit the scope of research topics"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Critical engagement with evidence is crucial for developing independent thinkers who can analyze and draw their own conclusions."
+        },
+        {
+          "id": "q12",
+          "question": "As of the 2024-25 school year, what is no longer required for schools to participate in the AP Capstone Diploma Program?",
+          "options": [
+            "A) Application or sign-up form",
+            "B) A minimum number of students",
+            "C) AP Seminar offerings",
+            "D) Summer training for teachers"
+          ],
+          "correctAnswer": "A",
+          "explanation": "Starting in the 2024-25 school year, schools will not need an application or sign-up form to participate in the AP Capstone Diploma Program."
+        }
+      ],
+      "generatedAt": "2025-10-17T23:49:12.594Z",
+      "cedHash": "bdb85021f08d87347b89cd9f82d7b71d"
+    }
+  },
+  "ap-psychology": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which part of the brain is primarily responsible for regulating basic life functions such as breathing and heart rate?",
+          "options": [
+            "A) Cerebellum",
+            "B) Medulla Oblongata",
+            "C) Hippocampus",
+            "D) Thalamus"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Medulla Oblongata is responsible for autonomic functions such as breathing and heart rate regulation."
+        },
+        {
+          "id": "q2",
+          "question": "What term describes the process by which neurotransmitters are reabsorbed by the neuron that released them?",
+          "options": [
+            "A) Reuptake",
+            "B) Synaptic transmission",
+            "C) Neurogenesis",
+            "D) Reflex arc"
+          ],
+          "correctAnswer": "A",
+          "explanation": "Reuptake is the process by which neurotransmitters are reabsorbed into the presynaptic neuron after they have transmitted a signal across the synapse."
+        },
+        {
+          "id": "q3",
+          "question": "If a researcher is studying the impact of brain damage to the frontal lobe on decision-making abilities, which of the following research methods would likely be most appropriate?",
+          "options": [
+            "A) Case study",
+            "B) Survey",
+            "C) Experimental",
+            "D) Longitudinal"
+          ],
+          "correctAnswer": "A",
+          "explanation": "A case study is ideal for examining the effects of specific brain damage on individual behavior and cognitive functions."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following neurotransmitters is most closely associated with mood regulation and is often linked to depression?",
+          "options": [
+            "A) Acetylcholine",
+            "B) Serotonin",
+            "C) Dopamine",
+            "D) Norepinephrine"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Serotonin plays a crucial role in mood regulation, and low levels of serotonin are often associated with depression."
+        },
+        {
+          "id": "q5",
+          "question": "What is the primary function of the limbic system in the brain?",
+          "options": [
+            "A) Motor control",
+            "B) Memory and emotion",
+            "C) Vision processing",
+            "D) Language comprehension"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The limbic system is primarily involved in the processing of emotions and memory."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best describes the role of the autonomic nervous system?",
+          "options": [
+            "A) Controls voluntary muscle movements",
+            "B) Regulates involuntary bodily functions",
+            "C) Manages sensory information",
+            "D) Coordinates cognitive tasks"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The autonomic nervous system regulates involuntary bodily functions such as heart rate, digestion, and respiratory rate."
+        }
+      ],
+      "generatedAt": "2025-10-15T00:49:35.184Z",
+      "cedHash": null
+    }
+  },
+  "ap-english-language": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following components is NOT part of the rhetorical situation?",
+          "options": [
+            "A) Exigence",
+            "B) Audience",
+            "C) Thesis",
+            "D) Context"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The thesis is a central claim in an argument, but it is not a component of the rhetorical situation itself."
+        },
+        {
+          "id": "q2",
+          "question": "What is the primary purpose of identifying claims and evidence in an argument?",
+          "options": [
+            "A) To summarize the argument",
+            "B) To evaluate its effectiveness",
+            "C) To critique the writer's style",
+            "D) To analyze the rhetorical situation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Identifying claims and evidence helps evaluate the effectiveness of an argument by assessing the support provided."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following best describes the term 'exigence' in the context of the rhetorical situation?",
+          "options": [
+            "A) The emotional appeal of the argument",
+            "B) The urgency or issue that prompts an argument",
+            "C) The intended audience for the argument",
+            "D) The background information provided"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Exigence refers to the urgent issue or problem that prompts the creation of an argument."
+        },
+        {
+          "id": "q4",
+          "question": "In writing an effective argument, what role does evidence play?",
+          "options": [
+            "A) It distracts from the main point",
+            "B) It supports and strengthens the claim",
+            "C) It introduces counterarguments",
+            "D) It provides background information"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Evidence is crucial in supporting and strengthening a claim, making the argument more persuasive."
+        },
+        {
+          "id": "q5",
+          "question": "What is the purpose of the AP English Language and Composition course framework?",
+          "options": [
+            "A) To provide a detailed syllabus for teachers",
+            "B) To outline the skills and knowledge students will develop",
+            "C) To serve as a guide for standardized testing",
+            "D) To promote college-level writing only"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The course framework outlines the skills and knowledge that students will develop throughout the AP English Language and Composition course."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best represents the relationship between claims and evidence?",
+          "options": [
+            "A) Claims are always subjective, while evidence is objective",
+            "B) Claims are unsupported assertions, while evidence is irrelevant",
+            "C) Claims require evidence to be credible and persuasive",
+            "D) Claims and evidence are interchangeable terms"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Claims require evidence to be credible and persuasive; without evidence, a claim lacks support."
+        },
+        {
+          "id": "q7",
+          "question": "What does the term 'audience' refer to in the context of the rhetorical situation?",
+          "options": [
+            "A) The writer's personal perspective",
+            "B) The specific group of people the argument is addressing",
+            "C) The context in which the argument is presented",
+            "D) The purpose behind the argument"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The audience refers specifically to the group of people for whom the argument is intended."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following is NOT a key skill emphasized in Unit 1 of the AP English Language course?",
+          "options": [
+            "A) Identifying rhetorical situations",
+            "B) Developing counterarguments",
+            "C) Analyzing claims and evidence",
+            "D) Organizing effective paragraphs"
+          ],
+          "correctAnswer": "B",
+          "explanation": "While developing counterarguments is important, it is not a key skill emphasized in Unit 1, which focuses on understanding rhetorical situations and claims."
+        },
+        {
+          "id": "q9",
+          "question": "What is the significance of understanding the rhetorical situation in crafting an argument?",
+          "options": [
+            "A) It allows the writer to ignore the audience's values",
+            "B) It helps the writer tailor their argument to be more persuasive",
+            "C) It simplifies the writing process",
+            "D) It eliminates the need for evidence"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Understanding the rhetorical situation allows the writer to tailor their argument to the audience, making it more persuasive."
+        },
+        {
+          "id": "q10",
+          "question": "Which statement is an example of an effective claim?",
+          "options": [
+            "A) Many people think that climate change is a problem.",
+            "B) Climate change is caused by human activity and requires immediate action.",
+            "C) Some scientists believe climate change is real.",
+            "D) Climate change affects everyone."
+          ],
+          "correctAnswer": "B",
+          "explanation": "An effective claim makes a clear, specific assertion that can be supported with evidence."
+        },
+        {
+          "id": "q11",
+          "question": "In the context of the AP English Language course framework, what does the acronym 'REO' stand for?",
+          "options": [
+            "A) Rhetorical Effectiveness Organization",
+            "B) Reasoning and Organization",
+            "C) Rhetorical Evidence Outline",
+            "D) Response Evaluation Objective"
+          ],
+          "correctAnswer": "B",
+          "explanation": "In the course framework, 'REO' stands for Reasoning and Organization, which is a key skill area."
+        },
+        {
+          "id": "q12",
+          "question": "Which of the following is a primary goal of the AP English Language and Composition course?",
+          "options": [
+            "A) To enhance students' literary analysis skills",
+            "B) To develop students' ability to write in a variety of genres",
+            "C) To prepare students for college-level writing and critical thinking",
+            "D) To focus exclusively on fiction writing"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The primary goal of the AP English Language and Composition course is to prepare students for college-level writing and critical thinking."
+        }
+      ],
+      "generatedAt": "2025-10-15T06:30:55.365Z",
+      "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
+    }
+  },
+  "ap-seminar": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "What is the primary goal of the AP Capstone Diploma Program?",
+          "options": [
+            "A) To provide a standardized test for college admissions.",
+            "B) To allow schools to offer college-level courses without any prerequisites.",
+            "C) To develop students' independent thinking and research skills.",
+            "D) To ensure all students pass advanced placement exams."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The AP Capstone Diploma Program aims to develop students' independent thinking and research skills, enabling them to engage with complex issues."
+        },
+        {
+          "id": "q2",
+          "question": "Which principle emphasizes the importance of transparency in AP courses?",
+          "options": [
+            "A) Clarity and transparency",
+            "B) Evidence-based learning",
+            "C) Academic freedom",
+            "D) Opposing indoctrination"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The principle of 'clarity and transparency' highlights the need for clear expectations in AP courses, ensuring that both teachers and students understand the course framework."
+        },
+        {
+          "id": "q3",
+          "question": "According to the AP Seminar curriculum framework, which of the following is NOT a focus of the course?",
+          "options": [
+            "A) Analyzing various perspectives",
+            "B) Developing memorization skills",
+            "C) Assessing the credibility of sources",
+            "D) Drawing independent conclusions"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Seminar focuses on critical thinking skills, analysis, and independent conclusions rather than memorization."
+        },
+        {
+          "id": "q4",
+          "question": "What action does the AP Program take if a school censors required topics from its AP courses?",
+          "options": [
+            "A) It allows the school to keep the AP designation temporarily.",
+            "B) It requires a review of the curriculum.",
+            "C) It removes the AP designation from the course.",
+            "D) It provides additional resources to the school."
+          ],
+          "correctAnswer": "C",
+          "explanation": "If a school censors required topics, the AP Program will remove the AP designation from that course to maintain academic integrity."
+        },
+        {
+          "id": "q5",
+          "question": "What is a key characteristic of the evidence-based learning principle in AP courses?",
+          "options": [
+            "A) It encourages students to memorize facts.",
+            "B) It promotes discussions based on personal beliefs.",
+            "C) It requires students to use the scientific method.",
+            "D) It emphasizes the importance of teacher-led instruction."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The evidence-based learning principle emphasizes the use of the scientific method as a foundation for discussions and critical thinking in AP courses."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best describes 'academic freedom' as outlined in the AP Seminar course principles?",
+          "options": [
+            "A) Teachers can teach any subject they prefer.",
+            "B) Students are free to express personal opinions in assessments.",
+            "C) Both teachers and students have the right to explore various viewpoints.",
+            "D) Schools can limit discussions to approved topics only."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Academic freedom in the AP context means that both teachers and students are encouraged to explore a range of viewpoints without censorship."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:11:22.458Z",
+      "cedHash": "153f8ec8005927e43dcb68c18d2e228f"
+    }
+  },
+  "ap-calculus-ab": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Given the function f(x) = 3x^2 - 12x + 5, what is the limit of f(x) as x approaches 2?",
+          "options": [
+            "-1",
+            "1",
+            "5",
+            "7"
+          ],
+          "correctAnswer": "1",
+          "explanation": "To find the limit as x approaches 2, substitute 2 into the function: f(2) = 3(2)^2 - 12(2) + 5 = 12 - 24 + 5 = -7."
+        },
+        {
+          "id": "q2",
+          "question": "Evaluate the limit: lim (x -> 1) (x^2 - 1)/(x - 1).",
+          "options": [
+            "0",
+            "1",
+            "2",
+            "Undefined"
+          ],
+          "correctAnswer": "2",
+          "explanation": "Factoring gives (x - 1)(x + 1)/(x - 1), which simplifies to x + 1. Evaluating at x = 1 gives 2."
+        },
+        {
+          "id": "q3",
+          "question": "The limit of f(x) as x approaches 3 exists if f(x) is continuous at x = 3. If f(3) = 7 and lim (x -> 3) f(x) = 7, what can be said about f(x)?",
+          "options": [
+            "It is discontinuous at x = 3",
+            "It is continuous at x = 3",
+            "It has a removable discontinuity",
+            "It has an infinite discontinuity"
+          ],
+          "correctAnswer": "IT IS CONTINUOUS AT X = 3",
+          "explanation": "A function is continuous at a point if the limit exists and equals the function's value at that point."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following statements is true regarding the limit of f(x) as x approaches infinity for f(x) = 1/x?",
+          "options": [
+            "The limit is 0",
+            "The limit is 1",
+            "The limit is undefined",
+            "The limit is infinity"
+          ],
+          "correctAnswer": "THE LIMIT IS 0",
+          "explanation": "As x approaches infinity, 1/x approaches 0."
+        },
+        {
+          "id": "q5",
+          "question": "If the function g(x) is defined as g(x) = { x^2 for x < 2, 4 for x = 2, 2x - 2 for x > 2. What is g(2)?",
+          "options": [
+            "0",
+            "2",
+            "4",
+            "Undefined"
+          ],
+          "correctAnswer": "4",
+          "explanation": "g(2) is defined directly as 4 in the piecewise function."
+        },
+        {
+          "id": "q6",
+          "question": "Consider the function h(x) = 5x/(x^2 + 1). What is lim (x -> 0) h(x)?",
+          "options": [
+            "0",
+            "5",
+            "1",
+            "Undefined"
+          ],
+          "correctAnswer": "0",
+          "explanation": "Substituting 0 into h(x), we get h(0) = 5(0)/(0^2 + 1) = 0."
+        },
+        {
+          "id": "q7",
+          "question": "For the piecewise function f(x) = { x^2, x < 1; 3, x = 1; 2x, x > 1. What is lim (x -> 1-) f(x)?",
+          "options": [
+            "1",
+            "2",
+            "3",
+            "0"
+          ],
+          "correctAnswer": "1",
+          "explanation": "The left-hand limit as x approaches 1 is determined by the first piece: lim (x -> 1-) f(x) = 1^2 = 1."
+        },
+        {
+          "id": "q8",
+          "question": "If f(x) = x^3 - 3x + 2, what is the value of f'(1)?",
+          "options": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "correctAnswer": "0",
+          "explanation": "First, differentiate f(x) to get f'(x) = 3x^2 - 3. Then, evaluate f'(1): f'(1) = 3(1)^2 - 3 = 0."
+        },
+        {
+          "id": "q9",
+          "question": "What is the derivative of the function f(x) = 4x^2 - 3x + 1 at x = 2?",
+          "options": [
+            "1",
+            "5",
+            "10",
+            "12"
+          ],
+          "correctAnswer": "5",
+          "explanation": "The derivative f'(x) = 8x - 3. Evaluating at x = 2 gives f'(2) = 8(2) - 3 = 16 - 3 = 13."
+        },
+        {
+          "id": "q10",
+          "question": "Calculate the limit: lim (x -> 0) (sin(x)/x).",
+          "options": [
+            "0",
+            "1",
+            "Undefined",
+            "Infinity"
+          ],
+          "correctAnswer": "1",
+          "explanation": "This limit is a well-known limit that equals 1."
+        },
+        {
+          "id": "q11",
+          "question": "If the limit of f(x) as x approaches 2 is 5 and the limit as x approaches 3 is 6, what can be said about the continuity of f(x) at those points?",
+          "options": [
+            "f(x) is continuous at both points",
+            "f(x) is discontinuous at both points",
+            "f(x) is continuous at x = 2, discontinuous at x = 3",
+            "f(x) is discontinuous at x = 2, continuous at x = 3"
+          ],
+          "correctAnswer": "F(X) IS DISCONTINUOUS AT BOTH POINTS",
+          "explanation": "The continuity of a function requires that the limit must equal the function's value at those points."
+        },
+        {
+          "id": "q12",
+          "question": "Let f(x) = 2/x. What is lim (x -> ∞) f(x)?",
+          "options": [
+            "0",
+            "2",
+            "∞",
+            "Undefined"
+          ],
+          "correctAnswer": "0",
+          "explanation": "As x approaches infinity, the function approaches 0."
+        }
+      ],
+      "generatedAt": "2025-10-15T20:17:49.530Z",
+      "cedHash": "34e04ca920d39358cc327fcc335bf597"
+    }
+  }
+}
