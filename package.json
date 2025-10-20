@@ -1,4 +1,7 @@
 {
+  "name": "highfive",
+  "version": "1.0.0",
+  "description": "HighFive - AP Exam Preparation Platform",
   "dependencies": {
     "react-router-dom": "^7.9.4"
   }

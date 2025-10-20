@@ -270,7 +270,7 @@ function AppContent() {
     return (
       <div className="login-screen">
         <div className="card">
-          <h1 className="title">FiveAI</h1>
+          <h1 className="title">HighFive</h1>
           <p className="msg">Checking your session…</p>
         </div>
       </div>
@@ -286,7 +286,7 @@ function AppContent() {
           element={
             <div className="login-screen">
               <div className="card">
-                <h1 className="title">FiveAI</h1>
+                <h1 className="title">HighFive</h1>
                 {isLogin ? (
                   <Login onLoginSuccess={handleAuthSuccess} />
                 ) : (

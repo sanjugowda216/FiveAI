@@ -2,7 +2,7 @@
 
 ## 🎉 Implementation Status: ✅ COMPLETED
 
-A production-ready dark/light theme system has been successfully implemented for FiveAI with all requested features and best practices.
+A production-ready dark/light theme system has been successfully implemented for HighFive with all requested features and best practices.
 
 ---
 

@@ -160,7 +160,7 @@ export default function Stats({ stats }) {
                 </div>
                 <div style={styles.predictedScoreContainer}>
                   <div style={styles.predictedScore}>
-                    <span style={styles.predictedScoreValue}>{predictedScore || "—"}</span>
+                    <span style={styles.predictedScoreValue}>{predictedScore || "N/A"}</span>
                     <span style={styles.predictedScoreLabel}>Predicted Score</span>
                   </div>
                 </div>
@@ -200,9 +200,9 @@ export default function Stats({ stats }) {
                             </div>
                           ))}
                         </div>
-                      </div>
+          </div>
                     )}
-                  </div>
+          </div>
                 )}
 
                 {/* FRQ Section */}
@@ -213,12 +213,12 @@ export default function Stats({ stats }) {
                       <div style={styles.statItem}>
                         <span style={styles.statValue}>{stats.frqStats.averageScore}/{stats.frqStats.maxScore}</span>
                         <span style={styles.statLabel}>Average</span>
-                      </div>
+          </div>
                       <div style={styles.statItem}>
                         <span style={styles.statValue}>{stats.frqStats.totalSubmissions}</span>
                         <span style={styles.statLabel}>Submissions</span>
-                      </div>
-                    </div>
+          </div>
+        </div>
                     
                     {/* FRQ Recent Grades */}
                     <div style={styles.recentGrades}>
@@ -242,8 +242,8 @@ export default function Stats({ stats }) {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
+        </div>
+      )}
               </div>
             </div>
           );

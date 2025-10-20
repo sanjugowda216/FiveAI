@@ -1,10 +1,10 @@
-# FiveAI
+# HighFive
 Congressional App Challenge
-# Running FiveAI Locally
+# Running HighFive Locally
 
 # Clone the repo and enter project
 git clone <YOUR_REPO_URL>
-cd FiveAI
+cd HighFive
 
 # Backend
 cd backend
