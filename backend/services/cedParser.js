@@ -346,7 +346,7 @@ export function getCedHash(courseId) {
 /**
  * Map frontend course IDs to backend CED file names
  */
-function mapCourseIdToCedId(courseId) {
+export function mapCourseIdToCedId(courseId) {
   const courseMapping = {
     'ap-psychology': 'ap-psychology-ced',
     'ap-human-geography': 'ap-human-geography-ced',

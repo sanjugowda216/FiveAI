@@ -13,6 +13,7 @@ import Practice from "./pages/Practice";
 import Stats from "./pages/Stats";
 import StudyCalendar from "./pages/StudyCalendar";
 import Settings from "./pages/Settings";
+import Community from "./pages/Community";
 import { auth, db } from "./firebase";
 import {
   findCourseByName,
@@ -417,6 +418,7 @@ function AppContent() {
           />
           <Route path="/stats" element={<Stats stats={userProfile?.stats} />} />
           <Route path="/calendar" element={<StudyCalendar />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/settings" element={<Settings userProfile={userProfile} />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
