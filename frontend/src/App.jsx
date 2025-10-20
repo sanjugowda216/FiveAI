@@ -270,7 +270,19 @@ function AppContent() {
     return (
       <div className="login-screen">
         <div className="card">
-          <h1 className="title">HighFive</h1>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+            <img 
+              src="/logo.png" 
+              alt="HighFive Logo" 
+              style={{
+                width: "32px",
+                height: "32px",
+                marginRight: "8px",
+                borderRadius: "6px"
+              }}
+            />
+            <h1 className="title">HighFive</h1>
+          </div>
           <p className="msg">Checking your session…</p>
         </div>
       </div>
@@ -286,7 +298,19 @@ function AppContent() {
           element={
             <div className="login-screen">
               <div className="card">
-                <h1 className="title">HighFive</h1>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                  <img 
+                    src="/logo.png" 
+                    alt="HighFive Logo" 
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      marginRight: "8px",
+                      borderRadius: "6px"
+                    }}
+                  />
+                  <h1 className="title">HighFive</h1>
+                </div>
                 {isLogin ? (
                   <Login onLoginSuccess={handleAuthSuccess} />
                 ) : (
