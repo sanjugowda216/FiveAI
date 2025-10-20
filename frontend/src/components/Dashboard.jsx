@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { apCourses } from "../data/apCourses";
 
 const featuredCourses = apCourses.slice(0, 4);
@@ -16,6 +16,21 @@ export default function Dashboard({
   const selectedCourseName = selectedCourse?.name ?? "an AP course";
   const hasPinnedCourses = pinnedCourses.length > 0;
   const displayName = preferredName || userEmail || "there";
+  const [streakData, setStreakData] = useState({
+    currentStreak: 0,
+    longestStreak: 0,
+    lastStudyDate: null,
+  });
+
+  // Load streak data from localStorage
+  useEffect(() => {
+    const savedStreakData = JSON.parse(localStorage.getItem('streakData') || '{}');
+    setStreakData({
+      currentStreak: savedStreakData.currentStreak || 0,
+      longestStreak: savedStreakData.longestStreak || 0,
+      lastStudyDate: savedStreakData.lastStudyDate || null,
+    });
+  }, []);
 
   return (
     <section style={styles.wrapper}>
@@ -30,10 +45,32 @@ export default function Dashboard({
               : "Pick a course to discover your passions and prepare for AP exam success."}
           </p>
         </div>
+        {/* Streak Overview */}
+        <div style={styles.streakOverview}>
+          <div style={styles.streakCard}>
+            <div style={styles.streakIcon}>🔥</div>
+            <div style={styles.streakInfo}>
+              <div style={styles.streakNumber}>{streakData.currentStreak}</div>
+              <div style={styles.streakLabel}>
+                {streakData.currentStreak === 0 ? 'Start your streak!' : 
+                 streakData.currentStreak === 1 ? 'day streak' : 'day streak'}
+              </div>
+              <div style={styles.streakMessage}>
+                {streakData.currentStreak === 0 ? 'Study 15+ minutes to begin' :
+                 streakData.currentStreak >= 7 ? 'Keep it up!' :
+                 'Great start!'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Browse Courses Button */}
+      <div style={styles.browseSection}>
         <button style={styles.secondaryCta} onClick={onBrowseCourses}>
           Browse All AP Courses
         </button>
-      </header>
+      </div>
 
       <div style={styles.callout}
         onMouseEnter={(e) => {
@@ -135,34 +172,6 @@ export default function Dashboard({
         )}
       </section>
 
-      <section>
-        <p style={styles.featureTitle}>Popular AP Tracks</p>
-        <div style={styles.featureGrid}>
-          {featuredCourses.map((course) => (
-            <button
-              key={course.id}
-              type="button"
-              style={styles.featureCard}
-              onClick={() => onOpenCourse?.(course)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.borderColor = "#0078C8";
-                e.currentTarget.style.boxShadow =
-                  "0 14px 32px rgba(15, 23, 42, 0.15), 0 0 20px rgba(0, 120, 200, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.borderColor = "var(--border-color)";
-                e.currentTarget.style.boxShadow = styles.featureCard.boxShadow;
-              }}
-            >
-              <p style={styles.cardLabel}>{course.name}</p>
-              <span style={styles.cardPill}>{course.subject}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
       <div
         style={styles.tips}
         onMouseEnter={(e) => {
@@ -193,52 +202,118 @@ export default function Dashboard({
 const styles = {
   wrapper: {
     backgroundColor: "var(--bg-secondary)",
-    borderRadius: "1.25rem",
-    padding: "2.75rem 3rem",
-    boxShadow: "0 12px 32px var(--shadow-color)",
+    borderRadius: "1.5rem",
+    padding: "3rem 4rem",
+    boxShadow: "0 20px 40px var(--shadow-color), 0 0 0 1px var(--border-color)",
     width: "100%",
-    maxWidth: "960px",
+    maxWidth: "1200px",
     margin: "0 auto",
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    gap: "2.5rem",
+    gap: "3rem",
     color: "var(--text-primary)",
-    transition: "background-color 0.3s ease, color 0.3s ease",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
+  },
+  // Streak Overview Styles
+  streakOverview: {
+    display: "flex",
+    alignItems: "center",
+  },
+  streakCard: {
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "16px",
+    padding: "1.5rem 2rem",
+    boxShadow: "0 8px 24px var(--shadow-color), 0 0 0 1px var(--border-color)",
+    border: "none",
+    display: "flex",
+    alignItems: "center",
+    gap: "1.25rem",
+    minWidth: "320px",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
+    background: "linear-gradient(135deg, var(--bg-primary) 0%, rgba(0, 120, 200, 0.05) 100%)",
+  },
+  streakIcon: {
+    fontSize: "2.2rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    filter: "drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3))",
+  },
+  streakInfo: {
+    flex: 1,
+    textAlign: "left",
+  },
+  streakNumber: {
+    fontSize: "1.8rem",
+    fontWeight: "800",
+    color: "#FF6B35",
+    lineHeight: 1,
+    marginBottom: "0.25rem",
+    textShadow: "0 2px 4px rgba(255, 107, 53, 0.2)",
+  },
+  streakLabel: {
+    fontSize: "1rem",
+    fontWeight: "600",
+    color: "var(--text-secondary)",
+    marginBottom: "0.25rem",
+  },
+  streakMessage: {
+    fontSize: "0.85rem",
+    color: "var(--text-secondary)",
+    fontWeight: "500",
+    opacity: 0.8,
   },
   header: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
-    gap: "1.5rem",
+    gap: "3rem",
     flexWrap: "wrap",
+    padding: "2rem 0",
+    borderBottom: "1px solid var(--border-color)",
+    marginBottom: "1rem",
+  },
+  browseSection: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "1rem",
   },
   heading: {
-    fontSize: "2rem",
-    fontWeight: 700,
+    fontSize: "2.5rem",
+    fontWeight: 800,
     color: "var(--text-primary)",
     margin: 0,
     transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    lineHeight: 1.2,
   },
   subheading: {
-    fontSize: "1.1rem",
+    fontSize: "1.2rem",
     color: "var(--text-secondary)",
-    marginTop: "0.25rem",
+    marginTop: "0.75rem",
     marginBottom: 0,
     transition: "color 0.3s ease",
   },
   callout: {
     backgroundColor: "var(--bg-secondary)",
-    borderRadius: "1rem",
-    padding: "1.75rem",
-    boxShadow: "0 10px 28px var(--shadow-color)",
+    borderRadius: "16px",
+    padding: "2.5rem 3rem",
+    boxShadow: "0 12px 32px var(--shadow-color), 0 0 0 1px var(--border-color)",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    gap: "1.5rem",
-    border: "2px solid transparent",
-    transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
+    gap: "2rem",
+    border: "none",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
+    background: "linear-gradient(135deg, var(--bg-secondary) 0%, rgba(0, 120, 200, 0.03) 100%)",
   },
   calloutTitle: {
     fontSize: "0.95rem",
@@ -347,15 +422,18 @@ const styles = {
     transition: "background 0.2s ease",
   },
   secondaryCta: {
-    padding: "0.85rem 1.5rem",
+    padding: "1.25rem 2.5rem",
     backgroundColor: "var(--bg-primary)",
     color: "var(--text-primary)",
-    border: "1px solid var(--border-color)",
-    borderRadius: "0.85rem",
+    border: "2px solid var(--border-color)",
+    borderRadius: "12px",
     fontWeight: 600,
-    fontSize: "1rem",
+    fontSize: "1.1rem",
     cursor: "pointer",
-    transition: "opacity 0.2s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease",
+    transition: "all 0.3s ease",
+    boxShadow: "0 6px 20px var(--shadow-color)",
+    backdropFilter: "blur(10px)",
+    background: "linear-gradient(135deg, var(--bg-primary) 0%, rgba(0, 120, 200, 0.05) 100%)",
   },
   disabledCta: {
     backgroundColor: "var(--text-secondary)",
@@ -410,18 +488,24 @@ const styles = {
   },
   tips: {
     backgroundColor: "var(--bg-secondary)",
-    borderRadius: "1rem",
-    padding: "1.75rem",
-    boxShadow: "0 10px 24px var(--shadow-color)",
-    border: "2px solid var(--border-color)",
-    transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
+    borderRadius: "16px",
+    padding: "2.5rem 3rem",
+    boxShadow: "0 12px 32px var(--shadow-color), 0 0 0 1px var(--border-color)",
+    border: "none",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
+    background: "linear-gradient(135deg, var(--bg-secondary) 0%, rgba(0, 120, 200, 0.03) 100%)",
   },
   tipTitle: {
-    fontSize: "1rem",
-    fontWeight: 700,
+    fontSize: "1.3rem",
+    fontWeight: 800,
     color: "var(--text-primary)",
     margin: 0,
-    marginBottom: "1rem",
+    marginBottom: "1.5rem",
+    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
     textTransform: "uppercase",
     letterSpacing: "0.1em",
     transition: "color 0.3s ease",
