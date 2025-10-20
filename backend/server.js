@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import questionRoutes from "./routes/questionRoutes.js";
 import frqRoutes from "./routes/frqRoutes.js";
+import communityRoutes from "./routes/communityRoutes.js";
 import { initializeCedParsing } from "./services/cedParser.js";
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 // Mount question routes
 app.use("/api/questions", questionRoutes);
 app.use("/api/frq", frqRoutes);
+app.use("/api/community", communityRoutes);
 
 // Initialize CED parsing on startup
 async function startServer() {
