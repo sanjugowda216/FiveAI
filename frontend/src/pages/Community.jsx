@@ -189,7 +189,8 @@ export default function Community() {
       <header style={styles.header}>
         <h1 style={styles.title}>Community Q&A</h1>
         <p style={styles.subtitle}>
-          Ask questions about AP courses and get AI-powered answers
+          Ask questions about AP courses and get AI-powered answers. 
+          See other students' questions and learn together!
         </p>
       </header>
 
