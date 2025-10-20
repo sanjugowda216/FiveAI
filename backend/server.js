@@ -19,7 +19,7 @@ app.use(express.json({ limit: "10mb" }));
 
 // Simple test route
 app.get("/", (req, res) => {
-  res.send("FiveAI backend is running 👑");
+  res.send("HighFive backend is running 👑");
 });
 
 // Mount question routes
@@ -29,7 +29,7 @@ app.use("/api/frq", frqRoutes);
 // Initialize CED parsing on startup
 async function startServer() {
   try {
-    console.log("Starting FiveAI backend server...");
+    console.log("Starting HighFive backend server...");
     
     // Initialize CED parsing
     await initializeCedParsing();

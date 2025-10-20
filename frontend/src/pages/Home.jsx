@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 
 /**
  * Home.jsx
- * Academic-futuristic landing page using original FiveAI colors:
+ * Academic-futuristic landing page using original HighFive colors:
  * - primary blue: #0078C8
  * - white: #FFFFFF
  * - light grey: #F0F0F0
@@ -21,19 +21,19 @@ export default function Home() {
   const [typingText, setTypingText] = useState("");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showFounders, setShowFounders] = useState(false);
 
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
   const howRef = useRef(null);
+  const foundersRef = useRef(null);
   const canvasRef = useRef(null);
 
   // Typing phrases (short, crisp)
   const phrases = useMemo(
     () => [
-      "Smarter studying starts here",
-      "Your AI companion for every AP course",
-      "Instant feedback. Clear explanations.",
+      "Discover your passions through AP courses",
+      "Prepare for success on AP exams",
+      "Track your progress and see improvements",
       "Built by students, for students",
     ],
     []
@@ -159,7 +159,7 @@ export default function Home() {
 
   // reveal on scroll using IntersectionObserver (applies inline transforms)
   useEffect(() => {
-    const elements = [heroRef.current, howRef.current, featuresRef.current].filter(Boolean);
+    const elements = [heroRef.current, howRef.current, featuresRef.current, foundersRef.current].filter(Boolean);
     const obs = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -219,6 +219,8 @@ export default function Home() {
       fontSize: "20px",
       cursor: "pointer",
       letterSpacing: "-0.5px",
+      display: "flex",
+      alignItems: "center",
     },
     nav: {
       display: "flex",
@@ -372,7 +374,17 @@ export default function Home() {
       {/* Header / Navbar */}
       <header style={styles.header}>
         <div onClick={() => scrollTo("top")} style={styles.logo}>
-          FiveAI
+          <img 
+            src="/logo.png" 
+            alt="HighFive Logo" 
+            style={{
+              width: "28px",
+              height: "28px",
+              marginRight: "8px",
+              borderRadius: "6px"
+            }}
+          />
+          HighFive
         </div>
 
         <nav style={styles.nav}>
@@ -384,9 +396,9 @@ export default function Home() {
           </div>
           <div
             style={{ ...styles.navLink, marginRight: 6 }}
-            onClick={() => setShowFounders((s) => !s)}
+            onClick={() => scrollTo("founders")}
           >
-            {showFounders ? "Close" : "Founders"}
+            Founders
           </div>
 
           <button
@@ -407,7 +419,7 @@ export default function Home() {
           style={{ ...styles.heroCanvas, width: "100%", height: "320px", top: 0 }}
         />
         <section ref={heroRef} style={styles.heroCard}>
-          <h1 style={styles.heroTitle}>Your AI Study Partner</h1>
+          <h1 style={styles.heroTitle}>Your AP Exam Preparation Partner</h1>
 
           <div style={styles.heroSubtitle}>
             <span>{typingText}</span>
@@ -425,8 +437,8 @@ export default function Home() {
           </div>
 
           <p style={styles.heroDesc}>
-            FiveAI brings smart, exam-focused study tools to AP students — personalized quizzes,
-            instant feedback, and progress tracking that helps you level up efficiently.
+            HighFive brings accessible, exam-focused study tools to AP students with personalized practice,
+            instant feedback, and progress tracking that helps you discover your passions and succeed on exam day.
           </p>
 
           <div style={{ display: "flex", gap: 12 }}>
@@ -456,7 +468,7 @@ export default function Home() {
 
       {/* HOW IT WORKS */}
       <section id="how" ref={howRef} style={styles.howSection}>
-        <h3 style={styles.howTitle}>How it works — in three steps</h3>
+        <h3 style={styles.howTitle}>How it works in three steps</h3>
         <div style={styles.howGrid}>
           <div style={styles.howCard}>Choose a subject & set a study goal</div>
           <div style={styles.howCard}>Practice with targeted questions and FRQs</div>
@@ -467,7 +479,7 @@ export default function Home() {
       {/* FEATURES */}
       <section id="features" ref={featuresRef} style={styles.featuresSection}>
         <h3 style={{ color: "#022037", fontSize: 24, fontWeight: 800, marginBottom: 18 }}>
-          Why FiveAI
+          Why HighFive
         </h3>
 
         <div style={styles.featuresGrid}>
@@ -476,10 +488,46 @@ export default function Home() {
             onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
           >
+            <div style={styles.featureTitle}>Making AP Exams More Accessible</div>
+            <div style={styles.featureText}>
+              With over 2.8 million students taking AP exams annually across the US, HighFive makes 
+              preparation more accessible through adaptive practice that focuses on your individual needs.
+            </div>
+          </div>
+
+          <div
+            style={styles.featureCard}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+          >
+            <div style={styles.featureTitle}>Discover Your Passions</div>
+            <div style={styles.featureText}>
+              Explore 38 different AP courses across 7 subject areas. From STEM to humanities, 
+              discover what excites you and prepare for college and career success.
+            </div>
+          </div>
+
+          <div
+            style={styles.featureCard}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+          >
+            <div style={styles.featureTitle}>Track Your Improvements</div>
+            <div style={styles.featureText}>
+              See your progress over time with detailed analytics. Identify your strengths, 
+              focus on areas for growth, and celebrate your achievements.
+            </div>
+          </div>
+
+          <div
+            style={styles.featureCard}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+          >
             <div style={styles.featureTitle}>Adaptive Practice</div>
             <div style={styles.featureText}>
-              The system focuses on your weak areas and reduces repetition for topics you've mastered,
-              so every session is efficient and high-impact.
+              The system adapts to your learning style, focusing on your weak areas while 
+              reinforcing topics you've mastered for efficient, personalized study sessions.
             </div>
           </div>
 
@@ -488,10 +536,10 @@ export default function Home() {
             onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
           >
-            <div style={styles.featureTitle}>AI-Powered Explanations</div>
+            <div style={styles.featureTitle}>College & Career Preparation</div>
             <div style={styles.featureText}>
-              Get clear, step-by-step explanations for multiple choice and free-response questions,
-              written to your level so concepts really stick.
+              AP courses provide college credit and demonstrate academic readiness. HighFive helps 
+              you prepare for both the exam and future academic and career opportunities.
             </div>
           </div>
 
@@ -500,82 +548,86 @@ export default function Home() {
             onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
           >
-            <div style={styles.featureTitle}>Progress & Insights</div>
+            <div style={styles.featureTitle}>Built by Students</div>
             <div style={styles.featureText}>
-              Track performance over time, identify trending weaknesses, and get a personalized revision plan.
-            </div>
-          </div>
-
-          <div
-            style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-          >
-            <div style={styles.featureTitle}>Fast, Localized Search</div>
-            <div style={styles.featureText}>
-              Search topics quickly and get context-aware answers with references. (CED-based source material is used behind the scenes for accuracy.)
-            </div>
-          </div>
-
-          <div
-            style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-          >
-            <div style={styles.featureTitle}>FRQ Mode & Smart Grading</div>
-            <div style={styles.featureText}>
-              Practice free-response prompts and receive constructive feedback plus a suggested rubric score to guide improvements.
-            </div>
-          </div>
-
-          <div
-            style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-          >
-            <div style={styles.featureTitle}>Privacy First</div>
-            <div style={styles.featureText}>
-              We only store what helps you learn — session data and progress. You control what stays and what’s removed.
+              Created by students who understand the AP experience. We know the challenges, 
+              the pressure, and the excitement of discovering new subjects and passions.
             </div>
           </div>
         </div>
       </section>
 
       {/* FOUNDERS */}
-      {showFounders && (
-        <section style={{ padding: "56px 20px", maxWidth: 1000, margin: "0 auto" }}>
-          <h3 style={{ fontSize: 22, color: "#0078C8", fontWeight: 700, marginBottom: 12 }}>
-            Meet the Team
-          </h3>
-          <div style={{ display: "grid", gap: 14 }}>
-            <div style={{ padding: 18, background: "#fff", borderRadius: 12 }}>
-              <strong>Vaidehi Akbari</strong>
-              <div style={{ marginTop: 8, color: "#234456" }}>
-                Machine learning enthusiast and full-stack developer focused on usable AI for students.
-              </div>
-            </div>
-            <div style={{ padding: 18, background: "#fff", borderRadius: 12 }}>
-              <strong>Sanjana Gowda</strong>
-              <div style={{ marginTop: 8, color: "#234456" }}>
-                Full-stack engineer passionate about educational tools and data-driven learning.
-              </div>
-            </div>
-            <div style={{ padding: 18, background: "#fff", borderRadius: 12 }}>
-              <strong>Shely Jain</strong>
-              <div style={{ marginTop: 8, color: "#234456" }}>
-                AI enthusiast and frontend engineer building polished learning experiences.
+      <section id="founders" ref={foundersRef} style={{ padding: "56px 20px", maxWidth: 1000, margin: "0 auto" }}>
+        <h3 style={{ fontSize: 22, color: "#0078C8", fontWeight: 700, marginBottom: 12, textAlign: "center" }}>
+          Meet the Team
+        </h3>
+        <div style={{ display: "flex", flexDirection: "row", gap: "20px", alignItems: "flex-start", justifyContent: "center", flexWrap: "nowrap" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "16px", background: "#fff", borderRadius: "12px", boxShadow: "0 6px 18px rgba(2,24,48,0.04)", border: "1px solid rgba(0,0,0,0.04)", width: "250px", flexShrink: 0 }}>
+            <img 
+              src="/vaidehi.png" 
+              alt="Vaidehi Akbari" 
+              style={{
+                width: "180px",
+                height: "180px",
+                borderRadius: "50%",
+                objectFit: "cover"
+              }}
+            />
+            <div style={{ textAlign: "center" }}>
+              <strong style={{ fontSize: "18px", color: "#022037" }}>Vaidehi Akbari</strong>
+              <div style={{ marginTop: "8px", color: "#234456", fontSize: "14px", lineHeight: "1.5" }}>
+                Machine learning enthusiast who enjoys coding with Python and Unity. Practices taekwondo and loves combining creativity with technology.
               </div>
             </div>
           </div>
-        </section>
-      )}
+          
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "16px", background: "#fff", borderRadius: "12px", boxShadow: "0 6px 18px rgba(2,24,48,0.04)", border: "1px solid rgba(0,0,0,0.04)", width: "250px", flexShrink: 0 }}>
+            <img 
+              src="/sanjana.png" 
+              alt="Sanjana Gowda" 
+              style={{
+                width: "180px",
+                height: "180px",
+                borderRadius: "50%",
+                objectFit: "cover"
+              }}
+            />
+            <div style={{ textAlign: "center" }}>
+              <strong style={{ fontSize: "18px", color: "#022037" }}>Sanjana Gowda</strong>
+              <div style={{ marginTop: "8px", color: "#234456", fontSize: "14px", lineHeight: "1.5" }}>
+                Full-stack engineer passionate about AI and machine learning. Swimmer and co-president of Girls Who Code who loves building educational tools.
+              </div>
+            </div>
+          </div>
+          
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "16px", background: "#fff", borderRadius: "12px", boxShadow: "0 6px 18px rgba(2,24,48,0.04)", border: "1px solid rgba(0,0,0,0.04)", width: "250px", flexShrink: 0 }}>
+            <img 
+              src="/shely.png" 
+              alt="Shely Jain" 
+              style={{
+                width: "180px",
+                height: "180px",
+                borderRadius: "50%",
+                objectFit: "cover"
+              }}
+            />
+            <div style={{ textAlign: "center" }}>
+              <strong style={{ fontSize: "18px", color: "#022037" }}>Shely Jain</strong>
+              <div style={{ marginTop: "8px", color: "#234456", fontSize: "14px", lineHeight: "1.5" }}>
+                AI enthusiast who loves working with Python and machine learning. Volleyball player and co-president of Girls Who Code passionate about coding.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer style={styles.footer}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <div style={{ marginBottom: 8, fontWeight: 700 }}>FiveAI</div>
+          <div style={{ marginBottom: 8, fontWeight: 700 }}>HighFive</div>
           <div style={{ opacity: 0.95, fontSize: 13 }}>
-            © 2025 FiveAI — Built by students. Powered by curiosity.
+            © 2025 HighFive Making AP exam preparation more accessible for students everywhere.
           </div>
         </div>
       </footer>

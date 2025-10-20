@@ -147,13 +147,23 @@ export default function Navbar({ onLogout }) {
         }}
       >
         <NavLink to="/dashboard" style={styles.brand}>
-          <span style={{ color: isLight ? '#000000' : '#FFFFFF' }}>Five</span>
+          <img 
+            src="/logo.png" 
+            alt="HighFive Logo" 
+            style={{
+              width: "32px",
+              height: "32px",
+              marginRight: "8px",
+              borderRadius: "6px"
+            }}
+          />
+          <span style={{ color: isLight ? '#000000' : '#FFFFFF' }}>High</span>
           <span style={{
             color: isLight ? '#0078C8' : '#3B82FF',
             textShadow: isLight
               ? '0 0 10px rgba(0, 120, 200, 0.4), 0 0 20px rgba(0, 120, 200, 0.2)'
               : `0 0 10px #3B82FF, 0 0 20px #3B82FF, 0 0 30px #3B82FF, 0 0 40px #2563EB, 0 0 70px #2563EB, 0 0 80px #2563EB, 0 0 100px #1D4ED8, 0 0 150px #1E40AF`
-          }}>AI</span>
+          }}>Five</span>
         </NavLink>
         <nav style={styles.nav}>
           {navItems.map((item) => {
@@ -437,7 +447,8 @@ const styles = {
     fontSize: "1.25rem",
     fontWeight: 700,
     textDecoration: "none",
-    display: "block",
+    display: "flex",
+    alignItems: "center",
   },
   nav: {
     display: "flex",
