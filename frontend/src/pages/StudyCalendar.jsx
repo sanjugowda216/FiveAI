@@ -14,6 +14,12 @@ export default function StudyCalendar() {
     type: 'mcq',
     notes: ''
   });
+  const [streakData, setStreakData] = useState({
+    currentStreak: 0,
+    longestStreak: 0,
+    lastStudyDate: null,
+    studyMinutes: {}
+  });
 
   // Color palette for AP courses
   const courseColors = {
@@ -66,11 +72,83 @@ export default function StudyCalendar() {
     'ap-human-geography': new Date('2025-05-22')
   };
 
-  // Load study sessions from localStorage
+  // Load study sessions and streak data from localStorage
   useEffect(() => {
     const savedSessions = JSON.parse(localStorage.getItem('studySessions') || '{}');
+    const savedStreakData = JSON.parse(localStorage.getItem('streakData') || '{}');
     setStudySessions(savedSessions);
+    setStreakData({
+      currentStreak: savedStreakData.currentStreak || 0,
+      longestStreak: savedStreakData.longestStreak || 0,
+      lastStudyDate: savedStreakData.lastStudyDate || null,
+      studyMinutes: savedStreakData.studyMinutes || {}
+    });
   }, []);
+
+  // Calculate streak based on study minutes
+  const calculateStreak = (studyMinutes) => {
+    const today = new Date();
+    const dates = Object.keys(studyMinutes).sort((a, b) => new Date(b) - new Date(a));
+    
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+    let lastStudyDate = null;
+
+    // Calculate current streak
+    for (let i = 0; i < dates.length; i++) {
+      const date = new Date(dates[i]);
+      const daysDiff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+      
+      if (i === 0) {
+        if (daysDiff <= 1) {
+          currentStreak = 1;
+          tempStreak = 1;
+          lastStudyDate = date;
+        }
+      } else {
+        const prevDate = new Date(dates[i - 1]);
+        const daysBetween = Math.floor((prevDate - date) / (1000 * 60 * 60 * 24));
+        
+        if (daysBetween === 1) {
+          tempStreak++;
+          if (i === 0 || daysDiff <= 1) {
+            currentStreak = tempStreak;
+          }
+        } else {
+          tempStreak = 1;
+        }
+      }
+      
+      longestStreak = Math.max(longestStreak, tempStreak);
+    }
+
+    return { currentStreak, longestStreak, lastStudyDate };
+  };
+
+  // Update streak when study sessions change
+  useEffect(() => {
+    const studyMinutes = {};
+    Object.keys(studySessions).forEach(dateStr => {
+      const sessions = studySessions[dateStr];
+      const totalMinutes = sessions.reduce((sum, session) => sum + (session.duration || 0), 0);
+      if (totalMinutes >= 15) { // Only count days with 15+ minutes
+        studyMinutes[dateStr] = totalMinutes;
+      }
+    });
+
+    const { currentStreak, longestStreak, lastStudyDate } = calculateStreak(studyMinutes);
+    
+    const newStreakData = {
+      currentStreak,
+      longestStreak,
+      lastStudyDate,
+      studyMinutes
+    };
+
+    setStreakData(newStreakData);
+    localStorage.setItem('streakData', JSON.stringify(newStreakData));
+  }, [studySessions]);
 
   // Save study sessions to localStorage
   const saveStudySessions = (sessions) => {
@@ -257,6 +335,35 @@ export default function StudyCalendar() {
           >
             🤖 Generate AI Study Plan
           </button>
+        </div>
+      </div>
+
+      {/* Streak Display */}
+      <div style={styles.streakContainer}>
+        <div style={styles.streakCard}>
+          <div style={styles.streakIcon}>
+            🔥
+          </div>
+          <div style={styles.streakInfo}>
+            <div style={styles.streakNumber}>{streakData.currentStreak}</div>
+            <div style={styles.streakLabel}>
+              {streakData.currentStreak === 0 ? 'Start your streak!' : 
+               streakData.currentStreak === 1 ? 'day streak' : 'day streak'}
+            </div>
+            <div style={styles.streakSubtext}>
+              {streakData.currentStreak === 0 ? 'Study 15+ minutes to begin' :
+               streakData.currentStreak >= 50 ? 'Incredible! You\'re unstoppable!' :
+               streakData.currentStreak >= 30 ? 'Amazing! You\'re on fire!' :
+               streakData.currentStreak >= 7 ? 'Great job! Keep it up!' :
+               'Keep studying daily!'}
+            </div>
+          </div>
+          <div style={styles.streakStats}>
+            <div style={styles.longestStreak}>
+              <div style={styles.longestNumber}>{streakData.longestStreak}</div>
+              <div style={styles.longestLabel}>Longest</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -577,6 +684,74 @@ const styles = {
     minHeight: "80vh",
     color: "var(--text-primary)",
     transition: "background-color 0.3s ease, color 0.3s ease, height 0.3s ease",
+  },
+  // Streak Styles
+  streakContainer: {
+    marginBottom: "2rem",
+    display: "flex",
+    justifyContent: "center",
+  },
+  streakCard: {
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "16px",
+    padding: "1.5rem",
+    boxShadow: "0 8px 32px var(--shadow-color)",
+    border: "2px solid var(--border-color)",
+    display: "flex",
+    alignItems: "center",
+    gap: "1.5rem",
+    minWidth: "400px",
+    transition: "all 0.3s ease",
+  },
+  streakIcon: {
+    fontSize: "3rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  streakInfo: {
+    flex: 1,
+    textAlign: "left",
+  },
+  streakNumber: {
+    fontSize: "2.5rem",
+    fontWeight: "800",
+    color: "#FF6B35",
+    lineHeight: 1,
+    marginBottom: "0.25rem",
+  },
+  streakLabel: {
+    fontSize: "1rem",
+    fontWeight: "600",
+    color: "var(--text-secondary)",
+    marginBottom: "0.5rem",
+  },
+  streakSubtext: {
+    fontSize: "0.9rem",
+    color: "var(--text-secondary)",
+    fontWeight: "500",
+  },
+  streakStats: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    paddingLeft: "1rem",
+    borderLeft: "2px solid var(--border-color)",
+  },
+  longestStreak: {
+    textAlign: "center",
+  },
+  longestNumber: {
+    fontSize: "1.5rem",
+    fontWeight: "700",
+    color: "var(--text-primary)",
+    lineHeight: 1,
+  },
+  longestLabel: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    fontWeight: "500",
+    marginTop: "0.25rem",
   },
   header: {
     display: "flex",
