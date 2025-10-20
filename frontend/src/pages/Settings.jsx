@@ -223,15 +223,16 @@ export default function Settings({ userProfile }) {
 const styles = {
   wrapper: {
     backgroundColor: "var(--bg-secondary)",
-    borderRadius: "1.25rem",
-    padding: "2.75rem 3rem",
-    boxShadow: "0 12px 32px var(--shadow-color)",
+    borderRadius: "1.5rem",
+    padding: "3rem 4rem",
+    boxShadow: "0 20px 40px var(--shadow-color), 0 0 0 1px var(--border-color)",
     width: "100%",
-    maxWidth: "960px",
+    maxWidth: "1200px",
     margin: "0 auto",
     boxSizing: "border-box",
     color: "var(--text-primary)",
-    transition: "background-color 0.3s ease, color 0.3s ease",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
   },
   header: {
     marginBottom: "2rem",

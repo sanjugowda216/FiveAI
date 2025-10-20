@@ -1229,6 +1229,156 @@
       ],
       "generatedAt": "2025-10-17T23:49:12.594Z",
       "cedHash": "bdb85021f08d87347b89cd9f82d7b71d"
+    },
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "What is the primary purpose of AP Classroom?",
+          "options": [
+            "To provide a platform for college admissions",
+            "To serve as a resource for teachers and students during the AP experience",
+            "To facilitate online testing",
+            "To manage student grades"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Classroom is designed to support teachers and students throughout their AP experience by providing various resources and tools."
+        },
+        {
+          "id": "q2",
+          "question": "What must new AP Capstone teachers complete before starting the digital activation process?",
+          "options": [
+            "Attend summer professional development and get their AP Course Audit form approved",
+            "Teach an AP course for at least one year",
+            "Complete a student registration form",
+            "Pass a nationwide exam"
+          ],
+          "correctAnswer": "A",
+          "explanation": "New AP Capstone teachers are required to attend summer professional development and have their AP Course Audit form approved to start the digital activation process."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following is NOT a benefit of the digital activation process?",
+          "options": [
+            "Access to AP resources and supports",
+            "Personalized AP ID registration labels",
+            "Reduction in preadministration sessions",
+            "Automatic grading of exams"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The digital activation process provides access to resources, personalized labels, and reduces preadministration sessions, but it does not automatically grade exams."
+        },
+        {
+          "id": "q4",
+          "question": "What is the deadline for AP Capstone students to submit their written performance tasks in the AP Digital Portfolio?",
+          "options": [
+            "March 15 at 11:59 p.m. ET",
+            "April 30 at 11:59 p.m. ET",
+            "May 10 at 11:59 p.m. ET",
+            "June 1 at 11:59 p.m. ET"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Capstone students must submit their written performance tasks as final by April 30 at 11:59 p.m. ET."
+        },
+        {
+          "id": "q5",
+          "question": "What does the AP ID registration label replace?",
+          "options": [
+            "The AP student pack",
+            "The AP exam paper",
+            "The digital portfolio",
+            "The school registration form"
+          ],
+          "correctAnswer": "A",
+          "explanation": "The AP ID registration label replaces the AP student pack and connects a student's exam materials with their registration information."
+        },
+        {
+          "id": "q6",
+          "question": "How do teachers verify the authenticity of student submissions in the AP Digital Portfolio?",
+          "options": [
+            "By conducting a peer review",
+            "By scoring the presentations",
+            "By checking for plagiarism software",
+            "By submitting a separate report"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Teachers must review final student submissions, score student presentations, and affirm their authenticity in the digital portfolio."
+        },
+        {
+          "id": "q7",
+          "question": "Why is it essential for AP coordinators to order an AP Seminar or AP Research Exam for students?",
+          "options": [
+            "To ensure students receive study materials",
+            "To enable students' submitted performance tasks to be sent for scoring",
+            "To provide access to the AP Classroom",
+            "To verify student identities"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Students' submitted performance tasks will only be sent for scoring if the AP coordinator has ordered an AP Seminar or AP Research Exam for them."
+        },
+        {
+          "id": "q8",
+          "question": "What type of reports do AP teachers receive after the digital activation process?",
+          "options": [
+            "Final exam scores",
+            "Instructional Planning Reports (IPRs)",
+            "Student enrollment statistics",
+            "Teacher performance reviews"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP teachers receive Instructional Planning Reports (IPRs) that include data on their class sections automatically after the digital activation process."
+        },
+        {
+          "id": "q9",
+          "question": "What is the purpose of the digital activation process for teachers and students?",
+          "options": [
+            "To collect exam fees",
+            "To streamline access to AP resources and registration information",
+            "To organize student presentations",
+            "To prepare for college admissions"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The digital activation process allows teachers and students to access AP resources and gather exam registration information more efficiently."
+        },
+        {
+          "id": "q10",
+          "question": "What is one requirement for teachers to submit scores for the presentation components of performance tasks?",
+          "options": [
+            "They must attend a national conference",
+            "They must pass certification tests each year",
+            "They must submit a research paper",
+            "They must complete a student evaluation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "AP Capstone teachers must take and pass certification tests annually to submit scores for the presentation components of the performance tasks."
+        },
+        {
+          "id": "q11",
+          "question": "What happens if an AP Capstone student's performance task is not submitted by the deadline?",
+          "options": [
+            "It will be automatically graded as a zero",
+            "The student will be required to retake the exam",
+            "The work will not be sent for scoring",
+            "The student will receive a late penalty"
+          ],
+          "correctAnswer": "C",
+          "explanation": "If performance tasks are not submitted by the deadline, they will not be sent for scoring."
+        },
+        {
+          "id": "q12",
+          "question": "What does the digital activation process help reduce on exam day?",
+          "options": [
+            "The number of questions on the exam",
+            "The length of the exam",
+            "The time spent bubbling registration information",
+            "The overall difficulty of the exam"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The digital activation process reduces the time spent bubbling registration information on exam day by providing personalized AP ID registration labels."
+        }
+      ],
+      "generatedAt": "2025-10-20T04:03:58.868Z",
+      "cedHash": "bdb85021f08d87347b89cd9f82d7b71d"
     }
   },
   "ap-psychology": {
