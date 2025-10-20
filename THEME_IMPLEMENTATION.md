@@ -1,7 +1,7 @@
 # Theme System Implementation
 
 ## Overview
-A complete dark/light theme system has been implemented for FiveAI with system preference detection and persistent user preferences.
+A complete dark/light theme system has been implemented for HighFive with system preference detection and persistent user preferences.
 
 ## Features
 

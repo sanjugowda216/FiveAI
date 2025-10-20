@@ -22,12 +22,12 @@ export default function Dashboard({
       <header style={styles.header}>
         <div>
           <h1 style={styles.heading}>
-            {preferredName ? `Welcome back, ${preferredName}!` : userEmail ? `Welcome back, ${userEmail}!` : "Welcome to FiveAI"}
+            {preferredName ? `Welcome back, ${preferredName}!` : userEmail ? `Welcome back, ${userEmail}!` : "Welcome to HighFive"}
           </h1>
           <p style={styles.subheading}>
             {hasCourseSelected
-              ? `You're currently locked in on ${selectedCourseName}.`
-              : "Pick a course to personalize your FiveAI practice journey."}
+              ? `You're currently focused on ${selectedCourseName}.`
+              : "Pick a course to discover your passions and prepare for AP exam success."}
           </p>
         </div>
         <button style={styles.secondaryCta} onClick={onBrowseCourses}>
@@ -50,8 +50,8 @@ export default function Dashboard({
           <p style={styles.calloutTitle}>Jump back in</p>
           <p style={styles.calloutBody}>
             {hasCourseSelected
-              ? `Spin up a new practice set for ${selectedCourseName} right away.`
-              : "Select a course to unlock adaptive MCQs and rubric-aligned FRQs."}
+              ? `Start a new practice session for ${selectedCourseName} and track your improvements.`
+              : "Select a course to unlock adaptive practice questions and detailed feedback."}
           </p>
         </div>
         <button
@@ -81,8 +81,8 @@ export default function Dashboard({
           <p style={styles.pinnedEyebrow}>My AP Dashboard</p>
           <p style={styles.pinnedCopy}>
             {hasPinnedCourses
-              ? "Quick launch your pinned courses."
-              : "Pin courses on the AP Courses page to build your personal list."}
+              ? "Quick access to your favorite AP courses."
+              : "Pin courses on the AP Courses page to build your personal study list."}
           </p>
         </div>
         {hasPinnedCourses ? (
@@ -177,14 +177,12 @@ export default function Dashboard({
       >
         <p style={styles.tipTitle}>Roadmap</p>
         <ul style={styles.tipList}>
-          <li>Review growth in "My Stats" after each practice session.</li>
+          <li>Track your progress in "My Stats" to see your improvements over time.</li>
           <li>
-            Submit essays or upload FRQs in the Course Options workspace for AI
-            feedback (coming soon).
+            Practice with FRQs and get detailed feedback to prepare for exam day.
           </li>
           <li>
-            Switching subjects? FiveAI saves your progress per course
-            automatically.
+            HighFive automatically saves your progress across all AP courses.
           </li>
         </ul>
       </div>

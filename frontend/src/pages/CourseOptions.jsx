@@ -609,7 +609,7 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                     <div style={styles.gradeStat}>
                       <span style={styles.statLabel}>Level</span>
                       <span style={styles.statValue}>
-                        {grade.performanceLevel || "—"}
+                        {grade.performanceLevel || "N/A"}
                       </span>
                     </div>
                   </div>
@@ -653,7 +653,7 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                             <strong>{entry.criterion}</strong>
                             <span>
                               {entry.score !== null
-                                ? ` — ${entry.score}${
+                                ? ` ${entry.score}${
                                     entry.maxScore ? `/${entry.maxScore}` : ""
                                   }`
                                 : ""}
