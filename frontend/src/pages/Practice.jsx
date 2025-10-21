@@ -19,21 +19,14 @@ export default function Practice({
   const courseName = activeCourse?.name ?? "your AP course";
   const activeCourseId = activeCourse?.id ?? null;
 
-  // Debug logging
-  console.log('Practice component debug:', {
-    courseId,
-    courseFromRoute,
-    selectedCourse,
-    activeCourse,
-    courseName
-  });
-
   // State for unit selection and questions
   const [units, setUnits] = useState([]);
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [loadingUnitNumber, setLoadingUnitNumber] = useState(null);
   const [error, setError] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
   const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
@@ -82,23 +75,41 @@ export default function Practice({
       return;
     }
 
-    setLoading(true);
+    setLoadingQuestions(true);
+    setLoadingUnitNumber(unit.number);
     setError(null);
     setIsAdaptiveMode(false);
     
     try {
       const isAuthenticated = !!userProfile?.uid;
       const response = await getQuestionsForUnit(activeCourseId, unit.number, isAuthenticated);
+      
+      // Check if this course doesn't have MCQ sections
+      if (response.questions && response.questions.source === 'no-mcq') {
+        setError(response.questions.message || 'This AP exam does not have multiple choice questions.');
+        return;
+      }
+      
       setQuestions(response.questions || []);
       setSelectedUnit(unit);
       setCurrentQuestionIndex(0);
       setShowQuestions(true);
       setShowAdaptiveButton(isAuthenticated && response.questions?.length >= 12);
+      
+      // Update the unit to show it has questions
+      setUnits(prevUnits => 
+        prevUnits.map(u => 
+          u.number === unit.number 
+            ? { ...u, hasQuestions: true }
+            : u
+        )
+      );
     } catch (err) {
       setError(err.message);
       console.error('Failed to load questions:', err);
     } finally {
-      setLoading(false);
+      setLoadingQuestions(false);
+      setLoadingUnitNumber(null);
     }
   };
 
@@ -261,15 +272,24 @@ export default function Practice({
               <h3 style={styles.unitTitle}>Unit {unit.number}</h3>
               <p style={styles.unitSubtitle}>{unit.title}</p>
               <div style={styles.unitStatus}>
-                <span style={{
-                  ...styles.statusBadge,
-                  ...(unit.hasQuestions ? styles.statusAvailable : styles.statusPending)
-                }}>
-                  {unit.hasQuestions ? 'Questions Ready' : 'Generate Questions'}
-                </span>
-                <div style={styles.questionCountInfo}>
-                  {userProfile?.uid ? '12 questions' : '6 questions'}
-                </div>
+                {loadingUnitNumber === unit.number ? (
+                  <>
+                    <div style={styles.loadingSpinner}></div>
+                    <span style={styles.loadingText}>Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{
+                      ...styles.statusBadge,
+                      ...(unit.hasQuestions ? styles.statusGenerated : styles.statusPending)
+                    }}>
+                      {unit.hasQuestions ? 'Generated' : 'Generate Questions'}
+                    </span>
+                    <div style={styles.questionCountInfo}>
+                      {userProfile?.uid ? '12 questions' : '6 questions'}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ))}
@@ -399,13 +419,27 @@ const styles = {
     fontSize: "0.8rem",
     fontWeight: 600,
   },
-  statusAvailable: {
+  statusGenerated: {
     backgroundColor: "rgba(34, 197, 94, 0.2)",
     color: "#22C55E",
   },
   statusPending: {
     backgroundColor: "rgba(251, 191, 36, 0.2)",
     color: "#FBbf24",
+  },
+  loadingSpinner: {
+    width: "16px",
+    height: "16px",
+    border: "2px solid rgba(255, 255, 255, 0.3)",
+    borderTop: "2px solid var(--text-primary)",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+    marginBottom: "0.25rem",
+  },
+  loadingText: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    fontWeight: 500,
   },
   noUnitsContainer: {
     backgroundColor: "var(--bg-primary)",

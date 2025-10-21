@@ -30,6 +30,20 @@ const fileToDataUrl = (file) =>
     reader.readAsDataURL(file);
   });
 
+// Courses that don't have MCQ sections
+const NON_MCQ_COURSES = [
+  'ap-research',
+  'ap-seminar', 
+  'ap-studio-art-2d',
+  'ap-studio-art-3d',
+  'ap-drawing'
+];
+
+// Check if course has MCQ sections
+const hasMCQSection = (courseId) => {
+  return !NON_MCQ_COURSES.includes(courseId);
+};
+
 export default function CourseOptions({ userProfile, onSelectCourse }) {
   const navigate = useNavigate();
   const { courseId } = useParams();
@@ -394,18 +408,20 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
       </div>
 
       <div style={styles.grid}>
-        <div style={styles.mcqCard}>
-          <h2 style={styles.mcqTitle}>Practice MCQs</h2>
-          <p style={styles.mcqDescription}>
-            Adaptive practice aligned with CED units
-          </p>
-          <button
-            style={styles.mcqButton}
-            onClick={() => navigate(`/practice/${course.id}`)}
-          >
-            Start Practice
-          </button>
-        </div>
+        {hasMCQSection(course?.id) && (
+          <div style={styles.mcqCard}>
+            <h2 style={styles.mcqTitle}>Practice MCQs</h2>
+            <p style={styles.mcqDescription}>
+              Adaptive practice aligned with CED units
+            </p>
+            <button
+              style={styles.mcqButton}
+              onClick={() => navigate(`/practice/${course.id}`)}
+            >
+              Start Practice
+            </button>
+          </div>
+        )}
 
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Submit FRQ / Essay</h2>
