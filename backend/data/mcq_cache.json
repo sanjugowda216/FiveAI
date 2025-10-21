@@ -149,6 +149,156 @@
       ],
       "generatedAt": "2025-10-21T04:03:28.593Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
+    },
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the impact of the Silk Roads during the period from c. 1200 to c. 1450?",
+          "options": [
+            "They facilitated the spread of technology and ideas across continents.",
+            "They were primarily used for military conquests.",
+            "They isolated different cultures from one another.",
+            "They were mainly a European trade network."
+          ],
+          "correctAnswer": "A",
+          "explanation": "The Silk Roads facilitated extensive cultural, technological, and economic exchanges across Asia and Europe, significantly impacting societies along the routes."
+        },
+        {
+          "id": "q2",
+          "question": "What was a significant consequence of the expansion of the Mongol Empire in the 13th century?",
+          "options": [
+            "The development of maritime trade routes.",
+            "The establishment of a unified language across Asia.",
+            "Increased trade and communication across Eurasia.",
+            "The isolation of Eastern Europe from Western Europe."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Mongol Empire's vast territory connected diverse cultures and regions, leading to increased trade and communication across Eurasia."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following regions was most significantly influenced by Indian Ocean trade routes from c. 1200 to c. 1450?",
+          "options": [
+            "Northern Europe",
+            "Sub-Saharan Africa",
+            "Southeast Asia",
+            "The Americas"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Southeast Asia was significantly influenced by Indian Ocean trade, serving as a critical hub for maritime commerce and cultural exchange."
+        },
+        {
+          "id": "q4",
+          "question": "In the context of the Networks of Exchange, what role did the city of Timbuktu play during this period?",
+          "options": [
+            "It served as a major center for Islamic scholarship.",
+            "It was a primary agricultural center for Europe.",
+            "It was the capital of the Mongol Empire.",
+            "It was a key industrial hub for manufacturing."
+          ],
+          "correctAnswer": "A",
+          "explanation": "Timbuktu became a major center for Islamic scholarship and trade, facilitating the exchange of knowledge and goods in West Africa."
+        },
+        {
+          "id": "q5",
+          "question": "Which of the following was a characteristic of the trade networks established during this period?",
+          "options": [
+            "Trade was limited to luxury goods only.",
+            "Trade networks were primarily controlled by European powers.",
+            "Cultural exchanges often accompanied trade.",
+            "Trade routes were predominantly land-based."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Cultural exchanges often accompanied trade during this period, as merchants shared ideas and practices along with goods."
+        },
+        {
+          "id": "q6",
+          "question": "What technological advancement significantly improved maritime trade during the period from c. 1200 to c. 1450?",
+          "options": [
+            "The steam engine",
+            "The compass",
+            "The printing press",
+            "The longbow"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The compass was a significant technological advancement that improved navigation and maritime trade during this period."
+        },
+        {
+          "id": "q7",
+          "question": "What was a primary reason for the growth of trade in the Indian Ocean during this period?",
+          "options": [
+            "The establishment of European colonies",
+            "The demand for spices and luxury goods",
+            "The decline of land-based empires",
+            "The isolation of Asian markets"
+          ],
+          "correctAnswer": "B",
+          "explanation": "The demand for spices, textiles, and other luxury goods drove the growth of trade in the Indian Ocean."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following best represents the concept of 'Dar al-Islam' during the period from c. 1200 to c. 1450?",
+          "options": [
+            "A region where Islamic laws were not enforced.",
+            "A place where different religions coexisted peacefully.",
+            "A term denoting areas under Islamic rule and influence.",
+            "A geographic area solely focused on trade."
+          ],
+          "correctAnswer": "C",
+          "explanation": "'Dar al-Islam' refers to regions where Islamic law was practiced and where Islamic culture and influence were prevalent."
+        },
+        {
+          "id": "q9",
+          "question": "Which of the following statements about the exchange of goods along the Silk Roads is true?",
+          "options": [
+            "Silk was the only significant good traded along the routes.",
+            "Only luxury items were traded, excluding everyday goods.",
+            "Silk Roads facilitated the exchange of both luxury and everyday goods.",
+            "Trade was primarily conducted by land and had no maritime component."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The Silk Roads facilitated the exchange of a wide variety of goods, including both luxury items like silk and everyday goods."
+        },
+        {
+          "id": "q10",
+          "question": "What was one significant effect of the spread of Islam along trade routes during this period?",
+          "options": [
+            "The decline of literacy rates in trading cities.",
+            "The establishment of banking systems based on Islamic principles.",
+            "The eradication of local cultures and religions.",
+            "The isolation of trade routes from cultural exchanges."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The spread of Islam along trade routes contributed to the establishment of banking systems based on Islamic principles, facilitating trade."
+        },
+        {
+          "id": "q11",
+          "question": "Which of the following was a major factor in the expansion of trade networks during the period from c. 1200 to c. 1450?",
+          "options": [
+            "The rise of feudalism in Europe",
+            "Increased demand for commodities",
+            "The decline of the Mongol Empire",
+            "The establishment of the Roman Empire"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Increased demand for commodities such as spices, textiles, and precious metals drove the expansion of trade networks during this period."
+        },
+        {
+          "id": "q12",
+          "question": "What role did the Hanseatic League play in the context of trade during the late medieval period?",
+          "options": [
+            "It served as a military alliance against the Mongols.",
+            "It facilitated trade among Northern European cities.",
+            "It was a religious organization promoting Christianity.",
+            "It focused solely on agricultural production."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The Hanseatic League was a commercial alliance that facilitated trade among Northern European cities, promoting economic cooperation."
+        }
+      ],
+      "generatedAt": "2025-10-21T04:05:02.438Z",
+      "cedHash": "5f71349777bed53cef2dca9bff394352"
     }
   }
 }
