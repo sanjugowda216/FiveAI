@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apCourses } from '../data/apCourses.js';
 import MultiSelectDropdown from '../components/MultiSelectDropdown';
+import { generateAIStudyPlan, generateAdaptiveStudyPlan } from '../utils/api.js';
 
 export default function StudyCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -20,6 +21,9 @@ export default function StudyCalendar() {
     lastStudyDate: null,
     studyMinutes: {}
   });
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+  const [studyPlanData, setStudyPlanData] = useState(null);
+  const [performanceData, setPerformanceData] = useState({});
 
   // Color palette for AP courses
   const courseColors = {
@@ -156,57 +160,282 @@ export default function StudyCalendar() {
     setStudySessions(sessions);
   };
 
-  // Generate AI study plan
-  const generateStudyPlan = () => {
-    if (selectedCourses.length === 0) {
+  // Generate AI study plan using backend service
+  const generateStudyPlan = async () => {
+    console.log('Selected courses:', selectedCourses);
+    console.log('Selected courses type:', typeof selectedCourses);
+    console.log('Selected courses length:', selectedCourses ? selectedCourses.length : 'undefined');
+    
+    if (!selectedCourses || selectedCourses.length === 0) {
       alert('Please select at least one AP course to generate a study plan');
       return;
     }
 
-    const today = new Date();
-    const sessions = {};
-
-    selectedCourses.forEach(courseId => {
-      const examDate = apExamDates[courseId];
-      if (!examDate) return;
-
-      const daysUntilExam = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
-      const sessionsPerWeek = Math.max(2, Math.min(5, Math.ceil(daysUntilExam / 7)));
-      
-      // Generate study sessions leading up to exam
-      for (let i = 0; i < daysUntilExam; i += Math.ceil(7 / sessionsPerWeek)) {
-        const sessionDate = new Date(today);
-        sessionDate.setDate(today.getDate() + i);
-        
-        const dateKey = sessionDate.toISOString().split('T')[0];
-        
-        if (!sessions[dateKey]) {
-          sessions[dateKey] = [];
-        }
-        
-        sessions[dateKey].push({
-          id: `${courseId}-${i}`,
-          courseId,
-          courseName: apCourses.find(c => c.id === courseId)?.name || courseId,
-          duration: 60,
-          type: i % 2 === 0 ? 'mcq' : 'frq',
-          notes: `AI-generated study session for ${apCourses.find(c => c.id === courseId)?.name}`,
-          isAIGenerated: true
+    setIsGeneratingPlan(true);
+    
+    // Declare variables outside try block for error handling
+    let examDatesForPlan = {};
+    
+    // Test backend connectivity first
+    try {
+      const testResponse = await fetch('http://localhost:5001/api/study-plan/health');
+      const testData = await testResponse.json();
+      console.log('Backend connectivity test:', testData);
+    } catch (testError) {
+      console.error('Backend connectivity test failed:', testError);
+      alert('Cannot connect to backend server. Please make sure the backend is running on port 5001.');
+      setIsGeneratingPlan(false);
+      return;
+    }
+    
+    try {
+      // Prepare exam dates for selected courses
+      if (selectedCourses && selectedCourses.length > 0) {
+        selectedCourses.forEach(courseId => {
+          if (apExamDates[courseId]) {
+            examDatesForPlan[courseId] = apExamDates[courseId].toISOString().split('T')[0];
+          }
         });
+      } else {
+        throw new Error('No courses selected');
       }
-    });
 
-    // Merge with existing sessions
-    const updatedSessions = { ...studySessions };
-    Object.keys(sessions).forEach(date => {
-      if (!updatedSessions[date]) {
-        updatedSessions[date] = [];
+      // Get performance data from localStorage
+      const savedPerformanceData = JSON.parse(localStorage.getItem('performanceData') || '{}');
+      
+      // Generate study plan using backend AI service
+      console.log('Calling generateAIStudyPlan with:', {
+        selectedCourses,
+        examDates: examDatesForPlan,
+        currentDate: new Date().toISOString().split('T')[0],
+        studyPreferences: {
+          preferredStudyTime: 'evening',
+          sessionLength: 60,
+          difficultyProgression: true
+        },
+        performanceData: savedPerformanceData
+      });
+      
+      const response = await generateAIStudyPlan({
+        selectedCourses,
+        examDates: examDatesForPlan,
+        currentDate: new Date().toISOString().split('T')[0],
+        studyPreferences: {
+          preferredStudyTime: 'evening',
+          sessionLength: 60,
+          difficultyProgression: true
+        },
+        performanceData: savedPerformanceData
+      });
+      
+      console.log('AI Study Plan Response:', response);
+
+      if (response.success && response.studyPlan) {
+        // Validate response structure
+        if (!response.studyPlan.studyPlan || !response.studyPlan.studyPlan.dailySchedule) {
+          console.error('Invalid study plan response: missing dailySchedule');
+          throw new Error('Invalid study plan response: missing daily schedule data');
+        }
+        setStudyPlanData(response.studyPlan);
+        
+        // Convert AI study plan to calendar sessions
+        const sessions = {};
+        if (response.studyPlan.studyPlan.dailySchedule && Array.isArray(response.studyPlan.studyPlan.dailySchedule)) {
+          response.studyPlan.studyPlan.dailySchedule.forEach(day => {
+            const dateKey = day.date;
+            if (day.sessions && Array.isArray(day.sessions)) {
+              sessions[dateKey] = day.sessions.map(session => ({
+                id: `${session.courseId}-${dateKey}-${Math.random().toString(36).substr(2, 9)}`,
+                courseId: session.courseId,
+                courseName: session.courseName,
+                duration: session.duration,
+                type: session.type,
+                notes: session.notes,
+                focus: session.focus,
+                difficulty: session.difficulty,
+                priority: session.priority,
+                isAIGenerated: true
+              }));
+            }
+          });
+        } else {
+          console.warn('No dailySchedule found in study plan response');
+        }
+
+        // Merge with existing sessions
+        const updatedSessions = { ...studySessions };
+        Object.keys(sessions).forEach(date => {
+          if (!updatedSessions[date]) {
+            updatedSessions[date] = [];
+          }
+          updatedSessions[date] = [...updatedSessions[date], ...sessions[date]];
+        });
+
+        saveStudySessions(updatedSessions);
+        
+        // Show success message with plan details and save option
+        const shouldSave = confirm(`AI study plan generated successfully!\n\nPlan Overview: ${response.studyPlan.overview}\nTotal Sessions: ${response.studyPlan.metadata?.totalSessions || 'N/A'}\nEstimated Study Hours: ${response.studyPlan.metadata?.estimatedStudyHours || 'N/A'}\n\nWould you like to save this plan for the entire year?`);
+        
+        if (shouldSave) {
+          // Save the study plan to localStorage for the year
+          const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
+          const planId = `plan_${Date.now()}`;
+          savedPlans[planId] = {
+            id: planId,
+            name: `Study Plan - ${selectedCourses.map(c => apCourses.find(course => course.id === c)?.name || c).join(', ')}`,
+            courses: selectedCourses,
+            studyPlan: response.studyPlan,
+            createdAt: new Date().toISOString(),
+            examDates: examDatesForPlan
+          };
+          localStorage.setItem('savedStudyPlans', JSON.stringify(savedPlans));
+          alert('Study plan saved successfully! You can access it anytime from your saved plans.');
+        }
+      } else {
+        throw new Error('Failed to generate study plan');
       }
-      updatedSessions[date] = [...updatedSessions[date], ...sessions[date]];
-    });
+    } catch (error) {
+      console.error('Error generating AI study plan:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        selectedCourses,
+        examDatesForPlan
+      });
+      alert(`Failed to generate AI study plan: ${error.message}. Please check the console for details.`);
+    } finally {
+      setIsGeneratingPlan(false);
+    }
+  };
 
-    saveStudySessions(updatedSessions);
-    alert('AI study plan generated successfully!');
+  // Generate adaptive study plan based on performance
+  const generateAdaptivePlan = async () => {
+    console.log('Selected courses for adaptive plan:', selectedCourses);
+    console.log('Selected courses length:', selectedCourses.length);
+    
+    if (selectedCourses.length === 0) {
+      alert('Please select at least one AP course to generate an adaptive study plan');
+      return;
+    }
+
+    setIsGeneratingPlan(true);
+    
+    // Declare variables outside try block for error handling
+    let examDatesForPlan = {};
+    
+    try {
+      // Prepare exam dates for selected courses
+      if (selectedCourses && selectedCourses.length > 0) {
+        selectedCourses.forEach(courseId => {
+          if (apExamDates[courseId]) {
+            examDatesForPlan[courseId] = apExamDates[courseId].toISOString().split('T')[0];
+          }
+        });
+      } else {
+        throw new Error('No courses selected');
+      }
+
+      // Get performance data from localStorage
+      const savedPerformanceData = JSON.parse(localStorage.getItem('performanceData') || '{}');
+      
+      if (Object.keys(savedPerformanceData).length === 0) {
+        alert('No performance data found. Please complete some practice sessions first to generate an adaptive study plan.');
+        setIsGeneratingPlan(false);
+        return;
+      }
+
+      // Generate adaptive study plan using backend AI service
+      const response = await generateAdaptiveStudyPlan({
+        selectedCourses,
+        examDates: examDatesForPlan,
+        currentDate: new Date().toISOString().split('T')[0],
+        studyPreferences: {
+          preferredStudyTime: 'evening',
+          sessionLength: 60,
+          difficultyProgression: true,
+          adaptiveMode: true
+        },
+        performanceData: savedPerformanceData
+      });
+
+      if (response.success && response.studyPlan) {
+        // Validate response structure
+        if (!response.studyPlan.studyPlan || !response.studyPlan.studyPlan.dailySchedule) {
+          console.error('Invalid adaptive study plan response: missing dailySchedule');
+          throw new Error('Invalid adaptive study plan response: missing daily schedule data');
+        }
+        setStudyPlanData(response.studyPlan);
+        
+        // Convert AI study plan to calendar sessions
+        const sessions = {};
+        if (response.studyPlan.studyPlan.dailySchedule && Array.isArray(response.studyPlan.studyPlan.dailySchedule)) {
+          response.studyPlan.studyPlan.dailySchedule.forEach(day => {
+            const dateKey = day.date;
+            if (day.sessions && Array.isArray(day.sessions)) {
+              sessions[dateKey] = day.sessions.map(session => ({
+                id: `${session.courseId}-${dateKey}-${Math.random().toString(36).substr(2, 9)}`,
+                courseId: session.courseId,
+                courseName: session.courseName,
+                duration: session.duration,
+                type: session.type,
+                notes: session.notes,
+                focus: session.focus,
+                difficulty: session.difficulty,
+                priority: session.priority,
+                isAIGenerated: true,
+                isAdaptive: true
+              }));
+            }
+          });
+        } else {
+          console.warn('No dailySchedule found in adaptive study plan response');
+        }
+
+        // Merge with existing sessions
+        const updatedSessions = { ...studySessions };
+        Object.keys(sessions).forEach(date => {
+          if (!updatedSessions[date]) {
+            updatedSessions[date] = [];
+          }
+          updatedSessions[date] = [...updatedSessions[date], ...sessions[date]];
+        });
+
+        saveStudySessions(updatedSessions);
+        
+        // Show success message with plan details and save option
+        const shouldSave = confirm(`Adaptive AI study plan generated successfully!\n\nThis plan is personalized based on your performance data.\n\nPlan Overview: ${response.studyPlan.overview}\nTotal Sessions: ${response.studyPlan.metadata?.totalSessions || 'N/A'}\nEstimated Study Hours: ${response.studyPlan.metadata?.estimatedStudyHours || 'N/A'}\n\nWould you like to save this plan for the entire year?`);
+        
+        if (shouldSave) {
+          // Save the study plan to localStorage for the year
+          const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
+          const planId = `adaptive_plan_${Date.now()}`;
+          savedPlans[planId] = {
+            id: planId,
+            name: `Adaptive Study Plan - ${selectedCourses.map(c => apCourses.find(course => course.id === c)?.name || c).join(', ')}`,
+            courses: selectedCourses,
+            studyPlan: response.studyPlan,
+            createdAt: new Date().toISOString(),
+            examDates: examDatesForPlan,
+            isAdaptive: true
+          };
+          localStorage.setItem('savedStudyPlans', JSON.stringify(savedPlans));
+          alert('Adaptive study plan saved successfully! You can access it anytime from your saved plans.');
+        }
+      } else {
+        throw new Error('Failed to generate adaptive study plan');
+      }
+    } catch (error) {
+      console.error('Error generating adaptive study plan:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        selectedCourses,
+        examDatesForPlan
+      });
+      alert(`Failed to generate adaptive study plan: ${error.message}. Please check the console for details.`);
+    } finally {
+      setIsGeneratingPlan(false);
+    }
   };
 
   // Add study session
@@ -243,6 +472,59 @@ export default function StudyCalendar() {
     const updatedSessions = { ...studySessions };
     updatedSessions[dateKey] = updatedSessions[dateKey].filter(s => s.id !== sessionId);
     saveStudySessions(updatedSessions);
+  };
+
+  // Load saved study plan to calendar
+  const loadSavedPlan = (plan) => {
+    if (!plan.studyPlan || !plan.studyPlan.dailySchedule) {
+      alert('Invalid study plan data');
+      return;
+    }
+
+    // Convert saved study plan to calendar sessions
+    const sessions = {};
+    plan.studyPlan.dailySchedule.forEach(day => {
+      const dateKey = day.date;
+      if (day.sessions && Array.isArray(day.sessions)) {
+        sessions[dateKey] = day.sessions.map(session => ({
+          id: `${session.courseId}-${dateKey}-${Math.random().toString(36).substr(2, 9)}`,
+          courseId: session.courseId,
+          courseName: session.courseName,
+          duration: session.duration,
+          type: session.type,
+          notes: session.notes,
+          focus: session.focus,
+          difficulty: session.difficulty,
+          priority: session.priority,
+          isAIGenerated: true,
+          isAdaptive: plan.isAdaptive || false,
+          isFromSavedPlan: true
+        }));
+      }
+    });
+
+    // Merge with existing sessions
+    const updatedSessions = { ...studySessions };
+    Object.keys(sessions).forEach(date => {
+      if (!updatedSessions[date]) {
+        updatedSessions[date] = [];
+      }
+      updatedSessions[date] = [...updatedSessions[date], ...sessions[date]];
+    });
+
+    saveStudySessions(updatedSessions);
+    alert(`Study plan "${plan.name}" loaded to calendar successfully!`);
+  };
+
+  // Delete saved study plan
+  const deleteSavedPlan = (planId) => {
+    if (confirm('Are you sure you want to delete this study plan?')) {
+      const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
+      delete savedPlans[planId];
+      localStorage.setItem('savedStudyPlans', JSON.stringify(savedPlans));
+      // Force re-render by updating state
+      setStudySessions({...studySessions});
+    }
   };
 
   // Get days in month
@@ -324,16 +606,61 @@ export default function StudyCalendar() {
           <button
             style={styles.secondaryButton}
             onClick={generateStudyPlan}
+            disabled={isGeneratingPlan}
             onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 8px 12px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3)";
-              e.currentTarget.style.backgroundColor = "#059669";
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 8px 12px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3)";
+                e.currentTarget.style.backgroundColor = "#059669";
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 4px 6px rgba(16, 185, 129, 0.3)";
-              e.currentTarget.style.backgroundColor = "#10B981";
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(16, 185, 129, 0.3)";
+                e.currentTarget.style.backgroundColor = "#10B981";
+              }
             }}
           >
-            🤖 Generate AI Study Plan
+            {isGeneratingPlan ? '⏳ Generating...' : '🤖 Generate AI Study Plan'}
+          </button>
+          <button
+            style={{
+              ...styles.secondaryButton,
+              backgroundColor: "#8B5CF6",
+              opacity: isGeneratingPlan ? 0.6 : 1,
+              cursor: isGeneratingPlan ? 'not-allowed' : 'pointer'
+            }}
+            onClick={generateAdaptivePlan}
+            disabled={isGeneratingPlan}
+            onMouseEnter={(e) => {
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 8px 12px rgba(139, 92, 246, 0.4), 0 0 20px rgba(139, 92, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.3)";
+                e.currentTarget.style.backgroundColor = "#7C3AED";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(139, 92, 246, 0.3)";
+                e.currentTarget.style.backgroundColor = "#8B5CF6";
+              }
+            }}
+          >
+            {isGeneratingPlan ? '⏳ Generating...' : '🧠 Generate Adaptive Plan'}
+          </button>
+          <button
+            style={{
+              ...styles.secondaryButton,
+              backgroundColor: "#F59E0B",
+              opacity: isGeneratingPlan ? 0.6 : 1,
+              cursor: isGeneratingPlan ? 'not-allowed' : 'pointer'
+            }}
+            onClick={() => {
+              console.log('Current selectedCourses state:', selectedCourses);
+              console.log('Setting test course...');
+              setSelectedCourses(['ap-psychology']);
+            }}
+            disabled={isGeneratingPlan}
+          >
+            🧪 Test Course Selection
           </button>
         </div>
       </div>
@@ -489,7 +816,10 @@ export default function StudyCalendar() {
         <MultiSelectDropdown
           options={apCourses}
           selectedValues={selectedCourses}
-          onChange={setSelectedCourses}
+          onChange={(newSelectedCourses) => {
+            console.log('Course selection changed:', newSelectedCourses);
+            setSelectedCourses(newSelectedCourses);
+          }}
           label="Select AP Courses to Display on Calendar"
           placeholder="Select AP Courses"
           searchPlaceholder="Search courses..."
@@ -533,6 +863,65 @@ export default function StudyCalendar() {
         )}
       </div>
 
+      {/* Saved Study Plans */}
+      <div style={styles.savedPlansContainer}>
+        <h3 style={styles.sectionTitle}>Saved Study Plans:</h3>
+        {(() => {
+          const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
+          const planList = Object.values(savedPlans);
+          
+          if (planList.length === 0) {
+            return (
+              <div style={styles.noPlansStatus}>
+                <div style={styles.statusDot} />
+                <span style={styles.statusText}>No saved plans yet</span>
+              </div>
+            );
+          }
+          
+          return (
+            <div style={styles.plansGrid}>
+              {planList.map(plan => (
+                <div key={plan.id} style={styles.planCard}>
+                  <div style={styles.planHeader}>
+                    <h4 style={styles.planTitle}>{plan.name}</h4>
+                    <div style={styles.planMeta}>
+                      {plan.isAdaptive && <span style={styles.adaptiveBadge}>🧠 Adaptive</span>}
+                      <span style={styles.planDate}>
+                        {new Date(plan.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={styles.planDetails}>
+                    <p style={styles.planCourses}>
+                      Courses: {plan.courses.map(c => apCourses.find(course => course.id === c)?.name || c).join(', ')}
+                    </p>
+                    <p style={styles.planStats}>
+                      Sessions: {plan.studyPlan.metadata?.totalSessions || 'N/A'} • 
+                      Hours: {plan.studyPlan.metadata?.estimatedStudyHours || 'N/A'}
+                    </p>
+                  </div>
+                  <div style={styles.planActions}>
+                    <button
+                      style={styles.loadPlanButton}
+                      onClick={() => loadSavedPlan(plan)}
+                    >
+                      📅 Load to Calendar
+                    </button>
+                    <button
+                      style={styles.deletePlanButton}
+                      onClick={() => deleteSavedPlan(plan.id)}
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
+      </div>
+
       {/* Selected Date Details */}
       <div style={styles.dateDetails}>
         <h3 style={styles.sectionTitle}>
@@ -560,8 +949,16 @@ export default function StudyCalendar() {
                   </div>
                   <p style={styles.sessionMeta}>
                     {session.duration} min • {session.type.toUpperCase()} • 
-                    {session.isAIGenerated ? ' AI Generated' : ' Manual'}
+                    {session.isFromSavedPlan ? ' 📅 Saved Plan' : 
+                     session.isAIGenerated ? (session.isAdaptive ? ' 🧠 AI Adaptive' : ' 🤖 AI Generated') : ' ✏️ Manual'}
+                    {session.difficulty && ` • ${session.difficulty.charAt(0).toUpperCase() + session.difficulty.slice(1)}`}
+                    {session.priority && ` • ${session.priority.charAt(0).toUpperCase() + session.priority.slice(1)} Priority`}
                   </p>
+                  {session.focus && (
+                    <p style={styles.sessionFocus}>
+                      <strong>Focus:</strong> {session.focus}
+                    </p>
+                  )}
                 </div>
                 <button
                   style={styles.deleteButton}
@@ -1050,6 +1447,13 @@ const styles = {
     fontStyle: "italic",
     transition: "color 0.3s ease",
   },
+  sessionFocus: {
+    fontSize: "0.85rem",
+    color: "var(--text-primary)",
+    margin: "0.5rem 0 0 0",
+    fontWeight: 500,
+    transition: "color 0.3s ease",
+  },
   deleteButton: {
     backgroundColor: "rgba(239, 68, 68, 0.1)",
     color: "#DC2626",
@@ -1175,6 +1579,103 @@ const styles = {
     borderRadius: "0.5rem",
     padding: "0.75rem 1.5rem",
     fontSize: "0.9rem",
+    fontWeight: 600,
+    cursor: "pointer",
+  },
+  // Saved Plans Styles
+  savedPlansContainer: {
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "1rem",
+    padding: "1.5rem",
+    marginBottom: "2rem",
+    border: "1px solid var(--border-color)",
+    transition: "all 0.3s ease",
+  },
+  noPlansStatus: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
+  },
+  plansGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+    gap: "1rem",
+    marginTop: "1rem",
+  },
+  planCard: {
+    backgroundColor: "var(--bg-secondary)",
+    borderRadius: "0.75rem",
+    padding: "1rem",
+    border: "1px solid var(--border-color)",
+    transition: "all 0.3s ease",
+    cursor: "pointer",
+  },
+  planHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: "0.75rem",
+  },
+  planTitle: {
+    fontSize: "1rem",
+    fontWeight: 600,
+    color: "var(--text-primary)",
+    margin: 0,
+    flex: 1,
+  },
+  planMeta: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: "0.25rem",
+  },
+  adaptiveBadge: {
+    fontSize: "0.75rem",
+    color: "#8B5CF6",
+    fontWeight: 600,
+    backgroundColor: "rgba(139, 92, 246, 0.1)",
+    padding: "0.25rem 0.5rem",
+    borderRadius: "0.25rem",
+  },
+  planDate: {
+    fontSize: "0.75rem",
+    color: "var(--text-secondary)",
+  },
+  planDetails: {
+    marginBottom: "1rem",
+  },
+  planCourses: {
+    fontSize: "0.85rem",
+    color: "var(--text-secondary)",
+    margin: "0 0 0.5rem 0",
+  },
+  planStats: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    margin: 0,
+  },
+  planActions: {
+    display: "flex",
+    gap: "0.5rem",
+  },
+  loadPlanButton: {
+    backgroundColor: "#10B981",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.5rem",
+    padding: "0.5rem 1rem",
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    flex: 1,
+  },
+  deletePlanButton: {
+    backgroundColor: "#EF4444",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.5rem",
+    padding: "0.5rem 1rem",
+    fontSize: "0.8rem",
     fontWeight: 600,
     cursor: "pointer",
   },

@@ -154,6 +154,56 @@ export async function submitFrqForGrading(payload) {
   }
 }
 
+/**
+ * Generate AI study plan
+ */
+export async function generateAIStudyPlan(studyPlanData) {
+  try {
+    const response = await fetch(`${API_URL}/api/study-plan/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(studyPlanData)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to generate AI study plan');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error generating AI study plan:', error);
+    throw error;
+  }
+}
+
+/**
+ * Generate adaptive study plan based on performance data
+ */
+export async function generateAdaptiveStudyPlan(studyPlanData) {
+  try {
+    const response = await fetch(`${API_URL}/api/study-plan/adaptive`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(studyPlanData)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to generate adaptive study plan');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error generating adaptive study plan:', error);
+    throw error;
+  }
+}
+
 async function safeParseJson(response) {
   try {
     return await response.json();
