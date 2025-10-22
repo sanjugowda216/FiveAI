@@ -420,7 +420,7 @@ function AppContent() {
           <Route path="/stats" element={<Stats stats={userProfile?.stats} />} />
           <Route path="/calendar" element={<StudyCalendar />} />
           <Route path="/community" element={<Community />} />
-          <Route path="/flashcards" element={<Flashcards />} />
+          <Route path="/flashcards" element={<Flashcards userProfile={userProfile} />} />
           <Route path="/settings" element={<Settings userProfile={userProfile} />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

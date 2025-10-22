@@ -154,14 +154,20 @@ export async function submitFrqForGrading(payload) {
   }
 }
 
-export async function getAllFlashcards() {
-  const res = await fetch(`${API_URL}/api/flashcards`);
+export async function getAllFlashcards(userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const res = await fetch(`${API_URL}/api/flashcards?userId=${userId}`);
   if (!res.ok) throw new Error(await res.text() || 'Failed to load flashcards');
   return res.json();
 }
 
-export async function createFlashcard(question, answer) {
-  const res = await fetch(`${API_URL}/api/flashcards`, {
+export async function createFlashcard(question, answer, userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const res = await fetch(`${API_URL}/api/flashcards?userId=${userId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ question, answer })
@@ -170,8 +176,11 @@ export async function createFlashcard(question, answer) {
   return res.json();
 }
 
-export async function updateFlashcard(id, { question, answer }) {
-  const res = await fetch(`${API_URL}/api/flashcards/${id}`, {
+export async function updateFlashcard(id, { question, answer }, userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const res = await fetch(`${API_URL}/api/flashcards/${id}?userId=${userId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ question, answer })
@@ -180,14 +189,20 @@ export async function updateFlashcard(id, { question, answer }) {
   return res.json();
 }
 
-export async function deleteFlashcard(id) {
-  const res = await fetch(`${API_URL}/api/flashcards/${id}`, { method: 'DELETE' });
+export async function deleteFlashcard(id, userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const res = await fetch(`${API_URL}/api/flashcards/${id}?userId=${userId}`, { method: 'DELETE' });
   if (!res.ok) throw new Error(await res.text() || 'Failed to delete flashcard');
   return res.json();
 }
 
-export async function getRandomStudyFlashcards(count = 10) {
-  const res = await fetch(`${API_URL}/api/flashcards/study/random?count=${count}`);
+export async function getRandomStudyFlashcards(count = 10, userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const res = await fetch(`${API_URL}/api/flashcards/study/random?count=${count}&userId=${userId}`);
   if (!res.ok) throw new Error(await res.text() || 'Failed to fetch study flashcards');
   return res.json();
 }

@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { createFlashcard } from '../utils/api.js';
 
-function FlashcardForm({ onCreated }) {
+function FlashcardForm({ onCreated, userId }) {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!question.trim() || !answer.trim()) return;
+    
     setLoading(true);
     try {
-      const newCard = await createFlashcard(question.trim(), answer.trim());
+      const newCard = await createFlashcard(question.trim(), answer.trim(), userId);
       setQuestion('');
       setAnswer('');
       onCreated?.(newCard);
@@ -20,21 +22,178 @@ function FlashcardForm({ onCreated }) {
       setLoading(false);
     }
   };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-      <div>
-        <label className="block font-semibold mb-1">Word</label>
-        <input value={question} onChange={(e)=>setQuestion(e.target.value)} className="w-full p-2 border rounded" placeholder="Enter word"/>
+    <div style={styles.container}>
+      <div style={styles.header}>
+        <h2 style={styles.title}>Create New Flashcard</h2>
+        <p style={styles.subtitle}>Add a new question and answer to your collection</p>
       </div>
-      <div>
-        <label className="block font-semibold mb-1">Definition</label>
-        <textarea value={answer} onChange={(e)=>setAnswer(e.target.value)} className="w-full p-2 border rounded" rows="3" placeholder="Enter definition"/>
-      </div>
-      <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50">
-        {loading ? 'Saving…' : 'Add Flashcard'}
-      </button>
-    </form>
+      
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>
+            <span style={styles.labelIcon}>❓</span>
+            Question
+          </label>
+          <input 
+            value={question} 
+            onChange={(e)=>setQuestion(e.target.value)} 
+            style={styles.input}
+            placeholder="Enter your question here..."
+            disabled={loading}
+          />
+        </div>
+        
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>
+            <span style={styles.labelIcon}>💡</span>
+            Answer
+          </label>
+          <textarea 
+            value={answer} 
+            onChange={(e)=>setAnswer(e.target.value)} 
+            style={styles.textarea}
+            rows="4"
+            placeholder="Enter the answer here..."
+            disabled={loading}
+          />
+        </div>
+        
+        <button 
+          type="submit" 
+          disabled={loading || !question.trim() || !answer.trim()} 
+          style={{
+            ...styles.submitButton,
+            ...(loading || !question.trim() || !answer.trim() ? styles.disabledButton : {})
+          }}
+        >
+          {loading ? (
+            <>
+              <div style={styles.buttonSpinner}></div>
+              Creating...
+            </>
+          ) : (
+            <>
+              <span style={styles.buttonIcon}>✨</span>
+              Add Flashcard
+            </>
+          )}
+        </button>
+      </form>
+    </div>
   );
 }
+
+const styles = {
+  container: {
+    width: '100%',
+    maxWidth: '600px',
+    margin: '0 auto',
+    padding: '2rem',
+    backgroundColor: 'var(--bg-secondary)',
+    borderRadius: '1.5rem',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)',
+    border: '1px solid var(--border-color)',
+  },
+  header: {
+    textAlign: 'center',
+    marginBottom: '2rem',
+  },
+  title: {
+    fontSize: '1.75rem',
+    fontWeight: '700',
+    color: 'var(--text-primary)',
+    margin: '0 0 0.5rem 0',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+  },
+  subtitle: {
+    fontSize: '1rem',
+    color: 'var(--text-secondary)',
+    margin: '0',
+    fontWeight: '500',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1.5rem',
+  },
+  inputGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem',
+  },
+  label: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    fontSize: '1rem',
+    fontWeight: '600',
+    color: 'var(--text-primary)',
+  },
+  labelIcon: {
+    fontSize: '1.2rem',
+  },
+  input: {
+    width: '100%',
+    padding: '1rem',
+    border: '2px solid var(--border-color)',
+    borderRadius: '0.75rem',
+    fontSize: '1rem',
+    backgroundColor: 'var(--input-bg)',
+    color: 'var(--input-text)',
+    transition: 'all 0.3s ease',
+    boxSizing: 'border-box',
+  },
+  textarea: {
+    width: '100%',
+    padding: '1rem',
+    border: '2px solid var(--border-color)',
+    borderRadius: '0.75rem',
+    fontSize: '1rem',
+    backgroundColor: 'var(--input-bg)',
+    color: 'var(--input-text)',
+    transition: 'all 0.3s ease',
+    resize: 'vertical',
+    minHeight: '100px',
+    fontFamily: 'inherit',
+    boxSizing: 'border-box',
+  },
+  submitButton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.5rem',
+    padding: '1rem 2rem',
+    backgroundColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '0.75rem',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+    marginTop: '0.5rem',
+  },
+  disabledButton: {
+    opacity: '0.6',
+    cursor: 'not-allowed',
+    boxShadow: 'none',
+  },
+  buttonIcon: {
+    fontSize: '1.1rem',
+  },
+  buttonSpinner: {
+    width: '16px',
+    height: '16px',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderTop: '2px solid white',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+  },
+};
 
 export default FlashcardForm;
