@@ -6,3 +6,5 @@ node_modules/
 build/
 dist/
 .next/
+backend/ceds/*.pdf
+backend/data/frq_uploads/**
