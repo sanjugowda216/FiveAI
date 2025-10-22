@@ -154,6 +154,44 @@ export async function submitFrqForGrading(payload) {
   }
 }
 
+export async function getAllFlashcards() {
+  const res = await fetch(`${API_URL}/api/flashcards`);
+  if (!res.ok) throw new Error(await res.text() || 'Failed to load flashcards');
+  return res.json();
+}
+
+export async function createFlashcard(question, answer) {
+  const res = await fetch(`${API_URL}/api/flashcards`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, answer })
+  });
+  if (!res.ok) throw new Error(await res.text() || 'Failed to create flashcard');
+  return res.json();
+}
+
+export async function updateFlashcard(id, { question, answer }) {
+  const res = await fetch(`${API_URL}/api/flashcards/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, answer })
+  });
+  if (!res.ok) throw new Error(await res.text() || 'Failed to update flashcard');
+  return res.json();
+}
+
+export async function deleteFlashcard(id) {
+  const res = await fetch(`${API_URL}/api/flashcards/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error(await res.text() || 'Failed to delete flashcard');
+  return res.json();
+}
+
+export async function getRandomStudyFlashcards(count = 10) {
+  const res = await fetch(`${API_URL}/api/flashcards/study/random?count=${count}`);
+  if (!res.ok) throw new Error(await res.text() || 'Failed to fetch study flashcards');
+  return res.json();
+}
+
 async function safeParseJson(response) {
   try {
     return await response.json();

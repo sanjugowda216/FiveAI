@@ -67,6 +67,7 @@ const navItems = [
   { path: "/calendar", label: "Study Calendar" },
   { path: "/stats", label: "My Stats" },
   { path: "/practice", label: "Practice" },
+  { path: "/flashcards", label: "Flashcards" },
 ];
 
 export default function Navbar({ onLogout }) {
