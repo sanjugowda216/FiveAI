@@ -3,6 +3,7 @@ import { StructuredOutputParser } from 'langchain/output_parsers';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { z } from 'zod';
 import dotenv from 'dotenv';
+import { hasCourseData, getUnitContent, getRubricSegments, findRelevantRubrics, mapCourseIdToCedId } from './cedParser.js';
 
 // Load environment variables
 dotenv.config();
@@ -78,7 +79,7 @@ MATH-SPECIFIC INSTRUCTIONS:
 
 // Create prompt template
 const promptTemplate = new PromptTemplate({
-  template: `You are an expert AP exam question writer. Generate {questionCount} high-quality multiple choice questions based on the provided course content.
+  template: `You are an expert AP exam question writer with deep knowledge of College Board AP exam formats and styles. Generate {questionCount} authentic AP-style multiple choice questions that match the exact format, difficulty, and style of real AP {courseName} exam questions.
 
 Course: {courseName}
 Unit: {unitNumber} - {unitTitle}
@@ -86,15 +87,41 @@ Unit: {unitNumber} - {unitTitle}
 Content:
 {content}
 
-Instructions:
-- Create questions that test understanding, not just memorization
-- Make distractors plausible but clearly incorrect
-- Use AP exam question format and difficulty level
-- Ensure questions align with the specific unit content provided
-- Include a mix of factual recall and analytical thinking questions
-- Keep explanations concise but informative
+CRITICAL INSTRUCTIONS FOR AUTHENTIC AP-STYLE QUESTIONS:
+
+1. **Question Format & Style:**
+   - Use the exact question formats found on real AP {courseName} exams
+   - Include specific historical periods, dates, or contexts when relevant
+   - Use "Which of the following..." constructions typical of AP exams
+   - Include primary source excerpts, data, or scenarios when appropriate
+   - Make questions test analysis, synthesis, and application, not just recall
+
+2. **AP-Specific Question Types:**
+   - For History courses: Include document-based questions, causation questions, comparison questions
+   - For Science courses: Include experimental design, data analysis, and application questions
+   - For Math courses: Include problem-solving, conceptual understanding, and application questions
+   - For English courses: Include rhetorical analysis, literary analysis, and synthesis questions
+
+3. **Distractor Quality:**
+   - Create distractors that are plausible but clearly incorrect to AP-level students
+   - Use common misconceptions as distractors
+   - Ensure only one answer is definitively correct
+   - Make distractors similar in length and complexity to the correct answer
+
+4. **Difficulty Level:**
+   - Match the cognitive complexity of real AP exam questions
+   - Include questions that require multiple steps of reasoning
+   - Test both content knowledge and analytical skills
+   - Use AP exam vocabulary and terminology
+
+5. **Content Alignment:**
+   - Base questions on the specific unit content provided
+   - Ensure questions test the most important concepts from the unit
+   - Include questions that connect to broader AP course themes
 
 {mathSpecificInstructions}
+
+IMPORTANT: Do NOT include letter prefixes (A., B., C., D.) in the question text or options - the letters will be added automatically.
 
 {format_instructions}`,
   inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content', 'questionCount', 'mathSpecificInstructions'],
@@ -138,8 +165,18 @@ export async function generateMCQQuestions(courseName, unitNumber, unitTitle, co
     // Generate response
     const response = await llm.invoke(prompt);
     
+    // Clean JSON content to remove markdown code blocks
+    const cleanJsonContent = (content) => {
+      if (typeof content !== 'string') return content;
+      return content
+        .replace(/^```json\s*/i, '')
+        .replace(/\s*```\s*$/i, '')
+        .trim();
+    };
+    
     // Parse the structured output
-    const parsedResponse = await outputParser.parse(response.content);
+    const cleanedContent = cleanJsonContent(response.content);
+    const parsedResponse = await outputParser.parse(cleanedContent);
     
     // Validate and clean up the questions
     const questions = parsedResponse.questions.map((q, index) => ({
@@ -349,7 +386,7 @@ export async function generateAdaptivePracticeQuestions(courseName, unitNumber, 
     
     // Create adaptive prompt template
     const adaptivePromptTemplate = new PromptTemplate({
-      template: `You are an expert AP exam question writer. Generate {questionCount} high-quality multiple choice questions based on the provided course content, with a focus on areas where the student needs improvement.
+      template: `You are an expert AP exam question writer with deep knowledge of College Board AP exam formats and styles. Generate {questionCount} authentic AP-style multiple choice questions that match the exact format, difficulty, and style of real AP {courseName} exam questions, with a focus on areas where the student needs improvement.
 
 Course: {courseName}
 Unit: {unitNumber} - {unitTitle}
@@ -360,15 +397,39 @@ Content:
 Previous Performance Analysis:
 {performanceAnalysis}
 
-Instructions:
-- Create questions that test understanding, not just memorization
-- Focus on concepts and topics where the student has shown weakness
-- Make distractors plausible but clearly incorrect
-- Use AP exam question format and difficulty level
-- Ensure questions align with the specific unit content provided
-- Include a mix of factual recall and analytical thinking questions
-- Keep explanations concise but informative
-- Prioritize questions that address identified knowledge gaps
+CRITICAL INSTRUCTIONS FOR AUTHENTIC AP-STYLE QUESTIONS:
+
+1. **Question Format & Style:**
+   - Use the exact question formats found on real AP {courseName} exams
+   - Include specific historical periods, dates, or contexts when relevant
+   - Use "Which of the following..." constructions typical of AP exams
+   - Include primary source excerpts, data, or scenarios when appropriate
+   - Make questions test analysis, synthesis, and application, not just recall
+
+2. **AP-Specific Question Types:**
+   - For History courses: Include document-based questions, causation questions, comparison questions
+   - For Science courses: Include experimental design, data analysis, and application questions
+   - For Math courses: Include problem-solving, conceptual understanding, and application questions
+   - For English courses: Include rhetorical analysis, literary analysis, and synthesis questions
+
+3. **Adaptive Focus:**
+   - Focus on concepts and topics where the student has shown weakness
+   - Prioritize questions that address identified knowledge gaps
+   - Create questions that test the specific skills the student needs to improve
+
+4. **Distractor Quality:**
+   - Create distractors that are plausible but clearly incorrect to AP-level students
+   - Use common misconceptions as distractors
+   - Ensure only one answer is definitively correct
+   - Make distractors similar in length and complexity to the correct answer
+
+5. **Difficulty Level:**
+   - Match the cognitive complexity of real AP exam questions
+   - Include questions that require multiple steps of reasoning
+   - Test both content knowledge and analytical skills
+   - Use AP exam vocabulary and terminology
+
+IMPORTANT: Do NOT include letter prefixes (A., B., C., D.) in the question text or options - the letters will be added automatically.
 
 {format_instructions}`,
       inputVariables: ['courseName', 'unitNumber', 'unitTitle', 'content', 'questionCount', 'performanceAnalysis'],
@@ -390,8 +451,18 @@ Instructions:
     // Generate response
     const response = await llm.invoke(prompt);
     
+    // Clean JSON content to remove markdown code blocks
+    const cleanJsonContent = (content) => {
+      if (typeof content !== 'string') return content;
+      return content
+        .replace(/^```json\s*/i, '')
+        .replace(/\s*```\s*$/i, '')
+        .trim();
+    };
+    
     // Parse the structured output
-    const parsedResponse = await outputParser.parse(response.content);
+    const cleanedContent = cleanJsonContent(response.content);
+    const parsedResponse = await outputParser.parse(cleanedContent);
     
     // Validate and clean up the questions
     const questions = parsedResponse.questions.map((q, index) => ({
@@ -474,4 +545,118 @@ export function validateQuestions(questions) {
     q.explanation &&
     ['A', 'B', 'C', 'D'].includes(q.correctAnswer.toUpperCase())
   );
+}
+
+/**
+ * Analyze AP exam format from CED content
+ */
+export async function analyzeAPExamFormat(courseName) {
+  try {
+    const cedId = mapCourseIdToCedId(courseName);
+    
+    if (!hasCourseData(cedId)) {
+      console.log(`No CED data found for ${courseName}`);
+      return getDefaultExamFormat(courseName);
+    }
+
+    const content = await getUnitContent(cedId, 1);
+    if (!content) {
+      return getDefaultExamFormat(courseName);
+    }
+
+    // Extract text content if content is an object
+    const contentText = typeof content === 'string' ? content : content.content || content.text || JSON.stringify(content);
+    if (!contentText || typeof contentText !== 'string') {
+      return getDefaultExamFormat(courseName);
+    }
+
+    // Use LLM to analyze exam format from CED
+    const prompt = `Analyze this AP course content and determine the exam format. Look for information about:
+- Number of multiple choice questions
+- Number of free response questions  
+- Time allocation for each section
+- Question types (DBQ, LEQ, SAQ, etc.)
+
+Course: ${courseName}
+Content: ${contentText.substring(0, 2000)}
+
+Return ONLY a JSON object with this exact format:
+{
+  "mcqCount": number,
+  "frqCount": number,
+  "mcqTimeMinutes": number,
+  "frqTimeMinutes": number,
+  "questionTypes": ["type1", "type2"],
+  "totalTimeMinutes": number
+}`;
+
+    const response = await llm.invoke(prompt);
+    
+    // Clean JSON content to remove markdown code blocks
+    const cleanJsonContent = (content) => {
+      if (typeof content !== 'string') return content;
+      return content
+        .replace(/^```json\s*/i, '')
+        .replace(/\s*```\s*$/i, '')
+        .trim();
+    };
+    
+    const cleanedContent = cleanJsonContent(response.content);
+    const analysis = JSON.parse(cleanedContent);
+    
+    return {
+      courseName,
+      mcqCount: analysis.mcqCount || 55,
+      frqCount: analysis.frqCount || 3,
+      mcqTimeMinutes: analysis.mcqTimeMinutes || 55,
+      frqTimeMinutes: analysis.frqTimeMinutes || 100,
+      questionTypes: analysis.questionTypes || ['general'],
+      totalTimeMinutes: analysis.totalTimeMinutes || 155,
+      source: 'ced-analysis'
+    };
+
+  } catch (error) {
+    console.error('Error analyzing exam format:', error);
+    return getDefaultExamFormat(courseName);
+  }
+}
+
+/**
+ * Get default exam format for courses
+ */
+function getDefaultExamFormat(courseName) {
+  const defaults = {
+    'ap-psychology': { mcqCount: 100, frqCount: 2, mcqTimeMinutes: 70, frqTimeMinutes: 50, questionTypes: ['SAQ', 'LEQ'], totalTimeMinutes: 120 },
+    'ap-world-history': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['SAQ', 'DBQ', 'LEQ'], totalTimeMinutes: 155 },
+    'ap-united-states-history': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['SAQ', 'DBQ', 'LEQ'], totalTimeMinutes: 155 },
+    'ap-calculus-ab': { mcqCount: 45, frqCount: 6, mcqTimeMinutes: 60, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 150 },
+    'ap-calculus-bc': { mcqCount: 45, frqCount: 6, mcqTimeMinutes: 60, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 150 },
+    'ap-biology': { mcqCount: 60, frqCount: 6, mcqTimeMinutes: 90, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-chemistry': { mcqCount: 60, frqCount: 7, mcqTimeMinutes: 90, frqTimeMinutes: 105, questionTypes: ['general'], totalTimeMinutes: 195 },
+    'ap-physics-1': { mcqCount: 50, frqCount: 5, mcqTimeMinutes: 90, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-physics-2': { mcqCount: 50, frqCount: 5, mcqTimeMinutes: 90, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-physics-c-mechanics': { mcqCount: 35, frqCount: 3, mcqTimeMinutes: 45, frqTimeMinutes: 45, questionTypes: ['general'], totalTimeMinutes: 90 },
+    'ap-physics-c-electricity': { mcqCount: 35, frqCount: 3, mcqTimeMinutes: 45, frqTimeMinutes: 45, questionTypes: ['general'], totalTimeMinutes: 90 },
+    'ap-statistics': { mcqCount: 40, frqCount: 6, mcqTimeMinutes: 90, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-computer-science-a': { mcqCount: 40, frqCount: 4, mcqTimeMinutes: 90, frqTimeMinutes: 90, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-computer-science-principles': { mcqCount: 70, frqCount: 0, mcqTimeMinutes: 120, frqTimeMinutes: 0, questionTypes: ['general'], totalTimeMinutes: 120 },
+    'ap-economics-macro': { mcqCount: 60, frqCount: 3, mcqTimeMinutes: 70, frqTimeMinutes: 60, questionTypes: ['general'], totalTimeMinutes: 130 },
+    'ap-economics-micro': { mcqCount: 60, frqCount: 3, mcqTimeMinutes: 70, frqTimeMinutes: 60, questionTypes: ['general'], totalTimeMinutes: 130 },
+    'ap-english-language': { mcqCount: 45, frqCount: 3, mcqTimeMinutes: 60, frqTimeMinutes: 135, questionTypes: ['general'], totalTimeMinutes: 195 },
+    'ap-english-literature': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 60, frqTimeMinutes: 120, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-environmental-science': { mcqCount: 80, frqCount: 3, mcqTimeMinutes: 90, frqTimeMinutes: 70, questionTypes: ['general'], totalTimeMinutes: 160 },
+    'ap-human-geography': { mcqCount: 60, frqCount: 3, mcqTimeMinutes: 60, frqTimeMinutes: 75, questionTypes: ['general'], totalTimeMinutes: 135 },
+    'ap-government-politics': { mcqCount: 55, frqCount: 4, mcqTimeMinutes: 80, frqTimeMinutes: 100, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-european-history': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['SAQ', 'DBQ', 'LEQ'], totalTimeMinutes: 155 },
+    'ap-art-history': { mcqCount: 80, frqCount: 6, mcqTimeMinutes: 60, frqTimeMinutes: 120, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-music-theory': { mcqCount: 75, frqCount: 9, mcqTimeMinutes: 80, frqTimeMinutes: 80, questionTypes: ['general'], totalTimeMinutes: 160 }
+  };
+
+  const defaultFormat = defaults[courseName] || { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['general'], totalTimeMinutes: 155 };
+  
+  return {
+    courseName,
+    ...defaultFormat,
+    source: 'default'
+  };
 }
