@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext.jsx';
+import TextToSpeechButton from './TextToSpeechButton';
 
 export default function QuestionCard({
   question,
@@ -169,7 +170,15 @@ export default function QuestionCard({
       </div>
 
       <div style={styles.questionContainer}>
-        <h2 style={{ ...styles.questionText, ...(isDark ? darkStyles.questionText : {}) }}>{question.question}</h2>
+        <div style={styles.questionHeader}>
+          <h2 style={{ ...styles.questionText, ...(isDark ? darkStyles.questionText : {}) }}>
+            {question.question}
+          </h2>
+          <TextToSpeechButton 
+            text={question.question}
+            style={{ marginLeft: '8px' }}
+          />
+        </div>
 
         <div style={styles.optionsContainer}>
           {question.options.map((option, index) => {
@@ -230,7 +239,15 @@ export default function QuestionCard({
             {showExplanation && (
               <div style={{ ...styles.explanationContainer, ...(isDark ? darkStyles.explanationContainer : {}) }}>
                 <h4 style={{ ...styles.explanationTitle, ...(isDark ? darkStyles.explanationTitle : {}) }}>Explanation:</h4>
-                <p style={{ ...styles.explanationText, ...(isDark ? darkStyles.explanationText : {}) }}>{question.explanation}</p>
+                <div style={styles.explanationHeader}>
+                  <p style={{ ...styles.explanationText, ...(isDark ? darkStyles.explanationText : {}) }}>
+                    {question.explanation}
+                  </p>
+                  <TextToSpeechButton 
+                    text={question.explanation}
+                    style={{ marginLeft: '8px' }}
+                  />
+                </div>
               </div>
             )}
 
@@ -295,12 +312,19 @@ const styles = {
   questionContainer: {
     marginBottom: "1.5rem",
   },
+  questionHeader: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+    marginBottom: '1.5rem',
+  },
   questionText: {
     fontSize: "1.25rem",
     fontWeight: 600,
     color: "#0F172A",
-    margin: "0 0 1.5rem 0",
+    margin: 0,
     lineHeight: 1.6,
+    flex: 1,
   },
   optionsContainer: {
     display: "flex",
@@ -394,11 +418,17 @@ const styles = {
     color: "#0F172A",
     margin: "0 0 0.5rem 0",
   },
+  explanationHeader: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+  },
   explanationText: {
     fontSize: "0.95rem",
     color: "#475569",
     margin: 0,
     lineHeight: 1.6,
+    flex: 1,
   },
   navigationContainer: {
     display: "flex",
