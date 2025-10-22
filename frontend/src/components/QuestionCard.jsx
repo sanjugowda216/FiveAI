@@ -206,7 +206,7 @@ export default function QuestionCard({
                 onClick={() => handleAnswerSelect(optionLetter)}
               >
                 <span style={{ ...styles.optionLetter, ...(isDark ? darkStyles.optionLetter : {}) }}>{optionLetter}.</span>
-                <span style={{ ...styles.optionText, ...(isDark ? darkStyles.optionText : {}) }}>{option}</span>
+                <span style={{ ...styles.optionText, ...(isDark ? darkStyles.optionText : {}) }}>{option.replace(/^[A-D]\.\s*/, '')}</span>
               </div>
             );
           })}
