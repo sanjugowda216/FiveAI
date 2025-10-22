@@ -6,6 +6,7 @@ import { db, storage } from "../firebase";
 import { getCourseById } from "../data/apCourses";
 import { submitFrqForGrading, getRubricsForCourse } from "../utils/api";
 import GlassDropdown from "../components/GlassDropdown";
+import TextToSpeechButton from "../components/TextToSpeechButton";
 
 const MAX_UPLOAD_SIZE = 25 * 1024 * 1024; // 25 MB
 const DEFAULT_FRQ_TYPE = "general";
@@ -631,7 +632,13 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                   </div>
 
                   {grade.summary && (
-                    <p style={styles.gradeSummary}>{grade.summary}</p>
+                    <div style={styles.gradeSummaryContainer}>
+                      <p style={styles.gradeSummary}>{grade.summary}</p>
+                      <TextToSpeechButton 
+                        text={grade.summary}
+                        style={{ marginLeft: '8px' }}
+                      />
+                    </div>
                   )}
 
                   {grade.strengths?.length ? (
@@ -1027,12 +1034,18 @@ const styles = {
     color: "var(--text-primary)",
     transition: "color 0.3s ease",
   },
+  gradeSummaryContainer: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+  },
   gradeSummary: {
     margin: 0,
     fontSize: "1rem",
     color: "var(--text-secondary)",
     lineHeight: 1.6,
     transition: "color 0.3s ease",
+    flex: 1,
   },
   gradeSection: {
     display: "flex",
