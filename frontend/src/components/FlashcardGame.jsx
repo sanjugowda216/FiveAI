@@ -158,7 +158,7 @@ const styles = {
     fontWeight: '700',
     color: 'var(--text-primary)',
     margin: '0 0 1rem 0',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
   },
@@ -178,7 +178,7 @@ const styles = {
   },
   progressFill: {
     height: '100%',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     borderRadius: '4px',
     transition: 'width 0.3s ease',
   },
@@ -237,7 +237,7 @@ const styles = {
     border: '2px solid var(--border-color)',
   },
   nextButton: {
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     color: 'white',
   },
   disabledButton: {
@@ -282,7 +282,7 @@ const styles = {
     width: '40px',
     height: '40px',
     border: '4px solid var(--border-color)',
-    borderTop: '4px solid #667eea',
+    borderTop: '4px solid #0078C8',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },

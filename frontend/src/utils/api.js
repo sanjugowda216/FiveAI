@@ -163,27 +163,27 @@ export async function getAllFlashcards(userId) {
   return res.json();
 }
 
-export async function createFlashcard(question, answer, userId) {
+export async function createFlashcard(question, answer, userId, folder = null) {
   if (!userId) {
     throw new Error('User ID is required');
   }
   const res = await fetch(`${API_URL}/api/flashcards?userId=${userId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question, answer })
+    body: JSON.stringify({ question, answer, folder })
   });
   if (!res.ok) throw new Error(await res.text() || 'Failed to create flashcard');
   return res.json();
 }
 
-export async function updateFlashcard(id, { question, answer }, userId) {
+export async function updateFlashcard(id, { question, answer, folder }, userId) {
   if (!userId) {
     throw new Error('User ID is required');
   }
   const res = await fetch(`${API_URL}/api/flashcards/${id}?userId=${userId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question, answer })
+    body: JSON.stringify({ question, answer, folder })
   });
   if (!res.ok) throw new Error(await res.text() || 'Failed to update flashcard');
   return res.json();

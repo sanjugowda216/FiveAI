@@ -20,7 +20,7 @@ export async function getAllFlashcards(userId = null) {
   return allFlashcards;
 }
 
-export async function addFlashcard({ question, answer, userId }) {
+export async function addFlashcard({ question, answer, userId, folder = null }) {
   if (!question || !answer) {
     throw new Error('Both question and answer are required');
   }
@@ -33,6 +33,7 @@ export async function addFlashcard({ question, answer, userId }) {
     question,
     answer,
     userId,
+    folder,
     createdAt: new Date().toISOString(),
     updatedAt: null
   };
@@ -41,7 +42,7 @@ export async function addFlashcard({ question, answer, userId }) {
   return newCard;
 }
 
-export async function updateFlashcard(id, { question, answer, userId }) {
+export async function updateFlashcard(id, { question, answer, userId, folder }) {
   if (!id) throw new Error('Flashcard id required');
   if (!userId) throw new Error('User ID is required');
   const flashcards = await getAllFlashcards();
@@ -57,6 +58,7 @@ export async function updateFlashcard(id, { question, answer, userId }) {
     ...flashcards[idx],
     question: question ?? flashcards[idx].question,
     answer: answer ?? flashcards[idx].answer,
+    folder: folder !== undefined ? folder : flashcards[idx].folder,
     updatedAt: new Date().toISOString()
   };
   await fsPromises.writeFile(FLASHCARDS_PATH, JSON.stringify(flashcards, null, 2), 'utf-8');

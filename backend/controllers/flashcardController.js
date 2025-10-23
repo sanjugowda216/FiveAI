@@ -28,8 +28,8 @@ export async function createFlashcard(req, res) {
       return res.status(401).json({ error: 'unauthorized', message: 'User authentication required' });
     }
     
-    const { question, answer } = req.body ?? {};
-    const card = await addFlashcard({ question, answer, userId });
+    const { question, answer, folder } = req.body ?? {};
+    const card = await addFlashcard({ question, answer, userId, folder });
     res.status(201).json(card);
   } catch (e) {
     res.status(400).json({ error: 'create_failed', message: e.message });
@@ -44,8 +44,8 @@ export async function editFlashcard(req, res) {
     }
     
     const { id } = req.params;
-    const { question, answer } = req.body ?? {};
-    const card = await updateFlashcard(id, { question, answer, userId });
+    const { question, answer, folder } = req.body ?? {};
+    const card = await updateFlashcard(id, { question, answer, userId, folder });
     res.json(card);
   } catch (e) {
     res.status(400).json({ error: 'update_failed', message: e.message });

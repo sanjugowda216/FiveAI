@@ -6,6 +6,7 @@ import FlashcardGame from '../components/FlashcardGame.jsx';
 function Flashcards({ userProfile }) {
   const [activeTab, setActiveTab] = useState('manage');
   const [refresh, setRefresh] = useState(0);
+  const [folders, setFolders] = useState([]);
   const handleCreated = () => setRefresh(r=>r+1);
 
   // Check if user is authenticated
@@ -54,8 +55,8 @@ function Flashcards({ userProfile }) {
       <div style={styles.contentContainer}>
         {activeTab === 'manage' ? (
           <div style={styles.manageContainer}>
-            <FlashcardForm onCreated={handleCreated} userId={userProfile.uid} />
-            <FlashcardList refreshKey={refresh} userId={userProfile.uid} />
+            <FlashcardForm onCreated={handleCreated} userId={userProfile.uid} folders={folders} />
+            <FlashcardList refreshKey={refresh} userId={userProfile.uid} onFoldersChange={setFolders} />
           </div>
         ) : (
           <FlashcardGame userId={userProfile.uid} />
@@ -83,7 +84,7 @@ const styles = {
     fontWeight: '800',
     color: 'var(--text-primary)',
     margin: '0 0 0.5rem 0',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
   },
@@ -117,10 +118,10 @@ const styles = {
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
   activeTab: {
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     color: 'white',
     borderColor: 'transparent',
-    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.3)',
+    boxShadow: '0 6px 20px rgba(0, 120, 200, 0.3)',
   },
   tabIcon: {
     fontSize: '1.3rem',

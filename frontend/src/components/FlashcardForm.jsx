@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { createFlashcard } from '../utils/api.js';
 
-function FlashcardForm({ onCreated, userId }) {
+function FlashcardForm({ onCreated, userId, folders = [] }) {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+  const [folder, setFolder] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -12,9 +13,10 @@ function FlashcardForm({ onCreated, userId }) {
     
     setLoading(true);
     try {
-      const newCard = await createFlashcard(question.trim(), answer.trim(), userId);
+      const newCard = await createFlashcard(question.trim(), answer.trim(), userId, folder.trim() || null);
       setQuestion('');
       setAnswer('');
+      setFolder('');
       onCreated?.(newCard);
     } catch (err) {
       alert(err.message);
@@ -58,6 +60,24 @@ function FlashcardForm({ onCreated, userId }) {
             placeholder="Enter the answer here..."
             disabled={loading}
           />
+        </div>
+        
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>
+            <span style={styles.labelIcon}>📁</span>
+            Folder (Optional)
+          </label>
+          <select 
+            value={folder} 
+            onChange={(e)=>setFolder(e.target.value)} 
+            style={styles.select}
+            disabled={loading}
+          >
+            <option value="">No Folder</option>
+            {folders.map(folderName => (
+              <option key={folderName} value={folderName}>{folderName}</option>
+            ))}
+          </select>
         </div>
         
         <button 
@@ -105,7 +125,7 @@ const styles = {
     fontWeight: '700',
     color: 'var(--text-primary)',
     margin: '0 0 0.5rem 0',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
   },
@@ -167,7 +187,7 @@ const styles = {
     justifyContent: 'center',
     gap: '0.5rem',
     padding: '1rem 2rem',
-    backgroundColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     color: 'white',
     border: 'none',
     borderRadius: '0.75rem',
@@ -175,8 +195,19 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+    boxShadow: '0 4px 15px rgba(0, 120, 200, 0.3)',
     marginTop: '0.5rem',
+  },
+  select: {
+    width: '100%',
+    padding: '1rem',
+    border: '2px solid var(--border-color)',
+    borderRadius: '0.75rem',
+    fontSize: '1rem',
+    backgroundColor: 'var(--input-bg)',
+    color: 'var(--input-text)',
+    transition: 'all 0.3s ease',
+    boxSizing: 'border-box',
   },
   disabledButton: {
     opacity: '0.6',
