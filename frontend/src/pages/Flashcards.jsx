@@ -24,43 +24,45 @@ function Flashcards({ userProfile }) {
 
   return (
     <div style={styles.pageContainer}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>Flashcards</h1>
-        <p style={styles.subtitle}>Create, manage, and study your personal flashcard collection</p>
-      </div>
+      <div style={styles.contentWrapper}>
+        <div style={styles.header}>
+          <h1 style={styles.title}>Flashcards</h1>
+          <p style={styles.subtitle}>Create, manage, and study your personal flashcard collection</p>
+        </div>
 
-      <div style={styles.tabContainer}>
-        <button 
-          style={{
-            ...styles.tabButton,
-            ...(activeTab === 'manage' ? styles.activeTab : {})
-          }}
-          onClick={() => setActiveTab('manage')}
-        >
-          <span style={styles.tabIcon}>📝</span>
-          Manage Cards
-        </button>
-        <button 
-          style={{
-            ...styles.tabButton,
-            ...(activeTab === 'study' ? styles.activeTab : {})
-          }}
-          onClick={() => setActiveTab('study')}
-        >
-          <span style={styles.tabIcon}>🎯</span>
-          Study Mode
-        </button>
-      </div>
+        <div style={styles.tabContainer}>
+          <button 
+            style={{
+              ...styles.tabButton,
+              ...(activeTab === 'manage' ? styles.activeTab : {})
+            }}
+            onClick={() => setActiveTab('manage')}
+          >
+            <span style={styles.tabIcon}>📝</span>
+            Manage Cards
+          </button>
+          <button 
+            style={{
+              ...styles.tabButton,
+              ...(activeTab === 'study' ? styles.activeTab : {})
+            }}
+            onClick={() => setActiveTab('study')}
+          >
+            <span style={styles.tabIcon}>🎯</span>
+            Study Mode
+          </button>
+        </div>
 
-      <div style={styles.contentContainer}>
-        {activeTab === 'manage' ? (
-          <div style={styles.manageContainer}>
-            <FlashcardForm onCreated={handleCreated} userId={userProfile.uid} folders={folders} />
-            <FlashcardList refreshKey={refresh} userId={userProfile.uid} onFoldersChange={setFolders} />
-          </div>
-        ) : (
-          <FlashcardGame userId={userProfile.uid} />
-        )}
+        <div style={styles.contentContainer}>
+          {activeTab === 'manage' ? (
+            <div style={styles.manageContainer}>
+              <FlashcardForm onCreated={handleCreated} userId={userProfile.uid} folders={folders} />
+              <FlashcardList refreshKey={refresh} userId={userProfile.uid} onFoldersChange={setFolders} />
+            </div>
+          ) : (
+            <FlashcardGame userId={userProfile.uid} />
+          )}
+        </div>
       </div>
     </div>
   );
@@ -163,6 +165,13 @@ const styles = {
     color: 'var(--text-secondary)',
     margin: '0',
     maxWidth: '400px',
+  },
+  contentWrapper: {
+    backgroundColor: 'var(--bg-secondary)',
+    borderRadius: '1.5rem',
+    padding: '2rem',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+    border: '1px solid var(--border-color)',
   },
 };
 

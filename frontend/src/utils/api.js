@@ -207,6 +207,29 @@ export async function getRandomStudyFlashcards(count = 10, userId) {
   return res.json();
 }
 
+export async function getStudyFlashcardsByFolder(folder, count = 10, userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const url = `${API_URL}/api/flashcards/study/random?count=${count}&userId=${userId}&folder=${encodeURIComponent(folder)}`;
+  console.log('API call:', url);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(await res.text() || 'Failed to fetch study flashcards');
+  return res.json();
+}
+
+export async function getAllFolders(userId) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const res = await fetch(`${API_URL}/api/flashcards?userId=${userId}`);
+  if (!res.ok) throw new Error(await res.text() || 'Failed to load flashcards');
+  const cards = await res.json();
+  // Extract unique folders from all cards
+  const uniqueFolders = [...new Set(cards.map(card => card.folder).filter(Boolean))];
+  return uniqueFolders;
+}
+
 async function safeParseJson(response) {
   try {
     return await response.json();

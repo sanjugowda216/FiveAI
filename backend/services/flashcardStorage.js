@@ -83,8 +83,29 @@ export async function deleteFlashcard(id, userId) {
   return { deleted: true };
 }
 
-export async function getRandomFlashcards(count = 10, userId = null) {
-  const flashcards = await getAllFlashcards(userId);
+export async function getRandomFlashcards(count = 10, userId = null, folder = null) {
+  let flashcards = await getAllFlashcards(userId);
+  
+  console.log(`getRandomFlashcards called with userId=${userId}, folder=${folder}, total cards for user=${flashcards.length}`);
+  console.log('All cards for user:', flashcards.map(c => ({ id: c.id.substring(0, 8), folder: c.folder, question: c.question.substring(0, 20) })));
+  
+  const uniqueFolders = [...new Set(flashcards.map(c => c.folder))];
+  console.log('Unique folders in user cards:', uniqueFolders);
+  
+  // Filter by folder if provided
+  if (folder && folder !== 'all') {
+    console.log(`Filtering for folder: "${folder}"`);
+    flashcards = flashcards.filter(card => {
+      const matches = card.folder === folder;
+      if (!matches) {
+        console.log(`Card "${card.question.substring(0, 20)}" folder="${card.folder}" does NOT match filter "${folder}"`);
+      }
+      return matches;
+    });
+    console.log(`After folder filter (${folder}): ${flashcards.length} cards`);
+  }
+  
+  // Shuffle and return
   const shuffled = flashcards.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, Math.min(count, flashcards.length));
 }

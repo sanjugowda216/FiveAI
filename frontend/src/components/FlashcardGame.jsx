@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { getRandomStudyFlashcards } from '../utils/api.js';
+import { getRandomStudyFlashcards, getStudyFlashcardsByFolder, getAllFolders } from '../utils/api.js';
 import './FlashcardGame.css';
 
 function FlashcardGame({ userId }) {
@@ -7,22 +7,51 @@ function FlashcardGame({ userId }) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [folders, setFolders] = useState([]);
+  const [selectedFolder, setSelectedFolder] = useState('all');
 
-  useEffect(()=>{ load(); },[]);
+  useEffect(()=>{ loadFolders(); },[userId]);
 
-  const load = async ()=>{
+  const loadFolders = async () => {
+    try {
+      const folderList = await getAllFolders(userId);
+      console.log('Folders loaded:', folderList);
+      setFolders(folderList);
+    } catch(e) {
+      console.error('Failed to load folders:', e);
+    }
+  };
+
+  const load = async (folder = 'all') => {
+    console.log(`Loading cards for folder: ${folder}`);
     setLoading(true);
-    try{ 
-      const data = await getRandomStudyFlashcards(10, userId); 
+    try { 
+      let data;
+      if (folder === 'all') {
+        console.log('Fetching all flashcards');
+        data = await getRandomStudyFlashcards(10, userId);
+      } else {
+        console.log(`Fetching flashcards from folder: ${folder}`);
+        data = await getStudyFlashcardsByFolder(folder, 10, userId);
+      }
+      console.log(`Received ${data.length} cards`);
       setCards(data); 
       setIndex(0); 
       setFlipped(false);
-    }catch(e){
+      setSelectedFolder(folder);
+    } catch(e) {
+      console.error('Error loading cards:', e);
       alert(e.message);
-    }finally{
+    } finally {
       setLoading(false);
     } 
   };
+
+  useEffect(() => {
+    if (userId) {
+      load('all');
+    }
+  }, [userId]);
 
   const next = useCallback(()=>{ 
     if(index<cards.length-1){ 
@@ -69,6 +98,32 @@ function FlashcardGame({ userId }) {
     <div style={styles.container}>
       <div style={styles.header}>
         <h2 style={styles.title}>Study Mode</h2>
+        <div style={styles.folderSelector}>
+          <label style={styles.folderLabel}>Study from:</label>
+          <div style={styles.folderOptions}>
+            <button
+              onClick={() => load('all')}
+              style={{
+                ...styles.folderButton,
+                ...(selectedFolder === 'all' ? styles.activeFolderButton : {})
+              }}
+            >
+              All Folders
+            </button>
+            {folders.map(folder => (
+              <button
+                key={folder}
+                onClick={() => load(folder)}
+                style={{
+                  ...styles.folderButton,
+                  ...(selectedFolder === folder ? styles.activeFolderButton : {})
+                }}
+              >
+                {folder}
+              </button>
+            ))}
+          </div>
+        </div>
         <div style={styles.progressContainer}>
           <div style={styles.progressBar}>
             <div style={{
@@ -87,17 +142,6 @@ function FlashcardGame({ userId }) {
             <div className="flashcard-face back">{current.answer}</div>
           </div>
         </div>
-        
-        <div style={styles.cardActions}>
-          <button 
-            onClick={()=>setFlipped(f=>!f)} 
-            style={styles.flipButton}
-          >
-            <span style={styles.buttonIcon}>🔄</span>
-            Flip Card
-            <span style={styles.keyHint}>(Space)</span>
-          </button>
-        </div>
       </div>
 
       <div style={styles.navigation}>
@@ -110,9 +154,15 @@ function FlashcardGame({ userId }) {
             ...(index===0 ? styles.disabledButton : {})
           }}
         >
-          <span style={styles.buttonIcon}>←</span>
           Previous
-          <span style={styles.keyHint}>(←)</span>
+        </button>
+        
+        <button 
+          onClick={()=>setFlipped(f=>!f)} 
+          style={styles.navButton}
+          title="Click or press Space to flip"
+        >
+          Flip Card
         </button>
         
         <button 
@@ -125,13 +175,11 @@ function FlashcardGame({ userId }) {
           }}
         >
           Next
-          <span style={styles.buttonIcon}>→</span>
-          <span style={styles.keyHint}>(→)</span>
         </button>
       </div>
 
       <div style={styles.footer}>
-        <button onClick={load} style={styles.refreshButton}>
+        <button onClick={() => load(selectedFolder)} style={styles.refreshButton}>
           <span style={styles.buttonIcon}>🔄</span>
           New Study Session
         </button>
@@ -143,15 +191,20 @@ function FlashcardGame({ userId }) {
 const styles = {
   container: {
     width: '100%',
-    maxWidth: '800px',
+    maxWidth: '1000px',
     margin: '0 auto',
-    padding: '2rem',
+    padding: '0',
     display: 'flex',
     flexDirection: 'column',
     gap: '2rem',
+    alignItems: 'center',
   },
   header: {
     textAlign: 'center',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   title: {
     fontSize: '2rem',
@@ -161,12 +214,51 @@ const styles = {
     background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
+    textAlign: 'center',
+  },
+  folderSelector: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '0.5rem',
+    marginBottom: '1.5rem',
+    width: '100%',
+  },
+  folderLabel: {
+    fontSize: '1rem',
+    color: 'var(--text-secondary)',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  folderOptions: {
+    display: 'flex',
+    gap: '0.75rem',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  folderButton: {
+    padding: '0.5rem 1rem',
+    border: '2px solid var(--border-color)',
+    borderRadius: '0.75rem',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    backgroundColor: 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
+  },
+  activeFolderButton: {
+    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
+    color: 'white',
+    borderColor: 'transparent',
   },
   progressContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: '0.5rem',
+    width: '100%',
   },
   progressBar: {
     width: '100%',
@@ -187,12 +279,15 @@ const styles = {
     color: 'var(--text-secondary)',
     margin: '0',
     fontWeight: '500',
+    textAlign: 'center',
   },
   cardContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: '1.5rem',
+    width: '100%',
+    maxWidth: '600px',
   },
   cardActions: {
     display: 'flex',
@@ -201,10 +296,42 @@ const styles = {
   flipButton: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: '0.5rem',
-    padding: '0.75rem 1.5rem',
+    padding: '0.75rem 1rem',
     backgroundColor: 'var(--bg-secondary)',
     color: 'var(--text-primary)',
+    border: '2px solid var(--border-color)',
+    borderRadius: '0.75rem',
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    position: 'absolute',
+    top: '50%',
+    right: '-120px',
+    transform: 'translateY(-50%)',
+    zIndex: '10',
+    whiteSpace: 'nowrap',
+    width: '110px',
+    flexDirection: 'column',
+  },
+  flipButtonText: {
+    fontSize: '0.85rem',
+  },
+  navigation: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '1rem',
+    width: '100%',
+  },
+  navButton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.5rem',
+    padding: '0.75rem 1.5rem',
     border: '2px solid var(--border-color)',
     borderRadius: '0.75rem',
     fontSize: '1rem',
@@ -212,24 +339,10 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  },
-  navigation: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    gap: '1rem',
-  },
-  navButton: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '0.75rem 1.5rem',
-    border: 'none',
-    borderRadius: '0.75rem',
-    fontSize: '1rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    flex: '1',
+    maxWidth: '140px',
+    backgroundColor: 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
   },
   prevButton: {
     backgroundColor: 'var(--bg-secondary)',
@@ -239,6 +352,7 @@ const styles = {
   nextButton: {
     background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
     color: 'white',
+    border: '2px solid transparent',
   },
   disabledButton: {
     opacity: '0.5',
@@ -255,6 +369,7 @@ const styles = {
   footer: {
     display: 'flex',
     justifyContent: 'center',
+    width: '100%',
   },
   refreshButton: {
     display: 'flex',

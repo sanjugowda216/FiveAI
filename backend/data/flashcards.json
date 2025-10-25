@@ -72,5 +72,41 @@
     "folder": "Biology",
     "createdAt": "2025-10-23T07:04:49.604Z",
     "updatedAt": null
+  },
+  {
+    "id": "ba0d97ed-3928-4a83-87d2-b5275a417dba",
+    "question": "juxtapoition",
+    "answer": "putting two different topics that contradict each other in comparison",
+    "userId": "kynxmkbp7FUFG8NjlHg9hmisFFl1",
+    "folder": "ap lang",
+    "createdAt": "2025-10-25T00:50:08.778Z",
+    "updatedAt": "2025-10-25T00:50:25.239Z"
+  },
+  {
+    "id": "dcf022d3-1fe6-4621-a410-1eb797141fcd",
+    "question": "hypophora",
+    "answer": "a rhetorical question that is answered by author",
+    "userId": "kynxmkbp7FUFG8NjlHg9hmisFFl1",
+    "folder": "ap lang",
+    "createdAt": "2025-10-25T00:51:59.136Z",
+    "updatedAt": "2025-10-25T00:52:08.152Z"
+  },
+  {
+    "id": "9e3aad35-8a73-41a0-b657-9599ad3e53e0",
+    "question": "h",
+    "answer": "hui",
+    "userId": "kynxmkbp7FUFG8NjlHg9hmisFFl1",
+    "folder": null,
+    "createdAt": "2025-10-25T00:54:45.387Z",
+    "updatedAt": null
+  },
+  {
+    "id": "7b6e7676-aef0-469d-b4f8-dccc56e65fe4",
+    "question": "sd",
+    "answer": "sdsd",
+    "userId": "kynxmkbp7FUFG8NjlHg9hmisFFl1",
+    "folder": "math",
+    "createdAt": "2025-10-25T01:11:11.212Z",
+    "updatedAt": "2025-10-25T01:11:29.949Z"
   }
 ]
