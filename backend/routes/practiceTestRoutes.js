@@ -12,6 +12,9 @@ const openai = new ChatOpenAI({
   temperature: 0.7,
 });
 
+// In-memory cache for practice tests (one per course)
+const practiceTestCache = new Map();
+
 // Route to get AP exam format
 router.get('/format/:courseId', async (req, res) => {
   const { courseId } = req.params;
@@ -52,7 +55,18 @@ router.get('/format/:courseId', async (req, res) => {
 router.post('/generate/:courseId', async (req, res) => {
   try {
     const { courseId } = req.params;
-    const { isAuthenticated = true } = req.body;
+    const { isAuthenticated = true, forceRegenerate = false } = req.body;
+    
+    // Check cache first
+    if (!forceRegenerate && practiceTestCache.has(courseId)) {
+      console.log(`Returning cached practice test for course: ${courseId}`);
+      const cachedTest = practiceTestCache.get(courseId);
+      return res.json({
+        success: true,
+        practiceTest: cachedTest,
+        cached: true
+      });
+    }
     
     console.log(`Generating practice test for course: ${courseId}`);
     
@@ -91,9 +105,14 @@ router.post('/generate/:courseId', async (req, res) => {
       generatedAt: new Date().toISOString()
     };
 
+    // Cache the practice test
+    practiceTestCache.set(courseId, practiceTest);
+    console.log(`Cached practice test for course: ${courseId}`);
+
     res.json({
       success: true,
-      practiceTest
+      practiceTest,
+      cached: false
     });
 
   } catch (error) {
@@ -187,6 +206,25 @@ Return ONLY a JSON object with this exact format:
       message: 'Failed to grade FRQ',
       error: error.message
     });
+  }
+});
+
+/**
+ * Clear practice test cache
+ */
+router.delete('/cache/:courseId', (req, res) => {
+  const { courseId } = req.params;
+  
+  if (courseId === 'all') {
+    practiceTestCache.clear();
+    console.log('Cleared all practice test cache');
+    res.json({ success: true, message: 'All cached practice tests cleared' });
+  } else if (practiceTestCache.has(courseId)) {
+    practiceTestCache.delete(courseId);
+    console.log(`Cleared cache for course: ${courseId}`);
+    res.json({ success: true, message: `Cache cleared for ${courseId}` });
+  } else {
+    res.json({ success: false, message: `No cache found for ${courseId}` });
   }
 });
 
