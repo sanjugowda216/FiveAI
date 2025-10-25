@@ -424,6 +424,19 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
           </div>
         )}
 
+        <div style={styles.practiceTestCard}>
+          <h2 style={styles.practiceTestTitle}>Practice Test</h2>
+          <p style={styles.practiceTestDescription}>
+            Full-length practice test matching real AP exam format
+          </p>
+          <button
+            style={styles.practiceTestButton}
+            onClick={() => navigate(`/practice-test/${course.id}`)}
+          >
+            Generate Test
+          </button>
+        </div>
+
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Submit FRQ / Essay</h2>
           <p style={styles.cardBody}>
@@ -827,6 +840,46 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.2s",
     whiteSpace: "nowrap",
+  },
+  practiceTestCard: {
+    background: "var(--bg-primary)",
+    borderRadius: "1rem",
+    padding: "2rem",
+    boxShadow: "0 8px 24px var(--shadow-color), 0 0 0 1px var(--border-color)",
+    border: "none",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
+  },
+  practiceTestTitle: {
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    color: "var(--text-primary)",
+    margin: 0,
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  practiceTestDescription: {
+    fontSize: "1rem",
+    color: "var(--text-secondary)",
+    margin: 0,
+    lineHeight: 1.5,
+  },
+  practiceTestButton: {
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    color: "white",
+    border: "none",
+    borderRadius: "0.75rem",
+    padding: "1rem 2rem",
+    fontSize: "1rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 16px rgba(102, 126, 234, 0.3)",
+    alignSelf: "flex-start",
   },
   cardBody: {
     fontSize: "1rem",
