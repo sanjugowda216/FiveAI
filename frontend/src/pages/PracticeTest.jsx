@@ -34,9 +34,24 @@ const PracticeTest = ({ userProfile }) => {
       // Get exam format
       const formatResponse = await fetch(`http://localhost:5001/api/practice-test/format/${courseId}`);
       if (!formatResponse.ok) {
-        throw new Error('Failed to get exam format');
+        const errorData = await formatResponse.json().catch(() => ({}));
+        if (errorData.hasTraditionalExam === false) {
+          throw new Error(errorData.message || 'This course does not have a traditional AP exam');
+        }
+        throw new Error(errorData.message || 'Failed to get exam format');
       }
       const format = await formatResponse.json();
+      
+      // Double-check if course has traditional exam (allows FRQ-only like AP Seminar)
+      if (!format.hasTraditionalExam) {
+        throw new Error('This course does not have a traditional AP exam (portfolio/performance-based)');
+      }
+      
+      // Check if course has any questions
+      if (format.mcqCount === 0 && format.frqCount === 0) {
+        throw new Error('This course exam format is not supported for practice tests');
+      }
+      
       setExamFormat(format);
 
       // Generate practice test
@@ -154,31 +169,79 @@ const PracticeTest = ({ userProfile }) => {
         });
       }
 
-      // Calculate FRQ score (simplified - just check if answer exists)
+      // Calculate FRQ score using AI grading
       let frqScore = 0;
       let frqTotal = 0;
       const frqResults = [];
       
       if (testQuestions?.frqQuestions) {
-        testQuestions.frqQuestions.forEach((question, index) => {
+        for (let index = 0; index < testQuestions.frqQuestions.length; index++) {
+          const question = testQuestions.frqQuestions[index];
           frqTotal++;
-          const userAnswer = frqAnswers[index];
-          const hasAnswer = userAnswer && userAnswer.trim().length > 0;
-          if (hasAnswer) frqScore++;
+          const userAnswer = frqAnswers[index] || '';
+          const trimmedAnswer = userAnswer.trim();
+          
+          let questionScore = 0;
+          let feedback = 'No response provided';
+          let quality = 'No Answer';
+          
+          if (trimmedAnswer.length === 0) {
+            // No answer provided
+            questionScore = 0;
+          } else if (trimmedAnswer.length < 30) {
+            // Too short to evaluate
+            questionScore = 0;
+            feedback = 'Response too brief for meaningful evaluation';
+            quality = 'Too Brief';
+          } else {
+            // Grade using AI with CED rubric
+            try {
+              const gradeResponse = await fetch(`http://localhost:5001/api/practice-test/grade-frq/${courseId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  prompt: question.prompt,
+                  response: userAnswer,
+                  questionType: question.questionType || 'general'
+                })
+              });
+              
+              if (gradeResponse.ok) {
+                const gradeData = await gradeResponse.json();
+                questionScore = gradeData.score || 0;
+                feedback = gradeData.feedback || 'Response evaluated';
+                quality = questionScore === 1 ? 'Meets CED Standards' : 'Needs Improvement';
+              } else {
+                throw new Error('Failed to grade response');
+              }
+            } catch (error) {
+              console.error('Error grading FRQ:', error);
+              // Fallback to length-based scoring
+              questionScore = trimmedAnswer.length >= 100 ? 1 : 0;
+              feedback = 'Automatic evaluation - check with instructor for detailed feedback';
+              quality = questionScore === 1 ? 'Long Response' : 'Short Response';
+            }
+          }
+          
+          frqScore += questionScore;
           
           frqResults.push({
             prompt: question.prompt,
-            userAnswer: userAnswer || '',
-            hasAnswer,
+            userAnswer: userAnswer,
+            hasAnswer: trimmedAnswer.length > 0,
+            score: questionScore,
+            maxScore: 1,
             questionType: question.questionType,
-            points: question.points
+            points: question.points,
+            feedback: feedback,
+            quality: quality
           });
-        });
+        }
       }
 
-      // Calculate overall score
-      const totalQuestions = mcqTotal + frqTotal;
+      // Calculate overall score (binary 0 or 1 for both MCQ and FRQ)
       const totalCorrect = mcqScore + frqScore;
+      const totalQuestions = mcqTotal + frqTotal;
       const percentage = totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
 
       // Estimate AP score (1-5 scale)
@@ -263,6 +326,9 @@ const PracticeTest = ({ userProfile }) => {
           <div style={styles.spinner}></div>
           <h2 style={styles.loadingTitle}>Generating Practice Test</h2>
           <p style={styles.loadingText}>Creating your personalized AP exam...</p>
+          <p style={{ ...styles.loadingText, marginTop: '0.5rem', fontSize: '0.9rem' }}>
+            This can take up to 1-2 minutes
+          </p>
         </div>
       </div>
     );
@@ -495,7 +561,7 @@ const PracticeTest = ({ userProfile }) => {
                   {gradingResults.frq.score} / {gradingResults.frq.total}
                 </div>
                 <div style={styles.scorePercentage}>
-                  {gradingResults.frq.percentage.toFixed(1)}%
+                  {gradingResults.frq.total > 0 ? Math.round(gradingResults.frq.score / gradingResults.frq.total * 100) : 0}%
                 </div>
               </div>
             )}
@@ -522,10 +588,10 @@ const PracticeTest = ({ userProfile }) => {
                     </div>
                     <p style={styles.questionReviewText}>{result.question}</p>
                     <div style={styles.answerReview}>
-                      <p><strong>Your Answer:</strong> {result.userAnswer || 'No answer'}</p>
-                      <p><strong>Correct Answer:</strong> {result.correctAnswer}</p>
+                      <p style={{ marginBottom: '0.75rem', fontSize: '1.05rem' }}><strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>Your Answer:</strong> {result.userAnswer || 'No answer'}</p>
+                      <p style={{ marginBottom: '0.75rem', fontSize: '1.05rem' }}><strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>Correct Answer:</strong> {result.correctAnswer}</p>
                       {result.explanation && (
-                        <p><strong>Explanation:</strong> {result.explanation}</p>
+                        <p style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '2px solid var(--border-color)', fontSize: '1.05rem', lineHeight: 1.8 }}><strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>Explanation:</strong> {result.explanation}</p>
                       )}
                     </div>
                   </div>
@@ -543,17 +609,29 @@ const PracticeTest = ({ userProfile }) => {
                       <span style={styles.questionNumber}>Q{index + 1}</span>
                       <span style={{
                         ...styles.correctnessBadge,
-                        backgroundColor: result.hasAnswer ? '#10b981' : '#ef4444'
+                                              backgroundColor: result.score >= 1 ? '#10b981' : '#ef4444'
                       }}>
-                        {result.hasAnswer ? 'Answered' : 'Not Answered'}
+                        Score: {result.score} / {result.maxScore}
                       </span>
                     </div>
                     <p style={styles.questionReviewText}>{result.prompt}</p>
                     <div style={styles.answerReview}>
-                      <p><strong>Your Response:</strong></p>
+                      <p style={{ marginBottom: '1rem', fontSize: '1.05rem' }}><strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>Response Quality:</strong> {result.quality}</p>
+                      <p style={{ marginBottom: '0.75rem', fontSize: '1.05rem' }}><strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>Your Response:</strong></p>
                       <div style={styles.frqResponse}>
                         {result.userAnswer || 'No response provided'}
                       </div>
+                      {result.feedback && (
+                        <div style={{ marginTop: '1.5rem', padding: '1.25rem', background: 'var(--bg-secondary)', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }}>
+                          <p style={{ margin: 0, fontWeight: 600, color: 'var(--text-primary)', fontSize: '1.1rem', marginBottom: '0.75rem' }}>Feedback:</p>
+                          <p style={{ margin: 0, color: 'var(--text-primary)', lineHeight: 1.8, fontSize: '1.05rem' }}>{result.feedback}</p>
+                        </div>
+                      )}
+                      {result.questionType && (
+                        <p style={{ marginTop: '1rem', fontSize: '1rem', color: 'var(--text-secondary)' }}>
+                          <strong>Type:</strong> {result.questionType}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -606,8 +684,10 @@ const styles = {
   spinner: {
     width: '40px',
     height: '40px',
-    border: '4px solid var(--border-color)',
     borderTop: '4px solid #3B82F6',
+    borderRight: '4px solid var(--border-color)',
+    borderBottom: '4px solid var(--border-color)',
+    borderLeft: '4px solid var(--border-color)',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -863,107 +943,131 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'var(--bg-primary)',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     zIndex: 1000,
     padding: '2rem',
+    overflowY: 'auto',
   },
   resultsHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '2rem',
+    marginBottom: '3rem',
+    width: '100%',
+    maxWidth: '1200px',
   },
   resultsTitle: {
-    fontSize: '2rem',
-    fontWeight: 700,
+    fontSize: '3rem',
+    fontWeight: 800,
     color: 'var(--text-primary)',
     margin: 0,
   },
   closeResultsButton: {
-    background: 'none',
-    border: 'none',
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-color)',
     fontSize: '2rem',
     color: 'var(--text-secondary)',
     cursor: 'pointer',
-    padding: '0.5rem',
+    padding: '0.5rem 1rem',
     borderRadius: '50%',
-    transition: 'background-color 0.2s',
+    width: '50px',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.3s ease',
+    lineHeight: 1,
   },
   resultsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '1.5rem',
-    marginBottom: '2rem',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '2rem',
+    marginBottom: '3rem',
+    width: '100%',
+    maxWidth: '1200px',
   },
   scoreCard: {
-    backgroundColor: 'var(--bg-secondary)',
-    borderRadius: '1rem',
-    padding: '1.5rem',
+    background: 'var(--bg-secondary)',
+    borderRadius: '1.5rem',
+    padding: '2.5rem',
     textAlign: 'center',
     border: '1px solid var(--border-color)',
+    boxShadow: '0 8px 24px var(--shadow-color)',
+    transition: 'all 0.3s ease',
   },
   scoreTitle: {
     fontSize: '1.2rem',
     fontWeight: 600,
     color: 'var(--text-primary)',
-    margin: '0 0 1rem 0',
+    margin: '0 0 1.5rem 0',
   },
   scoreValue: {
-    fontSize: '2rem',
-    fontWeight: 700,
+    fontSize: '3.5rem',
+    fontWeight: 800,
     color: 'var(--accent-primary)',
     margin: '0 0 0.5rem 0',
+    lineHeight: 1,
   },
   scorePercentage: {
-    fontSize: '1.1rem',
+    fontSize: '1.4rem',
     color: 'var(--text-secondary)',
-    margin: '0 0 1rem 0',
+    margin: '0 0 1.5rem 0',
+    fontWeight: 600,
   },
   apScore: {
     fontSize: '1rem',
     color: 'var(--text-primary)',
     fontWeight: 600,
+    marginTop: '1rem',
+    paddingTop: '1rem',
+    borderTop: '1px solid var(--border-color)',
   },
   apScoreValue: {
-    fontSize: '1.5rem',
+    fontSize: '2.5rem',
+    fontWeight: 800,
     color: 'var(--accent-primary)',
-    fontWeight: 700,
+    display: 'inline-block',
   },
   detailedResults: {
-    backgroundColor: 'var(--bg-secondary)',
-    borderRadius: '1rem',
-    padding: '2rem',
-    marginBottom: '2rem',
+    background: 'var(--bg-secondary)',
+    borderRadius: '1.5rem',
+    padding: '3rem',
+    marginBottom: '3rem',
     border: '1px solid var(--border-color)',
-    maxHeight: '60vh',
-    overflowY: 'auto',
+    boxShadow: '0 8px 24px var(--shadow-color)',
+    width: '100%',
+    maxWidth: '1400px',
   },
   detailedTitle: {
-    fontSize: '1.5rem',
-    fontWeight: 600,
+    fontSize: '1.8rem',
+    fontWeight: 700,
     color: 'var(--text-primary)',
-    margin: '0 0 1.5rem 0',
+    margin: '0 0 2rem 0',
+    paddingBottom: '1rem',
+    borderBottom: '2px solid var(--border-color)',
   },
   questionReview: {
     marginBottom: '2rem',
   },
   reviewSectionTitle: {
-    fontSize: '1.2rem',
+    fontSize: '1.5rem',
     fontWeight: 600,
     color: 'var(--text-primary)',
-    margin: '0 0 1rem 0',
-    paddingBottom: '0.5rem',
+    margin: '0 0 2rem 0',
+    paddingBottom: '1rem',
     borderBottom: '2px solid var(--border-color)',
   },
   questionReviewItem: {
     backgroundColor: 'var(--bg-primary)',
     borderRadius: '0.75rem',
-    padding: '1.5rem',
-    marginBottom: '1rem',
+    padding: '2rem',
+    marginBottom: '2rem',
     border: '1px solid var(--border-color)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
   },
   questionReviewHeader: {
     display: 'flex',
@@ -972,63 +1076,69 @@ const styles = {
     marginBottom: '1rem',
   },
   questionNumber: {
-    fontSize: '1.1rem',
+    fontSize: '1.2rem',
     fontWeight: 600,
     color: 'var(--text-primary)',
   },
   correctnessBadge: {
-    padding: '0.25rem 0.75rem',
+    padding: '0.5rem 1rem',
     borderRadius: '1rem',
-    fontSize: '0.875rem',
+    fontSize: '0.95rem',
     fontWeight: 600,
     color: 'white',
   },
   questionReviewText: {
-    fontSize: '1rem',
+    fontSize: '1.15rem',
     color: 'var(--text-primary)',
-    margin: '0 0 1rem 0',
-    lineHeight: 1.5,
+    margin: '0 0 1.5rem 0',
+    lineHeight: 1.7,
+    fontWeight: 500,
   },
   answerReview: {
-    fontSize: '0.9rem',
+    fontSize: '1rem',
     color: 'var(--text-secondary)',
+    lineHeight: 1.8,
   },
   frqResponse: {
     backgroundColor: 'var(--bg-secondary)',
     borderRadius: '0.5rem',
-    padding: '1rem',
-    marginTop: '0.5rem',
+    padding: '1.25rem',
+    marginTop: '0.75rem',
+    marginBottom: '0.75rem',
     border: '1px solid var(--border-color)',
     whiteSpace: 'pre-wrap',
-    fontFamily: 'monospace',
-    fontSize: '0.9rem',
+    fontSize: '1rem',
+    lineHeight: 1.8,
   },
   resultsActions: {
     display: 'flex',
-    gap: '1rem',
+    gap: '1.5rem',
     justifyContent: 'center',
+    width: '100%',
+    maxWidth: '1200px',
   },
   retakeButton: {
-    padding: '1rem 2rem',
-    backgroundColor: 'var(--accent-primary)',
+    padding: '1rem 2.5rem',
+    background: 'var(--accent-primary)',
     color: 'white',
     border: 'none',
     borderRadius: '0.75rem',
     fontSize: '1rem',
     fontWeight: 600,
     cursor: 'pointer',
-    transition: 'background-color 0.2s',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
   backToCourseButton: {
-    padding: '1rem 2rem',
-    backgroundColor: 'var(--bg-secondary)',
+    padding: '1rem 2.5rem',
+    background: 'var(--bg-secondary)',
     color: 'var(--text-primary)',
     border: '1px solid var(--border-color)',
     borderRadius: '0.75rem',
     fontSize: '1rem',
     fontWeight: 600,
     cursor: 'pointer',
-    transition: 'background-color 0.2s',
+    transition: 'all 0.3s ease',
   },
 };
 
