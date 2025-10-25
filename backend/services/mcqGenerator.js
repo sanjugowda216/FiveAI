@@ -559,14 +559,19 @@ export async function analyzeAPExamFormat(courseName) {
       return getDefaultExamFormat(courseName);
     }
 
-    const content = await getUnitContent(cedId, 1);
-    if (!content) {
-      return getDefaultExamFormat(courseName);
+    // Get exam overview from CED
+    const { getExamOverview } = await import('./cedParser.js');
+    const examOverviewContent = getExamOverview(cedId);
+    
+    let contentText = examOverviewContent;
+    
+    // If no exam overview found, try getting unit content
+    if (!contentText) {
+      const content = await getUnitContent(cedId, 1);
+      contentText = typeof content === 'string' ? content : content?.content || content?.text || '';
     }
-
-    // Extract text content if content is an object
-    const contentText = typeof content === 'string' ? content : content.content || content.text || JSON.stringify(content);
-    if (!contentText || typeof contentText !== 'string') {
+    
+    if (!contentText || typeof contentText !== 'string' || contentText.length < 100) {
       return getDefaultExamFormat(courseName);
     }
 
@@ -611,13 +616,27 @@ Return ONLY a JSON object with this exact format:
     const cleanedContent = cleanJsonContent(response.content);
     const analysis = JSON.parse(cleanedContent);
     
-    // Determine exam type
+    // Determine exam type with smarter logic
     let examType = analysis.examType;
+    const frqOnlyCoursesList = ['ap-seminar']; // Only truly FRQ-only course
+    const hasMultipleChoice = analysis.hasMultipleChoice !== false && analysis.mcqCount !== undefined;
+    
+    // If AI says mcqCount is 0, check if it's really an FRQ-only course
+    if (analysis.mcqCount === 0) {
+      if (frqOnlyCoursesList.includes(courseName.toLowerCase())) {
+        examType = 'frq-only';
+      } else {
+        // Not in FRQ-only list - this is a parsing error, use traditional defaults
+        examType = 'traditional';
+        console.log(`MCQ count is 0 for ${courseName}, will use traditional defaults`);
+      }
+    } else {
+      examType = 'traditional';
+    }
+    
     if (!examType) {
       if (analysis.mcqCount === 0 && analysis.frqCount === 0) {
         examType = 'portfolio';
-      } else if (analysis.mcqCount === 0 && analysis.frqCount > 0) {
-        examType = 'frq-only';
       } else {
         examType = 'traditional';
       }
@@ -625,12 +644,28 @@ Return ONLY a JSON object with this exact format:
     
     const hasTraditionalExam = examType !== 'portfolio';
     
-    // Use defaults for traditional exams if analysis failed
+    // Use smart defaults for traditional exams
     const isTraditionalExam = examType === 'traditional';
-    const defaultMcq = isTraditionalExam ? 55 : 0;
-    const defaultFrq = isTraditionalExam ? 3 : 0;
-    const defaultMcqTime = isTraditionalExam ? 55 : 0;
-    const defaultFrqTime = isTraditionalExam ? 100 : 0;
+    let defaultMcq = isTraditionalExam ? 55 : 0;
+    let defaultFrq = isTraditionalExam ? 3 : 0;
+    let defaultMcqTime = isTraditionalExam ? 55 : 0;
+    let defaultFrqTime = isTraditionalExam ? 100 : 0;
+    
+    // If analysis failed completely, use hardcoded defaults
+    if (analysis.mcqCount === 0 && analysis.frqCount === 0 && examType !== 'frq-only') {
+      console.log(`Analysis failed for ${courseName}, using hardcoded defaults`);
+      const defaults = getDefaultExamFormat(courseName);
+      return defaults;
+    }
+    
+    // If mcqCount is 0 but not in FRQ-only list, use defaults
+    if (analysis.mcqCount === 0 && !frqOnlyCoursesList.includes(courseName.toLowerCase()) && examType === 'traditional') {
+      console.log(`MCQ count is 0 for ${courseName}, using defaults`);
+      const defaults = getDefaultExamFormat(courseName);
+      if (defaults.mcqCount > 0) {
+        return defaults;
+      }
+    }
     
     return {
       courseName,
