@@ -151,6 +151,7 @@ export async function parseCedFile(filepath) {
     // Extract unit structure
     const units = extractUnits(chunks);
     const rubrics = extractRubrics(chunks);
+    const examOverview = extractExamOverview(fullText);
     
     console.log(`Parsed ${chunks.length} chunks, found ${units.size} units`);
     return {
@@ -158,6 +159,7 @@ export async function parseCedFile(filepath) {
       units,
       rubrics,
       fullText,
+      examOverview,
       hash: generateFileHash(filepath)
     };
   } catch (error) {
@@ -266,6 +268,48 @@ function createDefaultUnits(chunks) {
 }
 
 /**
+ * Extract exam overview section from CED
+ */
+function extractExamOverview(fullText) {
+  try {
+    const text = fullText.toLowerCase();
+    
+    // Look for exam overview section
+    const examOverviewPatterns = [
+      /exam overview[^]*?(?=how the curriculum framework|how course content|course framework|unit)/i,
+      /the exam[^]*?(?=how the curriculum framework|how course content|course framework|unit)/i,
+      /exam structure[^]*?(?=how the curriculum framework|how course content|course framework|unit)/i,
+      /assessment overview[^]*?(?=how the curriculum framework|how course content|course framework|unit)/i
+    ];
+    
+    let examOverview = '';
+    for (const pattern of examOverviewPatterns) {
+      const match = fullText.match(pattern);
+      if (match && match[0].length > 100) {
+        examOverview = match[0];
+        break;
+      }
+    }
+    
+    // If no section found, look for exam-related content in first few pages
+    if (!examOverview) {
+      const firstThird = fullText.substring(0, fullText.length / 3);
+      const examKeywords = ['multiple choice', 'free response', 'section i', 'section ii', 'question'];
+      const hasExamContent = examKeywords.some(keyword => firstThird.toLowerCase().includes(keyword));
+      
+      if (hasExamContent) {
+        examOverview = firstThird.substring(0, 3000); // Take first 3000 chars
+      }
+    }
+    
+    return examOverview || '';
+  } catch (error) {
+    console.error('Error extracting exam overview:', error);
+    return '';
+  }
+}
+
+/**
  * Get unit content for a specific course and unit
  */
 export function getUnitContent(courseId, unitNumber) {
@@ -307,6 +351,20 @@ export function getAvailableUnits(courseId) {
   return Array.from(courseData.units.keys())
     .map(key => parseInt(key.replace('unit-', '')))
     .sort((a, b) => a - b);
+}
+
+/**
+ * Get exam overview from CED
+ */
+export function getExamOverview(courseId) {
+  const cedId = mapCourseIdToCedId(courseId);
+  const courseData = cedContent.get(cedId);
+  
+  if (!courseData || !courseData.examOverview) {
+    return '';
+  }
+  
+  return courseData.examOverview;
 }
 
 /**
