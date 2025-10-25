@@ -15,6 +15,7 @@ import StudyCalendar from "./pages/StudyCalendar";
 import Settings from "./pages/Settings";
 import Community from "./pages/Community";
 import PracticeTest from "./pages/PracticeTest";
+import OnboardingTutorial from "./components/OnboardingTutorial";
 import { auth, db } from "./firebase";
 import {
   findCourseByName,
@@ -351,6 +352,7 @@ function AppContent() {
   return (
     <div className="dashboard-shell">
       <Navbar onLogout={handleLogout} />
+      <OnboardingTutorial />
       <main className="dashboard-content">
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
