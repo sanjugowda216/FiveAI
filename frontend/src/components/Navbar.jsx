@@ -77,6 +77,8 @@ export default function Navbar({ onLogout }) {
   const [isNavbarHovered, setIsNavbarHovered] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
+  const [isFlashcardsDropdownOpen, setIsFlashcardsDropdownOpen] = useState(false);
+  const [closeDropdownTimeout, setCloseDropdownTimeout] = useState(null);
 
   const isLight = resolvedTheme === 'light';
   const textColor = isLight ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.8)';
@@ -173,6 +175,111 @@ export default function Navbar({ onLogout }) {
               location.pathname === item.path ||
               (item.path === "/practice" &&
                 location.pathname.startsWith("/practice"));
+            
+            // Special handling for Flashcards with dropdown
+            if (item.path === "/flashcards") {
+              return (
+                <div 
+                  key={item.path}
+                  style={{ position: 'relative' }}
+                  onMouseEnter={() => {
+                    clearTimeout(closeDropdownTimeout);
+                    setIsFlashcardsDropdownOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    const timeout = setTimeout(() => {
+                      setIsFlashcardsDropdownOpen(false);
+                    }, 200);
+                    setCloseDropdownTimeout(timeout);
+                  }}
+                >
+                  <NavLink
+                    to={item.path}
+                    style={{
+                      ...styles.link,
+                      color: textColor,
+                      ...(isActive ? {
+                        color: activeTextColor,
+                        borderBottomColor: activeTextColor,
+                        fontWeight: 700,
+                        textShadow: isLight ? "0 0 10px rgba(0, 120, 200, 0.3)" : "0 0 10px rgba(100, 181, 246, 0.4)"
+                      } : {
+                        color: inactiveTextColor,
+                        borderBottomColor: "transparent",
+                        fontWeight: 600
+                      }),
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.textShadow = isLight
+                        ? "0 0 20px rgba(0, 120, 200, 0.6), 0 0 30px rgba(0, 120, 200, 0.4)"
+                        : "0 0 20px rgba(100, 181, 246, 0.8), 0 0 30px rgba(100, 181, 246, 0.5)";
+                      e.currentTarget.style.color = activeTextColor;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.textShadow = isActive
+                        ? (isLight ? "0 0 10px rgba(0, 120, 200, 0.3)" : "0 0 10px rgba(100, 181, 246, 0.4)")
+                        : "none";
+                      e.currentTarget.style.color = isActive ? activeTextColor : inactiveTextColor;
+                    }}
+                  >
+                    {item.label}
+                  </NavLink>
+                  
+                  {isFlashcardsDropdownOpen && (
+                    <div style={{
+                      ...styles.dropdown,
+                      backgroundColor: isLight ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.08)',
+                      border: `1px solid ${borderColor}`,
+                      backdropFilter: 'blur(12px)',
+                    }}>
+                      <NavLink
+                        to="/flashcards?tab=manage"
+                        style={{
+                          ...styles.dropdownItem,
+                          color: inactiveTextColor,
+                        }}
+                        onClick={() => {
+                          setIsFlashcardsDropdownOpen(false);
+                          clearTimeout(closeDropdownTimeout);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = activeTextColor;
+                          e.currentTarget.style.textShadow = isLight ? '0 0 15px rgba(0, 120, 200, 0.5)' : '0 0 15px rgba(100, 181, 246, 0.5)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = inactiveTextColor;
+                          e.currentTarget.style.textShadow = 'none';
+                        }}
+                      >
+                        Manage Cards
+                      </NavLink>
+                      <NavLink
+                        to="/flashcards?tab=study"
+                        style={{
+                          ...styles.dropdownItem,
+                          color: inactiveTextColor,
+                        }}
+                        onClick={() => {
+                          setIsFlashcardsDropdownOpen(false);
+                          clearTimeout(closeDropdownTimeout);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = activeTextColor;
+                          e.currentTarget.style.textShadow = isLight ? '0 0 15px rgba(0, 120, 200, 0.5)' : '0 0 15px rgba(100, 181, 246, 0.5)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = inactiveTextColor;
+                          e.currentTarget.style.textShadow = 'none';
+                        }}
+                      >
+                        Study Mode
+                      </NavLink>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            
             return (
               <NavLink
                 key={item.path}
@@ -620,5 +727,29 @@ const styles = {
     pointerEvents: "auto",
     userSelect: "none",
     outline: "none",
+  },
+  dropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: '0',
+    width: '150px',
+    borderRadius: '0.75rem',
+    zIndex: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
+    padding: '0.75rem',
+    marginTop: '0.75rem',
+    backdropFilter: 'blur(12px)',
+  },
+  dropdownItem: {
+    padding: '0.75rem 1rem',
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    textDecoration: 'none',
+    transition: 'all 0.2s ease',
+    borderRadius: '0.5rem',
+    cursor: 'pointer',
+    display: 'block',
   },
 };

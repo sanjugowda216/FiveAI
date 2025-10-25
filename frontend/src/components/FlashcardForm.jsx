@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import { createFlashcard } from '../utils/api.js';
 
 function FlashcardForm({ onCreated, userId, folders = [] }) {
+  const { resolvedTheme } = useTheme();
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [folder, setFolder] = useState('');
@@ -26,7 +28,10 @@ function FlashcardForm({ onCreated, userId, folders = [] }) {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{
+      ...styles.container,
+      backgroundColor: resolvedTheme === 'dark' ? '#1A1A1A' : '#E2E8F0',
+    }}>
       <div style={styles.header}>
         <h2 style={styles.title}>Create New Flashcard</h2>
         <p style={styles.subtitle}>Add a new question and answer to your collection</p>
@@ -111,7 +116,7 @@ const styles = {
     maxWidth: '600px',
     margin: '0 auto',
     padding: '2rem',
-    backgroundColor: 'var(--bg-secondary)',
+    backgroundColor: '#1A1A1A',
     borderRadius: '1.5rem',
     boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)',
     border: '1px solid var(--border-color)',

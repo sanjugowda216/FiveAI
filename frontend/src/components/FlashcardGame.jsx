@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import { getRandomStudyFlashcards, getStudyFlashcardsByFolder, getAllFolders } from '../utils/api.js';
 import './FlashcardGame.css';
 
 function FlashcardGame({ userId }) {
+  const { resolvedTheme } = useTheme();
   const [cards, setCards] = useState([]);
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -95,7 +97,10 @@ function FlashcardGame({ userId }) {
   const current=cards[index];
 
   return(
-    <div style={styles.container}>
+    <div style={{
+      ...styles.container,
+      backgroundColor: resolvedTheme === 'dark' ? '#1A1A1A' : '#E2E8F0',
+    }}>
       <div style={styles.header}>
         <h2 style={styles.title}>Study Mode</h2>
         <div style={styles.folderSelector}>
@@ -190,14 +195,16 @@ function FlashcardGame({ userId }) {
 
 const styles = {
   container: {
-    width: '100%',
-    maxWidth: '1000px',
-    margin: '0 auto',
-    padding: '0',
+    width: 'calc(100% + 4rem)',
+    maxWidth: 'none',
+    margin: '0 -2rem 0 -2rem',
+    padding: '2rem',
     display: 'flex',
     flexDirection: 'column',
     gap: '2rem',
     alignItems: 'center',
+    backgroundColor: '#1A1A1A',
+    borderRadius: '1.5rem',
   },
   header: {
     textAlign: 'center',

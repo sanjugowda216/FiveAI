@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import FlashcardForm from '../components/FlashcardForm.jsx';
 import FlashcardList from '../components/FlashcardList.jsx';
 import FlashcardGame from '../components/FlashcardGame.jsx';
 
 function Flashcards({ userProfile }) {
-  const [activeTab, setActiveTab] = useState('manage');
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'manage');
   const [refresh, setRefresh] = useState(0);
   const [folders, setFolders] = useState([]);
   const handleCreated = () => setRefresh(r=>r+1);
+
+  // Update active tab when URL query parameter changes
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'manage' || tab === 'study') {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   // Check if user is authenticated
   if (!userProfile?.uid) {
@@ -26,31 +36,8 @@ function Flashcards({ userProfile }) {
     <div style={styles.pageContainer}>
       <div style={styles.contentWrapper}>
         <div style={styles.header}>
-          <h1 style={styles.title}>Flashcards</h1>
-          <p style={styles.subtitle}>Create, manage, and study your personal flashcard collection</p>
-        </div>
-
-        <div style={styles.tabContainer}>
-          <button 
-            style={{
-              ...styles.tabButton,
-              ...(activeTab === 'manage' ? styles.activeTab : {})
-            }}
-            onClick={() => setActiveTab('manage')}
-          >
-            <span style={styles.tabIcon}>📝</span>
-            Manage Cards
-          </button>
-          <button 
-            style={{
-              ...styles.tabButton,
-              ...(activeTab === 'study' ? styles.activeTab : {})
-            }}
-            onClick={() => setActiveTab('study')}
-          >
-            <span style={styles.tabIcon}>🎯</span>
-            Study Mode
-          </button>
+          <h1 style={styles.title}>Your Flashcards</h1>
+          <p style={styles.subtitle}>Create and manage your personal flashcard collection</p>
         </div>
 
         <div style={styles.contentContainer}>
@@ -78,7 +65,7 @@ const styles = {
     gap: '2rem',
   },
   header: {
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: '1rem',
   },
   title: {
@@ -95,8 +82,7 @@ const styles = {
     color: 'var(--text-secondary)',
     margin: '0',
     fontWeight: '500',
-    maxWidth: '600px',
-    margin: '0 auto',
+    textAlign: 'left',
   },
   tabContainer: {
     display: 'flex',
@@ -172,6 +158,8 @@ const styles = {
     padding: '2rem',
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
     border: '1px solid var(--border-color)',
+    width: 'calc(100% + 4rem)',
+    margin: '0 -2rem 0 -2rem',
   },
 };
 
