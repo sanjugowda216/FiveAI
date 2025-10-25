@@ -572,22 +572,29 @@ export async function analyzeAPExamFormat(courseName) {
 
     // Use LLM to analyze exam format from CED
     const prompt = `Analyze this AP course content and determine the exam format. Look for information about:
-- Number of multiple choice questions
+- Number of multiple choice questions (may be 0 for FRQ-only exams like AP Seminar)
 - Number of free response questions  
 - Time allocation for each section
 - Question types (DBQ, LEQ, SAQ, etc.)
+
+IMPORTANT: 
+- Some courses like AP Seminar have NO multiple choice questions (FRQ-only exam)
+- Portfolio-based courses like AP Research have NO exam at all
+- Check carefully for "no multiple choice" or "written exam only" indicators
 
 Course: ${courseName}
 Content: ${contentText.substring(0, 2000)}
 
 Return ONLY a JSON object with this exact format:
 {
-  "mcqCount": number,
+  "mcqCount": number (0 if no MCQs),
   "frqCount": number,
   "mcqTimeMinutes": number,
   "frqTimeMinutes": number,
   "questionTypes": ["type1", "type2"],
-  "totalTimeMinutes": number
+  "totalTimeMinutes": number,
+  "hasMultipleChoice": boolean,
+  "examType": "traditional" or "frq-only" or "portfolio"
 }`;
 
     const response = await llm.invoke(prompt);
@@ -604,14 +611,38 @@ Return ONLY a JSON object with this exact format:
     const cleanedContent = cleanJsonContent(response.content);
     const analysis = JSON.parse(cleanedContent);
     
+    // Determine exam type
+    let examType = analysis.examType;
+    if (!examType) {
+      if (analysis.mcqCount === 0 && analysis.frqCount === 0) {
+        examType = 'portfolio';
+      } else if (analysis.mcqCount === 0 && analysis.frqCount > 0) {
+        examType = 'frq-only';
+      } else {
+        examType = 'traditional';
+      }
+    }
+    
+    const hasTraditionalExam = examType !== 'portfolio';
+    
+    // Use defaults for traditional exams if analysis failed
+    const isTraditionalExam = examType === 'traditional';
+    const defaultMcq = isTraditionalExam ? 55 : 0;
+    const defaultFrq = isTraditionalExam ? 3 : 0;
+    const defaultMcqTime = isTraditionalExam ? 55 : 0;
+    const defaultFrqTime = isTraditionalExam ? 100 : 0;
+    
     return {
       courseName,
-      mcqCount: analysis.mcqCount || 55,
-      frqCount: analysis.frqCount || 3,
-      mcqTimeMinutes: analysis.mcqTimeMinutes || 55,
-      frqTimeMinutes: analysis.frqTimeMinutes || 100,
+      mcqCount: analysis.mcqCount ?? defaultMcq,
+      frqCount: analysis.frqCount ?? defaultFrq,
+      mcqTimeMinutes: analysis.mcqTimeMinutes ?? defaultMcqTime,
+      frqTimeMinutes: analysis.frqTimeMinutes ?? defaultFrqTime,
       questionTypes: analysis.questionTypes || ['general'],
-      totalTimeMinutes: analysis.totalTimeMinutes || 155,
+      totalTimeMinutes: analysis.totalTimeMinutes ?? ((analysis.mcqTimeMinutes ?? defaultMcqTime) + (analysis.frqTimeMinutes ?? defaultFrqTime)),
+      hasTraditionalExam,
+      frqOnly: examType === 'frq-only',
+      examType,
       source: 'ced-analysis'
     };
 
@@ -625,6 +656,48 @@ Return ONLY a JSON object with this exact format:
  * Get default exam format for courses
  */
 function getDefaultExamFormat(courseName) {
+  // Courses with NO exam at all (portfolio/performance-based only)
+  const noExamCourses = [
+    'ap-research', // No exam - portfolio only
+    'ap-drawing', // Portfolio only
+    'ap-studio-art-2d', // Portfolio only
+    'ap-studio-art-3d' // Portfolio only
+  ];
+  
+  if (noExamCourses.includes(courseName)) {
+    return {
+      courseName,
+      mcqCount: 0,
+      frqCount: 0,
+      mcqTimeMinutes: 0,
+      frqTimeMinutes: 0,
+      questionTypes: [],
+      totalTimeMinutes: 0,
+      hasTraditionalExam: false,
+      source: 'no-exam'
+    };
+  }
+  
+  // Courses with FRQ-only exam (no MCQs)
+  const frqOnlyCourses = [
+    'ap-seminar' // Written exam with only FRQs
+  ];
+  
+  if (frqOnlyCourses.includes(courseName)) {
+    return {
+      courseName,
+      mcqCount: 0,
+      frqCount: 4, // AP Seminar has multiple written tasks
+      mcqTimeMinutes: 0,
+      frqTimeMinutes: 120,
+      questionTypes: ['general', 'analysis', 'argument'],
+      totalTimeMinutes: 120,
+      hasTraditionalExam: true,
+      frqOnly: true,
+      source: 'frq-only'
+    };
+  }
+  
   const defaults = {
     'ap-psychology': { mcqCount: 100, frqCount: 2, mcqTimeMinutes: 70, frqTimeMinutes: 50, questionTypes: ['SAQ', 'LEQ'], totalTimeMinutes: 120 },
     'ap-world-history': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['SAQ', 'DBQ', 'LEQ'], totalTimeMinutes: 155 },
@@ -646,17 +719,38 @@ function getDefaultExamFormat(courseName) {
     'ap-english-literature': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 60, frqTimeMinutes: 120, questionTypes: ['general'], totalTimeMinutes: 180 },
     'ap-environmental-science': { mcqCount: 80, frqCount: 3, mcqTimeMinutes: 90, frqTimeMinutes: 70, questionTypes: ['general'], totalTimeMinutes: 160 },
     'ap-human-geography': { mcqCount: 60, frqCount: 3, mcqTimeMinutes: 60, frqTimeMinutes: 75, questionTypes: ['general'], totalTimeMinutes: 135 },
-    'ap-government-politics': { mcqCount: 55, frqCount: 4, mcqTimeMinutes: 80, frqTimeMinutes: 100, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-us-government-and-politics': { mcqCount: 55, frqCount: 4, mcqTimeMinutes: 80, frqTimeMinutes: 100, questionTypes: ['general'], totalTimeMinutes: 180 },
+    'ap-comparative-government-and-politics': { mcqCount: 55, frqCount: 4, mcqTimeMinutes: 80, frqTimeMinutes: 100, questionTypes: ['general'], totalTimeMinutes: 180 },
     'ap-european-history': { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['SAQ', 'DBQ', 'LEQ'], totalTimeMinutes: 155 },
     'ap-art-history': { mcqCount: 80, frqCount: 6, mcqTimeMinutes: 60, frqTimeMinutes: 120, questionTypes: ['general'], totalTimeMinutes: 180 },
     'ap-music-theory': { mcqCount: 75, frqCount: 9, mcqTimeMinutes: 80, frqTimeMinutes: 80, questionTypes: ['general'], totalTimeMinutes: 160 }
   };
 
-  const defaultFormat = defaults[courseName] || { mcqCount: 55, frqCount: 3, mcqTimeMinutes: 55, frqTimeMinutes: 100, questionTypes: ['general'], totalTimeMinutes: 155 };
+  const defaultFormat = defaults[courseName];
+  
+  if (!defaultFormat) {
+    // Unknown course - use generic defaults but mark as traditional exam
+    return {
+      courseName,
+      mcqCount: 55,
+      frqCount: 3,
+      mcqTimeMinutes: 55,
+      frqTimeMinutes: 100,
+      questionTypes: ['general'],
+      totalTimeMinutes: 155,
+      hasTraditionalExam: true,
+      frqOnly: false,
+      examType: 'traditional',
+      source: 'default-unknown'
+    };
+  }
   
   return {
     courseName,
     ...defaultFormat,
+    hasTraditionalExam: true,
+    frqOnly: false,
+    examType: 'traditional',
     source: 'default'
   };
 }
