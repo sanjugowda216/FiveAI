@@ -18,6 +18,27 @@ router.get('/format/:courseId', async (req, res) => {
   console.log(`Getting exam format for course: ${courseId}`);
   try {
     const format = await analyzeAPExamFormat(courseId);
+    
+    // Check if course has traditional exam (allows FRQ-only exams like AP Seminar)
+    if (!format.hasTraditionalExam) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'This course does not have a traditional AP exam',
+        hasTraditionalExam: false,
+        format 
+      });
+    }
+    
+    // Check if course has any questions (MCQ or FRQ)
+    if (format.mcqCount === 0 && format.frqCount === 0) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'This course exam format is not supported for practice tests',
+        hasTraditionalExam: false,
+        format 
+      });
+    }
+    
     res.json(format);
   } catch (error) {
     console.error('Error getting exam format:', error);
@@ -86,6 +107,90 @@ router.post('/generate/:courseId', async (req, res) => {
 });
 
 /**
+ * Grade FRQ response using CED rubric
+ */
+router.post('/grade-frq/:courseId', async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const { prompt, response, questionType } = req.body;
+    
+    if (!prompt || !response) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing prompt or response'
+      });
+    }
+
+    const cedId = mapCourseIdToCedId(courseId);
+    const rubrics = await getRubricSegments(cedId);
+    
+    // Get relevant rubric for this question type
+    const relevantRubrics = rubrics.filter(r => 
+      r.questionTypes.includes(questionType) || r.questionTypes.includes('general')
+    );
+    
+    const rubricContext = relevantRubrics.length > 0 
+      ? relevantRubrics[0].content.substring(0, 1000)
+      : 'Standard AP FRQ scoring rubric';
+    
+    const gradingPrompt = `You are an AP exam grader. Grade this FRQ response using the official AP scoring guidelines.
+
+COURSE: ${courseId}
+QUESTION TYPE: ${questionType}
+
+PROMPT:
+${prompt}
+
+STUDENT RESPONSE:
+${response}
+
+RUBRIC/GUIDELINES:
+${rubricContext}
+
+Grade this response based on AP scoring criteria. Consider:
+- Accuracy of historical content
+- Use of specific evidence/examples
+- Clear thesis/argument structure
+- Quality of analysis
+- Length and completeness
+
+Return ONLY a JSON object with this exact format:
+{
+  "score": 0 or 1 (binary AP scoring),
+  "maxScore": 1,
+  "feedback": "Brief explanation of why the response earned or did not earn the point"
+}`;
+
+    const gradingResponse = await openai.invoke(gradingPrompt);
+    
+    // Clean JSON content
+    const cleanJsonContent = (content) => {
+      if (typeof content !== 'string') return content;
+      return content
+        .replace(/^```json\s*/i, '')
+        .replace(/\s*```\s*$/i, '')
+        .trim();
+    };
+    
+    const cleanedContent = cleanJsonContent(gradingResponse.content);
+    const gradingResult = JSON.parse(cleanedContent);
+    
+    res.json({
+      success: true,
+      ...gradingResult
+    });
+
+  } catch (error) {
+    console.error('Error grading FRQ:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to grade FRQ',
+      error: error.message
+    });
+  }
+});
+
+/**
  * Generate content-focused, multi-unit MCQ questions for practice test
  */
 async function generateContentFocusedMCQs(courseId, examFormat) {
@@ -94,12 +199,22 @@ async function generateContentFocusedMCQs(courseId, examFormat) {
     
     // Get content from multiple units to create comprehensive questions
     const allUnitsContent = [];
-    const availableUnits = await getAvailableUnits(cedId);
+    
+    // First, try to get available units
+    let availableUnits = [];
+    try {
+      availableUnits = await getAvailableUnits(cedId);
+    } catch (error) {
+      console.log(`Could not get available units:`, error.message);
+    }
+    
+    // If no units available, try getting units directly up to 9
+    const maxUnits = availableUnits.length > 0 ? availableUnits.length : 9;
     
     // Collect content from all units
-    for (let i = 1; i <= Math.min(availableUnits.length, 9); i++) {
+    for (let i = 1; i <= Math.min(maxUnits, 9); i++) {
       try {
-        const unitContent = await getUnitContent(cedId, i);
+        const unitContent = getUnitContent(cedId, i);
         if (unitContent && unitContent.content) {
           allUnitsContent.push({
             unitNumber: i,
@@ -276,7 +391,31 @@ Return ONLY a JSON array with this exact format:
       const batchQuestions = JSON.parse(cleanedContent);
       
       if (batchQuestions && batchQuestions.length > 0) {
-        allQuestions = [...allQuestions, ...batchQuestions];
+        // Clean each question to remove duplicate letter prefixes
+        const cleanedBatchQuestions = batchQuestions.map(q => {
+          // Remove letter prefixes from options if they exist
+          const cleanedOptions = q.options.map(opt => {
+            if (typeof opt === 'string') {
+              // Remove patterns like "A.", "B.", "(A)", etc.
+              return opt.replace(/^[A-E]\)\s*/i, '').replace(/^\([A-E]\)\s*/i, '').trim();
+            }
+            return opt;
+          });
+          
+          // Ensure correctAnswer is uppercase and valid
+          let correctAnswer = q.correctAnswer;
+          if (typeof correctAnswer === 'string') {
+            correctAnswer = correctAnswer.toUpperCase().trim();
+          }
+          
+          return {
+            ...q,
+            options: cleanedOptions,
+            correctAnswer: correctAnswer
+          };
+        });
+        
+        allQuestions = [...allQuestions, ...cleanedBatchQuestions];
         console.log(`Batch ${batch + 1} generated ${batchQuestions.length} questions (total: ${allQuestions.length})`);
       }
     }
@@ -307,13 +446,19 @@ async function generateFRQQuestions(courseId, examFormat) {
       return [];
     }
 
+    // Get relevant rubric content for context
+    const rubricText = rubrics.slice(0, 2).map(r => r.content.substring(0, 500)).join('\n\n');
+
     const prompt = `Generate ${examFormat.frqCount} Free Response Questions (FRQs) for AP ${courseId} practice test.
 
 Course: ${courseId}
 Available Question Types: ${examFormat.questionTypes.join(', ')}
 Total Time: ${examFormat.frqTimeMinutes} minutes
 
-Based on the available rubrics, create realistic FRQ questions that match the exam format.
+IMPORTANT RUBRIC GUIDELINES:
+${rubricText}
+
+Based on the available rubrics and AP scoring guidelines, create realistic FRQ questions that match the exam format.
 
 Return ONLY a JSON array with this exact format:
 [
@@ -321,7 +466,8 @@ Return ONLY a JSON array with this exact format:
     "prompt": "Question prompt text",
     "questionType": "type from questionTypes array",
     "estimatedTime": "time in minutes",
-    "points": "point value"
+    "points": "point value",
+    "scoringCriteria": "Brief description of what earns points on this question"
   }
 ]`;
 
