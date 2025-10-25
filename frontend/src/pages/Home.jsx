@@ -513,7 +513,6 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureIcon}>📚</div>
             <div style={styles.featureTitle}>CED-Powered Practice</div>
             <div style={styles.featureText}>
               Practice tests generated from official AP Course and Exam Descriptions. 
@@ -532,7 +531,6 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureIcon}>🎯</div>
             <div style={styles.featureTitle}>Adaptive Learning</div>
             <div style={styles.featureText}>
               AI-powered practice that adapts to your strengths and weaknesses. 
@@ -551,7 +549,6 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureIcon}>📈</div>
             <div style={styles.featureTitle}>Track Your Progress</div>
             <div style={styles.featureText}>
               View detailed stats and analytics. Monitor your performance over time 
@@ -570,7 +567,6 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureIcon}>📅</div>
             <div style={styles.featureTitle}>Study Calendar</div>
             <div style={styles.featureText}>
               Plan your study sessions and stay organized. Set goals and track 
@@ -589,7 +585,6 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureIcon}>💬</div>
             <div style={styles.featureTitle}>Community</div>
             <div style={styles.featureText}>
               Ask questions and get help from other students. Share knowledge 
@@ -608,7 +603,6 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureIcon}>✅</div>
             <div style={styles.featureTitle}>Instant Feedback</div>
             <div style={styles.featureText}>
               Get immediate feedback on your practice tests. Upload text or images 
