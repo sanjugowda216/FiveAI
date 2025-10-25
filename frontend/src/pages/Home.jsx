@@ -2,19 +2,12 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 
 /**
- * Home.jsx
- * Academic-futuristic landing page using original HighFive colors:
- * - primary blue: #0078C8
- * - white: #FFFFFF
- * - light grey: #F0F0F0
- * - text: black (#000)
- *
- * - Subtle canvas particle animation behind hero
- * - Navbar includes "Get Started"
- * - Single CED mention in Features copy
- * - Smooth reveal on scroll (IntersectionObserver)
- *
- * Replace your existing Home component with this file.
+ * Home.jsx - Modern, clean landing page
+ * Simple, engaging design that highlights:
+ * - CED-powered practice tests
+ * - Adaptive practice
+ * - Community features
+ * - Study calendar & stats
  */
 
 export default function Home() {
@@ -24,17 +17,16 @@ export default function Home() {
 
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
-  const howRef = useRef(null);
+  const statsRef = useRef(null);
   const foundersRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Typing phrases (short, crisp)
+  // Shorter, punchier phrases
   const phrases = useMemo(
     () => [
-      "Discover your passions through AP courses",
-      "Prepare for success on AP exams",
-      "Track your progress and see improvements",
-      "Built by students, for students",
+      "Master AP exams with confidence",
+      "Powered by official CED content",
+      "Adaptive practice that works",
     ],
     []
   );
@@ -48,7 +40,7 @@ export default function Home() {
         if (typingText.length < current.length) {
           setTypingText(current.slice(0, typingText.length + 1));
         } else {
-          setTimeout(() => setIsDeleting(true), 1500);
+          setTimeout(() => setIsDeleting(true), 2000);
         }
       } else {
         if (typingText.length > 0) {
@@ -63,7 +55,7 @@ export default function Home() {
     return () => clearTimeout(t);
   }, [typingText, isDeleting, phraseIndex, phrases]);
 
-  // Simple particle system for hero background (no external libs)
+  // Simple particle system
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -72,7 +64,7 @@ export default function Home() {
     let height = (canvas.height = canvas.clientHeight);
     let rafId;
     const particles = [];
-    const PARTICLE_COUNT = Math.max(24, Math.floor(width / 60));
+    const PARTICLE_COUNT = Math.max(20, Math.floor(width / 60));
 
     function rand(min, max) {
       return Math.random() * (max - min) + min;
@@ -86,8 +78,8 @@ export default function Home() {
           y: rand(0, height),
           vx: rand(-0.15, 0.15),
           vy: rand(-0.05, 0.05),
-          r: rand(1, 3.5),
-          alpha: rand(0.08, 0.22),
+          r: rand(1, 3),
+          alpha: rand(0.08, 0.2),
         });
       }
     }
@@ -101,9 +93,8 @@ export default function Home() {
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
-      // subtle gradient overlay
       const g = ctx.createLinearGradient(0, 0, width, height);
-      g.addColorStop(0, "rgba(0,120,200,0.06)");
+      g.addColorStop(0, "rgba(0,120,200,0.05)");
       g.addColorStop(1, "rgba(0,120,200,0.02)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, width, height);
@@ -112,7 +103,6 @@ export default function Home() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // gentle wrap
         if (p.x < -10) p.x = width + 10;
         if (p.x > width + 10) p.x = -10;
         if (p.y < -10) p.y = height + 10;
@@ -124,7 +114,6 @@ export default function Home() {
         ctx.fill();
       }
 
-      // subtle connecting lines
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i];
@@ -157,46 +146,43 @@ export default function Home() {
     };
   }, []);
 
-  // reveal on scroll using IntersectionObserver (applies inline transforms)
+  // Reveal on scroll
   useEffect(() => {
-    const elements = [heroRef.current, howRef.current, featuresRef.current, foundersRef.current].filter(Boolean);
+    const elements = [heroRef.current, statsRef.current, featuresRef.current, foundersRef.current].filter(Boolean);
     const obs = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            entry.target.style.transform = "translateY(0px) scale(1)";
+            entry.target.style.transform = "translateY(0px)";
             entry.target.style.opacity = "1";
             entry.target.style.transition = "opacity 650ms ease, transform 650ms ease";
           }
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.15 }
     );
 
     elements.forEach((el) => {
       el.style.opacity = "0";
-      el.style.transform = "translateY(20px) scale(0.995)";
+      el.style.transform = "translateY(30px)";
       obs.observe(el);
     });
 
     return () => obs.disconnect();
   }, []);
 
-  // navigation handlers
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // styles (kept to your original palette, cleaned)
   const styles = {
     page: {
       minHeight: "100vh",
       background: "linear-gradient(180deg, #EAF6FF 0%, #F0F8FF 40%, #FFFFFF 100%)",
       color: "#000",
-      fontFamily:
-        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      paddingTop: "80px",
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      paddingTop: "72px",
     },
     header: {
       position: "fixed",
@@ -208,8 +194,8 @@ export default function Home() {
       alignItems: "center",
       justifyContent: "space-between",
       padding: "0 28px",
-      background: "rgba(255,255,255,0.7)",
-      backdropFilter: "blur(8px)",
+      background: "rgba(255,255,255,0.8)",
+      backdropFilter: "blur(12px)",
       borderBottom: "1px solid rgba(0,0,0,0.06)",
       zIndex: 1200,
     },
@@ -218,13 +204,12 @@ export default function Home() {
       fontWeight: 800,
       fontSize: "20px",
       cursor: "pointer",
-      letterSpacing: "-0.5px",
       display: "flex",
       alignItems: "center",
     },
     nav: {
       display: "flex",
-      gap: "18px",
+      gap: "24px",
       alignItems: "center",
     },
     navLink: {
@@ -232,146 +217,163 @@ export default function Home() {
       fontWeight: 600,
       cursor: "pointer",
       padding: "6px 8px",
+      fontSize: "14px",
     },
     getStartedBtn: {
       background: "linear-gradient(90deg, #0078C8, #2aa3f2)",
       color: "#fff",
-      padding: "10px 16px",
-      borderRadius: "999px",
+      padding: "10px 20px",
+      borderRadius: "8px",
       fontWeight: 700,
       border: "none",
       cursor: "pointer",
-      boxShadow: "0 6px 20px rgba(0,120,200,0.18)",
-      transition: "transform 160ms ease, box-shadow 160ms ease",
+      boxShadow: "0 4px 16px rgba(0,120,200,0.25)",
+      transition: "transform 160ms ease",
     },
 
-    // HERO
+    // Hero
     heroWrap: {
-      maxWidth: "1100px",
+      maxWidth: "1200px",
       margin: "0 auto",
-      padding: "68px 24px 56px",
+      padding: "80px 24px 60px",
       position: "relative",
-      overflow: "visible",
     },
     heroCanvas: {
       position: "absolute",
       inset: 0,
       zIndex: 0,
       pointerEvents: "none",
-      opacity: 0.55,
+      opacity: 0.5,
     },
     heroCard: {
       position: "relative",
       zIndex: 1,
-      borderRadius: "18px",
-      background: "linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,250,0.9))",
-      padding: "46px 36px",
-      boxShadow: "0 18px 40px rgba(2,24,48,0.08)",
-      border: "1px solid rgba(0,0,0,0.04)",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "18px",
       textAlign: "center",
     },
     heroTitle: {
-      fontSize: "44px",
-      lineHeight: 1.03,
-      margin: 0,
+      fontSize: "56px",
+      lineHeight: 1.1,
+      margin: "0 0 20px 0",
       fontWeight: 800,
       color: "#022037",
-      background: "linear-gradient(90deg, #0078C8, #266fb5)",
+    },
+    heroGradient: {
+      background: "linear-gradient(90deg, #0078C8, #2aa3f2)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
     },
     heroSubtitle: {
-      fontSize: "18px",
-      color: "#0b1b2b",
-      marginTop: 8,
-      minHeight: "26px",
+      fontSize: "22px",
+      color: "#234456",
+      marginBottom: "24px",
+      minHeight: "32px",
+      fontWeight: 600,
     },
     heroDesc: {
-      fontSize: "15px",
+      fontSize: "18px",
       color: "#234456",
-      maxWidth: "820px",
-      margin: "0 auto",
+      maxWidth: "700px",
+      margin: "0 auto 40px",
       lineHeight: 1.6,
     },
 
-    // HOW IT WORKS
-    howSection: {
-      padding: "64px 20px",
-      maxWidth: "1000px",
+    // Stats Section
+    statsSection: {
+      padding: "60px 20px",
+      maxWidth: "1200px",
       margin: "0 auto",
+      background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+      borderRadius: "24px",
+      color: "#fff",
       textAlign: "center",
+      marginBottom: "60px",
     },
-    howTitle: {
-      fontSize: "28px",
-      color: "#0078C8",
-      marginBottom: "18px",
+    statsTitle: {
+      fontSize: "32px",
       fontWeight: 800,
+      marginBottom: "40px",
     },
-    howGrid: {
+    statsGrid: {
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-      gap: "18px",
-      marginTop: "18px",
+      gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+      gap: "24px",
     },
-    howCard: {
-      background: "#fff",
-      borderRadius: "12px",
-      padding: "18px",
-      border: "1px solid rgba(0,0,0,0.04)",
-      boxShadow: "0 6px 18px rgba(2,24,48,0.04)",
-      color: "#0b1b2b",
-      fontWeight: 600,
+    statCard: {
+      padding: "24px",
+    },
+    statNumber: {
+      fontSize: "48px",
+      fontWeight: 800,
+      marginBottom: "8px",
+    },
+    statLabel: {
+      fontSize: "16px",
+      opacity: 0.95,
     },
 
-    // FEATURES
+    // Features
     featuresSection: {
-      padding: "64px 20px",
-      maxWidth: "1100px",
+      padding: "60px 20px",
+      maxWidth: "1200px",
       margin: "0 auto",
+    },
+    sectionTitle: {
+      fontSize: "36px",
+      fontWeight: 800,
+      textAlign: "center",
+      color: "#022037",
+      marginBottom: "12px",
+    },
+    sectionSubtitle: {
+      fontSize: "18px",
+      textAlign: "center",
+      color: "#234456",
+      marginBottom: "48px",
+      maxWidth: "600px",
+      margin: "0 auto 48px",
     },
     featuresGrid: {
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-      gap: "20px",
+      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+      gap: "24px",
     },
     featureCard: {
-      background: "linear-gradient(180deg,#fff,#fbfdff)",
-      borderRadius: "14px",
-      padding: "20px",
-      border: "1px solid rgba(0,120,200,0.06)",
-      boxShadow: "0 10px 30px rgba(2,24,48,0.04)",
+      background: "#fff",
+      borderRadius: "16px",
+      padding: "32px",
+      border: "1px solid rgba(0,120,200,0.1)",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
       transition: "transform 220ms ease, box-shadow 220ms ease",
     },
+    featureIcon: {
+      fontSize: "40px",
+      marginBottom: "16px",
+    },
     featureTitle: {
-      fontSize: "18px",
+      fontSize: "20px",
       fontWeight: 700,
-      color: "#0078C8",
-      marginBottom: 8,
+      color: "#022037",
+      marginBottom: "12px",
     },
     featureText: {
-      color: "#123945",
+      color: "#234456",
       lineHeight: 1.6,
+      fontSize: "15px",
     },
 
     // Footer
     footer: {
-      padding: "36px 20px",
+      padding: "40px 20px",
       textAlign: "center",
       color: "#fff",
       background: "#0078C8",
-      marginTop: "40px",
-      borderTopLeftRadius: "10px",
-      borderTopRightRadius: "10px",
+      marginTop: "60px",
     },
   };
 
   return (
     <div style={styles.page}>
-      {/* Header / Navbar */}
+      {/* Header */}
       <header style={styles.header}>
         <div onClick={() => scrollTo("top")} style={styles.logo}>
           <img 
@@ -388,22 +390,15 @@ export default function Home() {
         </div>
 
         <nav style={styles.nav}>
-          <div style={styles.navLink} onClick={() => scrollTo("how")}>
-            How
-          </div>
           <div style={styles.navLink} onClick={() => scrollTo("features")}>
             Features
           </div>
-          <div
-            style={{ ...styles.navLink, marginRight: 6 }}
-            onClick={() => scrollTo("founders")}
-          >
-            Founders
+          <div style={styles.navLink} onClick={() => scrollTo("founders")}>
+            Team
           </div>
-
           <button
             style={styles.getStartedBtn}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-3px)")}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             onClick={() => (window.location.href = "/login")}
           >
@@ -412,22 +407,25 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO */}
+      {/* Hero */}
       <main style={styles.heroWrap} id="top">
         <canvas
           ref={canvasRef}
-          style={{ ...styles.heroCanvas, width: "100%", height: "320px", top: 0 }}
+          style={{ ...styles.heroCanvas, width: "100%", height: "400px", top: 0 }}
         />
         <section ref={heroRef} style={styles.heroCard}>
-          <h1 style={styles.heroTitle}>Your AP Exam Preparation Partner</h1>
+          <h1 style={styles.heroTitle}>
+            Prepare for AP Exams with{" "}
+            <span style={styles.heroGradient}>HighFive</span>
+          </h1>
 
           <div style={styles.heroSubtitle}>
-            <span>{typingText}</span>
+            {typingText}
             <span
               style={{
                 display: "inline-block",
                 width: 3,
-                height: 18,
+                height: 24,
                 background: "#0078C8",
                 marginLeft: 8,
                 borderRadius: 2,
@@ -437,184 +435,241 @@ export default function Home() {
           </div>
 
           <p style={styles.heroDesc}>
-            HighFive brings accessible, exam-focused study tools to AP students with personalized practice,
-            instant feedback, and progress tracking that helps you discover your passions and succeed on exam day.
+            Practice tests powered by official AP Course and Exam Descriptions (CED). 
+            Get instant feedback and track your progress.
           </p>
 
-          <div style={{ display: "flex", gap: 12 }}>
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center" }}>
             <button
               style={styles.getStartedBtn}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
               onClick={() => (window.location.href = "/login")}
             >
-              Get Started
+              Start Practicing
             </button>
             <button
               style={{
-                padding: "10px 16px",
-                borderRadius: 12,
-                border: "1px solid rgba(0,120,200,0.12)",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                border: "2px solid #0078C8",
                 background: "#fff",
                 cursor: "pointer",
                 fontWeight: 700,
                 color: "#0078C8",
+                transition: "all 160ms ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,120,200,0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
               }}
               onClick={() => scrollTo("features")}
             >
-              Explore Features
+              Learn More
             </button>
           </div>
         </section>
       </main>
 
-      {/* HOW IT WORKS */}
-      <section id="how" ref={howRef} style={styles.howSection}>
-        <h3 style={styles.howTitle}>How it works in three steps</h3>
-        <div style={styles.howGrid}>
-          <div style={styles.howCard}>Choose a subject & set a study goal</div>
-          <div style={styles.howCard}>Practice with targeted questions and FRQs</div>
-          <div style={styles.howCard}>Get instant feedback, analytics & next-step guidance</div>
+      {/* Stats Section */}
+      <section ref={statsRef} id="stats" style={styles.statsSection}>
+        <h2 style={styles.statsTitle}>Making AP Exams More Accessible</h2>
+        <div style={styles.statsGrid}>
+          <div style={styles.statCard}>
+            <div style={styles.statNumber}>2.8M</div>
+            <div style={styles.statLabel}>Students take AP exams annually across the US</div>
+          </div>
+          <div style={styles.statCard}>
+            <div style={styles.statNumber}>40</div>
+            <div style={styles.statLabel}>AP courses available to explore</div>
+          </div>
+          <div style={styles.statCard}>
+            <div style={styles.statNumber}>100%</div>
+            <div style={styles.statLabel}>Powered by official CED content</div>
+          </div>
         </div>
       </section>
 
-      {/* FEATURES */}
+      {/* Features */}
       <section id="features" ref={featuresRef} style={styles.featuresSection}>
-        <h3 style={{ color: "#022037", fontSize: 24, fontWeight: 800, marginBottom: 18 }}>
-          Why HighFive
-        </h3>
+        <h2 style={styles.sectionTitle}>Everything You Need to Succeed</h2>
+        <p style={styles.sectionSubtitle}>
+          Built with your success in mind
+        </p>
 
         <div style={styles.featuresGrid}>
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
+            }}
           >
-            <div style={styles.featureTitle}>Making AP Exams More Accessible</div>
+            <div style={styles.featureTitle}>CED-Powered Practice</div>
             <div style={styles.featureText}>
-              With over 2.8 million students taking AP exams annually across the US, HighFive makes 
-              preparation more accessible through adaptive practice that focuses on your individual needs.
+              Practice tests generated from official AP Course and Exam Descriptions. 
+              Real content, real results.
             </div>
           </div>
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
+            }}
           >
-            <div style={styles.featureTitle}>Discover Your Passions</div>
+            <div style={styles.featureTitle}>Adaptive Learning</div>
             <div style={styles.featureText}>
-              Explore 38 different AP courses across 7 subject areas. From STEM to humanities, 
-              discover what excites you and prepare for college and career success.
+              AI-powered practice that adapts to your strengths and weaknesses. 
+              Focus on what you need to improve.
             </div>
           </div>
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
+            }}
           >
-            <div style={styles.featureTitle}>Track Your Improvements</div>
+            <div style={styles.featureTitle}>Track Your Progress</div>
             <div style={styles.featureText}>
-              See your progress over time with detailed analytics. Identify your strengths, 
-              focus on areas for growth, and celebrate your achievements.
+              View detailed stats and analytics. Monitor your performance over time 
+              and celebrate your improvements.
             </div>
           </div>
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
+            }}
           >
-            <div style={styles.featureTitle}>Adaptive Practice</div>
+            <div style={styles.featureTitle}>Study Calendar</div>
             <div style={styles.featureText}>
-              The system adapts to your learning style, focusing on your weak areas while 
-              reinforcing topics you've mastered for efficient, personalized study sessions.
+              Plan your study sessions and stay organized. Set goals and track 
+              your progress toward exam day.
             </div>
           </div>
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
+            }}
           >
-            <div style={styles.featureTitle}>College & Career Preparation</div>
+            <div style={styles.featureTitle}>Community</div>
             <div style={styles.featureText}>
-              AP courses provide college credit and demonstrate academic readiness. HighFive helps 
-              you prepare for both the exam and future academic and career opportunities.
+              Ask questions and get help from other students. Share knowledge 
+              and learn together.
             </div>
           </div>
 
           <div
             style={styles.featureCard}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-6px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
+            }}
           >
-            <div style={styles.featureTitle}>Built by Students</div>
+            <div style={styles.featureTitle}>Instant Feedback</div>
             <div style={styles.featureText}>
-              Created by students who understand the AP experience. We know the challenges, 
-              the pressure, and the excitement of discovering new subjects and passions.
+              Get immediate feedback on your practice tests. Upload text or images 
+              for FRQ grading with detailed explanations.
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOUNDERS */}
-      <section id="founders" ref={foundersRef} style={{ padding: "56px 20px", maxWidth: 1000, margin: "0 auto" }}>
-        <h3 style={{ fontSize: 22, color: "#0078C8", fontWeight: 700, marginBottom: 12, textAlign: "center" }}>
-          Meet the Team
-        </h3>
-        <div style={{ display: "flex", flexDirection: "row", gap: "20px", alignItems: "flex-start", justifyContent: "center", flexWrap: "nowrap" }}>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "16px", background: "#fff", borderRadius: "12px", boxShadow: "0 6px 18px rgba(2,24,48,0.04)", border: "1px solid rgba(0,0,0,0.04)", width: "250px", flexShrink: 0 }}>
+      {/* Founders */}
+      <section id="founders" ref={foundersRef} style={{ padding: "60px 20px", maxWidth: 1200, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 32, fontWeight: 800, color: "#022037", marginBottom: 48, textAlign: "center" }}>
+          Built by Students, for Students
+        </h2>
+        <div style={{ display: "flex", flexDirection: "row", gap: "24px", alignItems: "flex-start", justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", padding: "24px", background: "#fff", borderRadius: "16px", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.04)", width: "280px" }}>
             <img 
               src="/vaidehi.png" 
               alt="Vaidehi Akbari" 
               style={{
-                width: "180px",
-                height: "180px",
+                width: "160px",
+                height: "160px",
                 borderRadius: "50%",
                 objectFit: "cover"
               }}
             />
             <div style={{ textAlign: "center" }}>
-              <strong style={{ fontSize: "18px", color: "#022037" }}>Vaidehi Akbari</strong>
-              <div style={{ marginTop: "8px", color: "#234456", fontSize: "14px", lineHeight: "1.5" }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#022037", marginBottom: 8 }}>Vaidehi Akbari</div>
+              <div style={{ color: "#234456", fontSize: 14, lineHeight: 1.5 }}>
                 Machine learning enthusiast who enjoys coding with Python and Unity. Practices taekwondo and loves combining creativity with technology.
               </div>
             </div>
           </div>
           
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "16px", background: "#fff", borderRadius: "12px", boxShadow: "0 6px 18px rgba(2,24,48,0.04)", border: "1px solid rgba(0,0,0,0.04)", width: "250px", flexShrink: 0 }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", padding: "24px", background: "#fff", borderRadius: "16px", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.04)", width: "280px" }}>
             <img 
               src="/sanjana.png" 
               alt="Sanjana Gowda" 
               style={{
-                width: "180px",
-                height: "180px",
+                width: "160px",
+                height: "160px",
                 borderRadius: "50%",
                 objectFit: "cover"
               }}
             />
             <div style={{ textAlign: "center" }}>
-              <strong style={{ fontSize: "18px", color: "#022037" }}>Sanjana Gowda</strong>
-              <div style={{ marginTop: "8px", color: "#234456", fontSize: "14px", lineHeight: "1.5" }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#022037", marginBottom: 8 }}>Sanjana Gowda</div>
+              <div style={{ color: "#234456", fontSize: 14, lineHeight: 1.5 }}>
                 Full-stack engineer passionate about AI and machine learning. Swimmer and co-president of Girls Who Code who loves building educational tools.
               </div>
             </div>
           </div>
           
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "16px", background: "#fff", borderRadius: "12px", boxShadow: "0 6px 18px rgba(2,24,48,0.04)", border: "1px solid rgba(0,0,0,0.04)", width: "250px", flexShrink: 0 }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", padding: "24px", background: "#fff", borderRadius: "16px", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.04)", width: "280px" }}>
             <img 
               src="/shely.png" 
               alt="Shely Jain" 
               style={{
-                width: "180px",
-                height: "180px",
+                width: "160px",
+                height: "160px",
                 borderRadius: "50%",
                 objectFit: "cover"
               }}
             />
             <div style={{ textAlign: "center" }}>
-              <strong style={{ fontSize: "18px", color: "#022037" }}>Shely Jain</strong>
-              <div style={{ marginTop: "8px", color: "#234456", fontSize: "14px", lineHeight: "1.5" }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#022037", marginBottom: 8 }}>Shely Jain</div>
+              <div style={{ color: "#234456", fontSize: 14, lineHeight: 1.5 }}>
                 AI enthusiast who loves working with Python and machine learning. Volleyball player and co-president of Girls Who Code passionate about coding.
               </div>
             </div>
@@ -625,9 +680,9 @@ export default function Home() {
       {/* Footer */}
       <footer style={styles.footer}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <div style={{ marginBottom: 8, fontWeight: 700 }}>HighFive</div>
-          <div style={{ opacity: 0.95, fontSize: 13 }}>
-            © 2025 HighFive Making AP exam preparation more accessible for students everywhere.
+          <div style={{ marginBottom: 8, fontWeight: 700, fontSize: 18 }}>HighFive</div>
+          <div style={{ opacity: 0.95, fontSize: 14 }}>
+            © 2025 HighFive. Making AP exam preparation more accessible for students everywhere.
           </div>
         </div>
       </footer>
