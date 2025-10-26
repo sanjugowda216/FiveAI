@@ -34,6 +34,13 @@ const OnboardingTutorial = ({ onComplete }) => {
       targetSelector: '[data-tutorial="practice"]'
     },
     {
+      id: 'flashcards',
+      title: 'Flashcards',
+      message: 'Create and study personalized flashcards to help you memorize key concepts, terms, and definitions for your AP exams. Organize them by folder and track your progress.',
+      position: 'bottom',
+      targetSelector: '[data-tutorial="flashcards"]'
+    },
+    {
       id: 'community',
       title: 'Community',
       message: 'Ask any questions related to AP course topics and see questions from other students. Get answers from the community and help others learn.',
