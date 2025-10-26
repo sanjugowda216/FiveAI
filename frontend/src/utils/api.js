@@ -306,9 +306,9 @@ export async function deleteFlashcard(id, userId) {
   }
 }
 
-export async function getStudyFlashcards(userId) {
+export async function getStudyFlashcards(count = 10, userId) {
   try {
-    const response = await fetch(`${API_URL}/api/flashcards/study/random?userId=${userId}`);
+    const response = await fetch(`${API_URL}/api/flashcards/study/random?userId=${userId}&count=${count}`);
     if (!response.ok) {
       throw new Error('Failed to fetch study flashcards');
     }
@@ -319,13 +319,13 @@ export async function getStudyFlashcards(userId) {
   }
 }
 
-export async function getRandomStudyFlashcards(userId) {
-  return getStudyFlashcards(userId);
+export async function getRandomStudyFlashcards(count = 10, userId) {
+  return getStudyFlashcards(count, userId);
 }
 
-export async function getStudyFlashcardsByFolder(userId, folder) {
+export async function getStudyFlashcardsByFolder(folder, count = 10, userId) {
   try {
-    const response = await fetch(`${API_URL}/api/flashcards/study/random?userId=${userId}&folder=${encodeURIComponent(folder)}`);
+    const response = await fetch(`${API_URL}/api/flashcards/study/random?userId=${userId}&folder=${encodeURIComponent(folder)}&count=${count}`);
     if (!response.ok) {
       throw new Error('Failed to fetch study flashcards by folder');
     }
