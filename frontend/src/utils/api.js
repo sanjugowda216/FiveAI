@@ -220,3 +220,85 @@ async function safeParseJson(response) {
     return null;
   }
 }
+
+/**
+ * Flashcard API functions
+ */
+export async function listFlashcards(userId) {
+  try {
+    const response = await fetch(`${API_URL}/api/flashcards?userId=${userId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch flashcards');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching flashcards:', error);
+    throw error;
+  }
+}
+
+export async function createFlashcard(question, answer, userId, folder = null) {
+  try {
+    const response = await fetch(`${API_URL}/api/flashcards?userId=${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ question, answer, folder })
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create flashcard');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating flashcard:', error);
+    throw error;
+  }
+}
+
+export async function updateFlashcard(id, question, answer, userId, folder = null) {
+  try {
+    const response = await fetch(`${API_URL}/api/flashcards/${id}?userId=${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ question, answer, folder })
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update flashcard');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating flashcard:', error);
+    throw error;
+  }
+}
+
+export async function deleteFlashcard(id, userId) {
+  try {
+    const response = await fetch(`${API_URL}/api/flashcards/${id}?userId=${userId}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete flashcard');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting flashcard:', error);
+    throw error;
+  }
+}
+
+export async function getStudyFlashcards(userId) {
+  try {
+    const response = await fetch(`${API_URL}/api/flashcards/study/random?userId=${userId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch study flashcards');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching study flashcards:', error);
+    throw error;
+  }
+}
