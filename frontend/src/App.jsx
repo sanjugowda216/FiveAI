@@ -15,6 +15,7 @@ import StudyCalendar from "./pages/StudyCalendar";
 import Settings from "./pages/Settings";
 import Community from "./pages/Community";
 import PracticeTest from "./pages/PracticeTest";
+import Flashcards from "./pages/Flashcards";
 import OnboardingTutorial from "./components/OnboardingTutorial";
 import { auth, db } from "./firebase";
 import {
@@ -479,6 +480,7 @@ function AppContent() {
           <Route path="/stats" element={<Stats stats={userProfile?.stats} userProfile={userProfile} />} />
           <Route path="/calendar" element={<StudyCalendar />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/flashcards" element={<Flashcards userProfile={userProfile} />} />
           <Route path="/practice-test/:courseId" element={<PracticeTest userProfile={userProfile} />} />
           <Route path="/settings" element={<Settings userProfile={userProfile} />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
