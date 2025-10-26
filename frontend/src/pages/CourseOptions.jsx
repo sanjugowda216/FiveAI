@@ -6,6 +6,7 @@ import { db, storage } from "../firebase";
 import { getCourseById } from "../data/apCourses";
 import { submitFrqForGrading, getRubricsForCourse } from "../utils/api";
 import GlassDropdown from "../components/GlassDropdown";
+import TextToSpeechButton from "../components/TextToSpeechButton";
 
 const MAX_UPLOAD_SIZE = 25 * 1024 * 1024; // 25 MB
 const DEFAULT_FRQ_TYPE = "general";
@@ -423,6 +424,19 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
           </div>
         )}
 
+        <div style={styles.practiceTestCard}>
+          <h2 style={styles.practiceTestTitle}>Practice Test</h2>
+          <p style={styles.practiceTestDescription}>
+            Full-length practice test matching real AP exam format
+          </p>
+          <button
+            style={styles.practiceTestButton}
+            onClick={() => navigate(`/practice-test/${course.id}`)}
+          >
+            Generate Test
+          </button>
+        </div>
+
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Submit FRQ / Essay</h2>
           <p style={styles.cardBody}>
@@ -631,7 +645,13 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
                   </div>
 
                   {grade.summary && (
-                    <p style={styles.gradeSummary}>{grade.summary}</p>
+                    <div style={styles.gradeSummaryContainer}>
+                      <p style={styles.gradeSummary}>{grade.summary}</p>
+                      <TextToSpeechButton 
+                        text={grade.summary}
+                        style={{ marginLeft: '8px' }}
+                      />
+                    </div>
                   )}
 
                   {grade.strengths?.length ? (
@@ -820,6 +840,46 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.2s",
     whiteSpace: "nowrap",
+  },
+  practiceTestCard: {
+    background: "var(--bg-primary)",
+    borderRadius: "1rem",
+    padding: "2rem",
+    boxShadow: "0 8px 24px var(--shadow-color), 0 0 0 1px var(--border-color)",
+    border: "none",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
+  },
+  practiceTestTitle: {
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    color: "var(--text-primary)",
+    margin: 0,
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  practiceTestDescription: {
+    fontSize: "1rem",
+    color: "var(--text-secondary)",
+    margin: 0,
+    lineHeight: 1.5,
+  },
+  practiceTestButton: {
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    color: "white",
+    border: "none",
+    borderRadius: "0.75rem",
+    padding: "1rem 2rem",
+    fontSize: "1rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 16px rgba(102, 126, 234, 0.3)",
+    alignSelf: "flex-start",
   },
   cardBody: {
     fontSize: "1rem",
@@ -1027,12 +1087,18 @@ const styles = {
     color: "var(--text-primary)",
     transition: "color 0.3s ease",
   },
+  gradeSummaryContainer: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+  },
   gradeSummary: {
     margin: 0,
     fontSize: "1rem",
     color: "var(--text-secondary)",
     lineHeight: 1.6,
     transition: "color 0.3s ease",
+    flex: 1,
   },
   gradeSection: {
     display: "flex",

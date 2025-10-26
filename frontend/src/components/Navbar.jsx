@@ -166,16 +166,29 @@ export default function Navbar({ onLogout }) {
               : `0 0 10px #3B82FF, 0 0 20px #3B82FF, 0 0 30px #3B82FF, 0 0 40px #2563EB, 0 0 70px #2563EB, 0 0 80px #2563EB, 0 0 100px #1D4ED8, 0 0 150px #1E40AF`
           }}>Five</span>
         </NavLink>
-        <nav style={styles.nav}>
+        <nav style={styles.nav} data-tutorial="navbar">
           {navItems.map((item) => {
             const isActive =
               location.pathname === item.path ||
               (item.path === "/practice" &&
                 location.pathname.startsWith("/practice"));
+            
+            // Map paths to tutorial data attributes
+            const getTutorialAttr = (path) => {
+              if (path === '/dashboard') return 'home';
+              if (path === '/courses') return 'courses';
+              if (path === '/practice') return 'practice';
+              if (path === '/community') return 'community';
+              if (path === '/calendar') return 'calendar';
+              if (path === '/stats') return 'stats';
+              return null;
+            };
+            
             return (
               <NavLink
                 key={item.path}
                 to={item.path}
+                data-tutorial={getTutorialAttr(item.path)}
                 style={{
                   ...styles.link,
                   color: textColor,
@@ -211,6 +224,7 @@ export default function Navbar({ onLogout }) {
         <div style={styles.rightSection}>
           <NavLink
             to="/settings"
+            data-tutorial="settings"
             style={{
               ...styles.settingsLink,
               color: textColor,
