@@ -217,7 +217,7 @@ export default function Home() {
       fontWeight: 600,
       cursor: "pointer",
       padding: "6px 8px",
-      fontSize: "14px",
+      fontSize: "16px",
     },
     getStartedBtn: {
       background: "linear-gradient(90deg, #0078C8, #2aa3f2)",
