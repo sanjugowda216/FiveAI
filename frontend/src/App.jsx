@@ -355,47 +355,12 @@ function AppContent() {
                     </>
                   )}
                 </p>
-                <div className="text-center mt-4" style={{ paddingTop: "1rem", borderTop: "1px solid rgba(0,0,0,0.1)" }}>
-                  <p style={{ marginBottom: "0.5rem", fontSize: "0.9rem", color: "rgba(0,0,0,0.6)" }}>
-                    Or continue as a guest
-                  </p>
-                  <button
-                                    onClick={() => {
-                  localStorage.setItem('isGuest', 'true');
-                  setIsGuest(true);
-                  setLoggedIn(true);
-                  // Force navigation
-                  window.location.href = "/dashboard";
-                }}
-                    style={{
-                      background: "transparent",
-                      border: "2px solid #0078C8",
-                      color: "#0078C8",
-                      padding: "0.5rem 1.5rem",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontWeight: 600,
-                      fontSize: "0.9rem",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.background = "#0078C8";
-                      e.target.style.color = "#fff";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.background = "transparent";
-                      e.target.style.color = "#0078C8";
-                    }}
-                  >
-                    Continue as Guest
-                  </button>
-                </div>
                 <div className="text-center mt-4">
                   <button
                     onClick={() => navigate("/")}
                     className="text-blue-600 hover:text-blue-800 text-sm underline bg-transparent border-none cursor-pointer"
                   >
-                    ← Back to Home
+                    Back to Home
                   </button>
                 </div>
               </div>

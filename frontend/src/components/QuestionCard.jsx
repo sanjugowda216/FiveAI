@@ -283,7 +283,7 @@ export default function QuestionCard({
 
       <div style={styles.footer}>
         <button style={{ ...styles.backButton, ...(isDark ? darkStyles.backButton : {}) }} onClick={onBackToUnits}>
-          ← Back to Units
+          Back to Units
         </button>
       </div>
     </div>
