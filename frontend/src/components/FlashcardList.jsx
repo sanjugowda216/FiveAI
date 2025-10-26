@@ -87,7 +87,6 @@ function FlashcardList({ refreshKey, userId, onFoldersChange }) {
             onClick={() => setShowFolderForm(!showFolderForm)}
             style={styles.addFolderButton}
           >
-            <span style={styles.buttonIcon}>📁</span>
             Add Folder
           </button>
         </div>
@@ -137,37 +136,33 @@ function FlashcardList({ refreshKey, userId, onFoldersChange }) {
       </div>
       
       <div className="flashcard-row">
-        {filteredCards.map(card => (
-          <div key={card.id} className="flashcard-card">
+        {filteredCards.length === 0 ? (
+          <div className="flashcard-card" style={{ opacity: 0.6 }}>
             <div style={styles.cardWrapper}>
               <div style={styles.flashcardContent}>
-                <h4 className="flashcard-question">{card.question}</h4>
-                <p className="flashcard-answer">{card.answer}</p>
+                <h4 className="flashcard-question">This is what your flashcard will look like</h4>
+                <p className="flashcard-answer">The definition or answer will appear here</p>
                 <div className="flashcard-meta">
                   <span className="flashcard-folder">
-                    {card.folder || 'No Folder'}
+                    {selectedFolder === 'all' ? 'No Folder' : selectedFolder}
                   </span>
                   <span className="flashcard-date">
-                    {new Date(card.createdAt).toLocaleDateString()}
+                    {new Date().toLocaleDateString()}
                   </span>
                 </div>
               </div>
               
               <div style={styles.cardActions}>
                 <select 
-                  value={card.folder || ''} 
-                  onChange={(e) => handleMoveToFolder(card.id, e.target.value)}
-                  style={styles.folderSelect}
+                  disabled
+                  style={{...styles.folderSelect, opacity: 0.5}}
                 >
                   <option value="">No Folder</option>
-                  {folders.map(folder => (
-                    <option key={folder} value={folder}>{folder}</option>
-                  ))}
                 </select>
                 
                 <button 
-                  onClick={() => handleDelete(card.id)} 
-                  style={styles.deleteButton}
+                  disabled
+                  style={{...styles.deleteButton, opacity: 0.5, cursor: 'not-allowed'}}
                   title="Delete flashcard"
                 >
                   ✕
@@ -175,7 +170,47 @@ function FlashcardList({ refreshKey, userId, onFoldersChange }) {
               </div>
             </div>
           </div>
-        ))}
+        ) : (
+          filteredCards.map(card => (
+            <div key={card.id} className="flashcard-card">
+              <div style={styles.cardWrapper}>
+                <div style={styles.flashcardContent}>
+                  <h4 className="flashcard-question">{card.question}</h4>
+                  <p className="flashcard-answer">{card.answer}</p>
+                  <div className="flashcard-meta">
+                    <span className="flashcard-folder">
+                      {card.folder || 'No Folder'}
+                    </span>
+                    <span className="flashcard-date">
+                      {new Date(card.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+                
+                <div style={styles.cardActions}>
+                  <select 
+                    value={card.folder || ''} 
+                    onChange={(e) => handleMoveToFolder(card.id, e.target.value)}
+                    style={styles.folderSelect}
+                  >
+                    <option value="">No Folder</option>
+                    {folders.map(folder => (
+                      <option key={folder} value={folder}>{folder}</option>
+                    ))}
+                  </select>
+                  
+                  <button 
+                    onClick={() => handleDelete(card.id)} 
+                    style={styles.deleteButton}
+                    title="Delete flashcard"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
@@ -186,11 +221,16 @@ const styles = {
     width: '100%',
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '2rem',
+    padding: '0 2rem 2rem 2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'auto',
+    boxSizing: 'border-box',
   },
   header: {
-    textAlign: 'center',
-    marginBottom: '2rem',
+    textAlign: 'left',
+    marginBottom: '3rem',
   },
   title: {
     fontSize: '2rem',
@@ -208,7 +248,7 @@ const styles = {
     fontWeight: '500',
   },
   folderSection: {
-    marginBottom: '2rem',
+    marginBottom: '1rem',
     padding: '1.5rem',
     background: 'var(--bg-secondary)',
     border: '2px solid var(--border-color)',
@@ -303,9 +343,21 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
+    width: '100%',
+    maxWidth: '600px',
+    margin: '0 auto',
+    boxSizing: 'border-box',
   },
   flashcardContent: {
     flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    minHeight: '150px',
+    overflow: 'hidden',
+    width: '100%',
+    boxSizing: 'border-box',
+    minWidth: 0,
   },
   cardActions: {
     display: 'flex',

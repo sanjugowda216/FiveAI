@@ -256,14 +256,30 @@ export async function createFlashcard(question, answer, userId, folder = null) {
   }
 }
 
-export async function updateFlashcard(id, question, answer, userId, folder = null) {
+export async function updateFlashcard(id, questionOrUpdate, answerOrUserId, userIdOrFolder = null, folder = null) {
   try {
+    // Handle both old signature (id, question, answer, userId, folder) 
+    // and new signature (id, {question?, answer?, folder?}, userId)
+    let question, answer, userId, folderValue;
+    
+    if (typeof questionOrUpdate === 'object') {
+      // New signature: updateFlashcard(id, { question?, answer?, folder? }, userId)
+      ({ question, answer, folder: folderValue } = questionOrUpdate);
+      userId = answerOrUserId;
+    } else {
+      // Old signature: updateFlashcard(id, question, answer, userId, folder)
+      question = questionOrUpdate;
+      answer = answerOrUserId;
+      userId = userIdOrFolder;
+      folderValue = folder;
+    }
+    
     const response = await fetch(`${API_URL}/api/flashcards/${id}?userId=${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ question, answer, folder })
+      body: JSON.stringify({ question, answer, folder: folderValue })
     });
     if (!response.ok) {
       throw new Error('Failed to update flashcard');

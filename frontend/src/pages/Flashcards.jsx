@@ -66,7 +66,7 @@ const styles = {
   },
   header: {
     textAlign: 'left',
-    marginBottom: '1rem',
+    marginBottom: '3rem',
   },
   title: {
     fontSize: '3rem',
@@ -125,6 +125,8 @@ const styles = {
     flexDirection: 'column',
     gap: '3rem',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
   },
   authContainer: {
     display: 'flex',
@@ -158,8 +160,12 @@ const styles = {
     padding: '2rem',
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
     border: '1px solid var(--border-color)',
-    width: 'calc(100% + 4rem)',
-    margin: '0 -2rem 0 -2rem',
+    width: '100%',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    minHeight: '75vh',
+    display: 'flex',
+    flexDirection: 'column',
   },
 };
 
