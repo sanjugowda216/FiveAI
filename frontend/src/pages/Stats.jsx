@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { apCourses } from "../data/apCourses.js";
 
-export default function Stats({ stats }) {
+export default function Stats({ stats, userProfile }) {
   const [courseStats, setCourseStats] = useState({});
   const [loading, setLoading] = useState(true);
+
+  // Check if user is logged in
+  const isLoggedIn = userProfile && userProfile.uid;
 
   // Get real stats from localStorage and API
   useEffect(() => {
@@ -121,6 +124,18 @@ export default function Stats({ stats }) {
   if (coursesWithStats.length === 0) {
     return (
       <section style={styles.wrapper}>
+        {!isLoggedIn && (
+          <div style={styles.guestBanner}>
+            <div style={styles.guestBannerContent}>
+              <span style={styles.guestBannerText}>
+                <strong>Login to save your progress!</strong> Your stats are only saved locally while browsing as a guest.
+              </span>
+              <a href="/login" style={styles.guestBannerButton}>
+                Login
+              </a>
+            </div>
+          </div>
+        )}
         <div style={styles.header}>
           <h1 style={styles.title}>My Stats</h1>
           <p style={styles.subtitle}>
@@ -139,6 +154,18 @@ export default function Stats({ stats }) {
 
   return (
     <section style={styles.wrapper}>
+      {!isLoggedIn && (
+        <div style={styles.guestBanner}>
+          <div style={styles.guestBannerContent}>
+            <span style={styles.guestBannerText}>
+              <strong>Login to save your progress!</strong> Your stats are only saved locally while browsing as a guest.
+            </span>
+            <a href="/login" style={styles.guestBannerButton}>
+              Login
+            </a>
+          </div>
+        </div>
+      )}
       <div style={styles.header}>
         <h1 style={styles.title}>My Stats</h1>
         <p style={styles.subtitle}>
@@ -515,5 +542,34 @@ const styles = {
     color: "var(--text-secondary)",
     margin: 0,
     transition: "color 0.3s ease",
+  },
+  guestBanner: {
+    backgroundColor: "#FEF3C7",
+    border: "2px solid #F59E0B",
+    borderRadius: "0.75rem",
+    padding: "1rem 1.5rem",
+    marginBottom: "2rem",
+    transition: "all 0.3s ease",
+  },
+  guestBannerContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    flexWrap: "wrap",
+  },
+  guestBannerText: {
+    flex: 1,
+    color: "#92400E",
+    fontSize: "0.95rem",
+  },
+  guestBannerButton: {
+    backgroundColor: "#F59E0B",
+    color: "#fff",
+    padding: "0.5rem 1.5rem",
+    borderRadius: "0.5rem",
+    textDecoration: "none",
+    fontWeight: 600,
+    transition: "all 0.2s ease",
+    whiteSpace: "nowrap",
   },
 };

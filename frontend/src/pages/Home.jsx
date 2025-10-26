@@ -453,6 +453,33 @@ export default function Home() {
                 padding: "10px 20px",
                 borderRadius: "8px",
                 border: "2px solid #0078C8",
+                background: "transparent",
+                cursor: "pointer",
+                fontWeight: 700,
+                color: "#0078C8",
+                transition: "all 160ms ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,120,200,0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+              onClick={() => {
+                // Set guest mode in localStorage
+                localStorage.setItem('isGuest', 'true');
+                window.location.href = "/dashboard";
+              }}
+            >
+              Continue as Guest
+            </button>
+            <button
+              style={{
+                padding: "10px 20px",
+                borderRadius: "8px",
+                border: "2px solid #0078C8",
                 background: "#fff",
                 cursor: "pointer",
                 fontWeight: 700,
