@@ -80,7 +80,7 @@
     "userId": "kynxmkbp7FUFG8NjlHg9hmisFFl1",
     "folder": "ap lang",
     "createdAt": "2025-10-25T00:50:08.778Z",
-    "updatedAt": "2025-10-25T00:50:25.239Z"
+    "updatedAt": "2025-10-26T17:48:45.132Z"
   },
   {
     "id": "dcf022d3-1fe6-4621-a410-1eb797141fcd",
@@ -99,14 +99,5 @@
     "folder": null,
     "createdAt": "2025-10-25T00:54:45.387Z",
     "updatedAt": null
-  },
-  {
-    "id": "7b6e7676-aef0-469d-b4f8-dccc56e65fe4",
-    "question": "sd",
-    "answer": "sdsd",
-    "userId": "kynxmkbp7FUFG8NjlHg9hmisFFl1",
-    "folder": "math",
-    "createdAt": "2025-10-25T01:11:11.212Z",
-    "updatedAt": "2025-10-25T01:11:29.949Z"
   }
 ]

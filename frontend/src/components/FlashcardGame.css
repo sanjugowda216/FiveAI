@@ -61,9 +61,12 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem 0;
+  padding: 1rem;
   max-height: 70vh;
   overflow-y: auto;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .flashcard-card {
@@ -74,6 +77,13 @@
   box-shadow: 0 4px 12px var(--shadow-color);
   transition: all 0.3s ease;
   position: relative;
+  width: 600px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .flashcard-card:hover {
@@ -86,6 +96,10 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .flashcard-question {
@@ -93,6 +107,12 @@
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .flashcard-answer {
@@ -103,6 +123,13 @@
   background: var(--bg-primary);
   border-radius: 0.5rem;
   border-left: 4px solid #0078C8;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .flashcard-meta {

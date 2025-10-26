@@ -40,36 +40,33 @@ function FlashcardForm({ onCreated, userId, folders = [] }) {
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
           <label style={styles.label}>
-            <span style={styles.labelIcon}>❓</span>
-            Question
+            Word
           </label>
           <input 
             value={question} 
             onChange={(e)=>setQuestion(e.target.value)} 
             style={styles.input}
-            placeholder="Enter your question here..."
+            placeholder="Enter your word here..."
             disabled={loading}
           />
         </div>
         
         <div style={styles.inputGroup}>
           <label style={styles.label}>
-            <span style={styles.labelIcon}>💡</span>
-            Answer
+            Definition
           </label>
           <textarea 
             value={answer} 
             onChange={(e)=>setAnswer(e.target.value)} 
             style={styles.textarea}
             rows="4"
-            placeholder="Enter the answer here..."
+            placeholder="Enter the definition here..."
             disabled={loading}
           />
         </div>
         
         <div style={styles.inputGroup}>
           <label style={styles.label}>
-            <span style={styles.labelIcon}>📁</span>
             Folder (Optional)
           </label>
           <select 
