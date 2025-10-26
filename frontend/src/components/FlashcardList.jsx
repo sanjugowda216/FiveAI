@@ -230,7 +230,7 @@ const styles = {
   },
   header: {
     textAlign: 'left',
-    marginBottom: '3rem',
+    marginBottom: '1.5rem',
   },
   title: {
     fontSize: '2rem',
@@ -250,7 +250,7 @@ const styles = {
   folderSection: {
     marginBottom: '1rem',
     padding: '1.5rem',
-    background: 'var(--bg-secondary)',
+    background: 'var(--bg-primary)',
     border: '2px solid var(--border-color)',
     borderRadius: '1rem',
     boxShadow: '0 4px 12px var(--shadow-color)',
