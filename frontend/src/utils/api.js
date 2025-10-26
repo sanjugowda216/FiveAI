@@ -159,6 +159,9 @@ export async function submitFrqForGrading(payload) {
  */
 export async function generateAIStudyPlan(studyPlanData) {
   try {
+    console.log('Sending request to:', `${API_URL}/api/study-plan/generate`);
+    console.log('Request data:', studyPlanData);
+    
     const response = await fetch(`${API_URL}/api/study-plan/generate`, {
       method: 'POST',
       headers: {
@@ -167,12 +170,18 @@ export async function generateAIStudyPlan(studyPlanData) {
       body: JSON.stringify(studyPlanData)
     });
     
+    console.log('Response status:', response.status);
+    console.log('Response ok:', response.ok);
+    
     if (!response.ok) {
       const errorData = await response.json();
+      console.error('Error response:', errorData);
       throw new Error(errorData.message || 'Failed to generate AI study plan');
     }
     
-    return await response.json();
+    const result = await response.json();
+    console.log('Success response:', result);
+    return result;
   } catch (error) {
     console.error('Error generating AI study plan:', error);
     throw error;
