@@ -97,7 +97,6 @@ function FlashcardForm({ onCreated, userId, folders = [] }) {
             </>
           ) : (
             <>
-              <span style={styles.buttonIcon}>✨</span>
               Add Flashcard
             </>
           )}
