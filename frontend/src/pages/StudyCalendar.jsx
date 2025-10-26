@@ -688,7 +688,7 @@ export default function StudyCalendar() {
                 }
               }}
             >
-              {isGeneratingPlan ? '⏳ Generating AI Plan...' : '🤖 Create AI Study Schedule'}
+              {isGeneratingPlan ? '⏳ Generating AI Plan...' : 'Create AI Study Schedule'}
             </button>
             <button
               style={styles.secondaryButton}
@@ -707,7 +707,7 @@ export default function StudyCalendar() {
                 }
               }}
             >
-              {isGeneratingPlan ? '⏳ Generating...' : '🤖 Generate AI Study Plan'}
+              {isGeneratingPlan ? '⏳ Generating...' : 'Generate AI Study Plan'}
             </button>
             <button
               style={styles.adaptiveButton}
@@ -726,7 +726,7 @@ export default function StudyCalendar() {
                 }
               }}
             >
-              {isGeneratingPlan ? '⏳ Generating...' : '🧠 Generate Adaptive Plan'}
+              {isGeneratingPlan ? '⏳ Generating...' : 'Generate Adaptive Plan'}
             </button>
           </div>
         </div>
@@ -1102,7 +1102,7 @@ export default function StudyCalendar() {
                   onClick={generateStudySchedule}
                   disabled={isGeneratingPlan}
                 >
-                  {isGeneratingPlan ? '⏳ Generating...' : '🤖 Generate AI Schedule'}
+                  {isGeneratingPlan ? '⏳ Generating...' : 'Generate AI Schedule'}
                 </button>
               </div>
             </div>
