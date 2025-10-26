@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllFlashcards, deleteFlashcard, updateFlashcard } from '../utils/api.js';
+import { listFlashcards, deleteFlashcard, updateFlashcard } from '../utils/api.js';
 import './FlashcardGame.css';
 
 function FlashcardList({ refreshKey, userId, onFoldersChange }) {
@@ -15,7 +15,7 @@ function FlashcardList({ refreshKey, userId, onFoldersChange }) {
   async function refresh() {
     setLoading(true);
     try { 
-      const allCards = await getAllFlashcards(userId);
+      const allCards = await listFlashcards(userId);
       setCards(allCards);
       
       // Extract unique folders from cards

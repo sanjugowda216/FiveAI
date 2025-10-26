@@ -302,3 +302,31 @@ export async function getStudyFlashcards(userId) {
     throw error;
   }
 }
+
+export async function getRandomStudyFlashcards(userId) {
+  return getStudyFlashcards(userId);
+}
+
+export async function getStudyFlashcardsByFolder(userId, folder) {
+  try {
+    const response = await fetch(`${API_URL}/api/flashcards/study/random?userId=${userId}&folder=${encodeURIComponent(folder)}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch study flashcards by folder');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching study flashcards by folder:', error);
+    throw error;
+  }
+}
+
+export async function getAllFolders(userId) {
+  try {
+    const flashcards = await listFlashcards(userId);
+    const folders = [...new Set(flashcards.map(card => card.folder).filter(Boolean))];
+    return folders;
+  } catch (error) {
+    console.error('Error fetching folders:', error);
+    throw error;
+  }
+}
