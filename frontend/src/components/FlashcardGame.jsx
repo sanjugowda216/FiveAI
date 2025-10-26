@@ -98,94 +98,103 @@ function FlashcardGame({ userId }) {
 
   return(
     <div style={{
-      ...styles.container,
-      backgroundColor: resolvedTheme === 'dark' ? '#1A1A1A' : '#E2E8F0',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+      minHeight: 'calc(100vh - 200px)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '0',
     }}>
-      <div style={styles.header}>
-        <h2 style={styles.title}>Study Mode</h2>
-        <div style={styles.folderSelector}>
-          <label style={styles.folderLabel}>Study from:</label>
-          <div style={styles.folderOptions}>
-            <button
-              onClick={() => load('all')}
-              style={{
-                ...styles.folderButton,
-                ...(selectedFolder === 'all' ? styles.activeFolderButton : {})
-              }}
-            >
-              All Folders
-            </button>
-            {folders.map(folder => (
+      <div style={{
+        ...styles.container,
+        backgroundColor: resolvedTheme === 'dark' ? '#1A1A1A' : '#E2E8F0',
+        flex: 1,
+      }}>
+        <div style={styles.header}>
+          <h2 style={styles.title}>Study Mode</h2>
+          <div style={styles.folderSelector}>
+            <div style={styles.folderOptions}>
               <button
-                key={folder}
-                onClick={() => load(folder)}
+                onClick={() => load('all')}
                 style={{
                   ...styles.folderButton,
-                  ...(selectedFolder === folder ? styles.activeFolderButton : {})
+                  ...(selectedFolder === 'all' ? styles.activeFolderButton : {})
                 }}
               >
-                {folder}
+                All Folders
               </button>
-            ))}
+              {folders.map(folder => (
+                <button
+                  key={folder}
+                  onClick={() => load(folder)}
+                  style={{
+                    ...styles.folderButton,
+                    ...(selectedFolder === folder ? styles.activeFolderButton : {})
+                  }}
+                >
+                  {folder}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={styles.progressContainer}>
+            <div style={styles.progressBar}>
+              <div style={{
+                ...styles.progressFill,
+                width: `${((index + 1) / cards.length) * 100}%`
+              }}></div>
+            </div>
+            <p style={styles.progressText}>{index + 1} / {cards.length}</p>
           </div>
         </div>
-        <div style={styles.progressContainer}>
-          <div style={styles.progressBar}>
-            <div style={{
-              ...styles.progressFill,
-              width: `${((index + 1) / cards.length) * 100}%`
-            }}></div>
-          </div>
-          <p style={styles.progressText}>{index + 1} / {cards.length}</p>
-        </div>
-      </div>
 
-      <div style={styles.cardContainer}>
-        <div className={`flashcard-container ${flipped?'flashcard is-flipped':''}`} onClick={()=>setFlipped(f=>!f)}>
-          <div className="flashcard-inner">
-            <div className="flashcard-face front">{current.question}</div>
-            <div className="flashcard-face back">{current.answer}</div>
+        <div style={styles.cardContainer}>
+          <div className={`flashcard-container ${flipped?'flashcard is-flipped':''}`} onClick={()=>setFlipped(f=>!f)}>
+            <div className="flashcard-inner">
+              <div className="flashcard-face front">{current.question}</div>
+              <div className="flashcard-face back">{current.answer}</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div style={styles.navigation}>
-        <button 
-          onClick={prev} 
-          disabled={index===0} 
-          style={{
-            ...styles.navButton,
-            ...styles.prevButton,
-            ...(index===0 ? styles.disabledButton : {})
-          }}
-        >
-          Previous
-        </button>
-        
-        <button 
-          onClick={()=>setFlipped(f=>!f)} 
-          style={styles.navButton}
-          title="Click or press Space to flip"
-        >
-          Flip Card
-        </button>
-        
-        <button 
-          onClick={next} 
-          disabled={index===cards.length-1} 
-          style={{
-            ...styles.navButton,
-            ...styles.nextButton,
-            ...(index===cards.length-1 ? styles.disabledButton : {})
-          }}
-        >
-          Next
-        </button>
+        <div style={styles.navigation}>
+          <button 
+            onClick={prev} 
+            disabled={index===0} 
+            style={{
+              ...styles.navButton,
+              ...styles.prevButton,
+              ...(index===0 ? styles.disabledButton : {})
+            }}
+          >
+            Previous
+          </button>
+          
+          <button 
+            onClick={()=>setFlipped(f=>!f)} 
+            style={styles.navButton}
+            title="Click or press Space to flip"
+          >
+            Flip Card
+          </button>
+          
+          <button 
+            onClick={next} 
+            disabled={index===cards.length-1} 
+            style={{
+              ...styles.navButton,
+              ...styles.nextButton,
+              ...(index===cards.length-1 ? styles.disabledButton : {})
+            }}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       <div style={styles.footer}>
         <button onClick={() => load(selectedFolder)} style={styles.refreshButton}>
-          <span style={styles.buttonIcon}>🔄</span>
           New Study Session
         </button>
       </div>
@@ -195,16 +204,22 @@ function FlashcardGame({ userId }) {
 
 const styles = {
   container: {
-    width: 'calc(100% + 4rem)',
-    maxWidth: 'none',
-    margin: '0 -2rem 0 -2rem',
-    padding: '2rem',
+    width: '95%',
+    maxWidth: '1100px',
+    margin: '0 auto',
+    marginLeft: '-10px',
+    padding: '1.5rem 1.5rem',
     display: 'flex',
     flexDirection: 'column',
     gap: '2rem',
     alignItems: 'center',
-    backgroundColor: '#1A1A1A',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
     borderRadius: '1.5rem',
+    minHeight: '80vh',
+    background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(35, 35, 35, 0.95) 100%)',
+    backdropFilter: 'blur(8px)',
+    border: '1px solid rgba(59, 130, 255, 0.2)',
   },
   header: {
     textAlign: 'center',
@@ -294,7 +309,7 @@ const styles = {
     alignItems: 'center',
     gap: '1.5rem',
     width: '100%',
-    maxWidth: '600px',
+    maxWidth: '500px',
   },
   cardActions: {
     display: 'flex',
@@ -332,6 +347,7 @@ const styles = {
     justifyContent: 'center',
     gap: '1rem',
     width: '100%',
+    marginTop: '3rem',
   },
   navButton: {
     display: 'flex',
@@ -377,17 +393,20 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
+    padding: '0.75rem',
+    marginTop: '0.5rem',
   },
   refreshButton: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: '0.5rem',
-    padding: '0.75rem 1.5rem',
+    padding: '0.5rem 1rem',
     backgroundColor: 'transparent',
     color: 'var(--text-secondary)',
     border: '2px solid var(--border-color)',
     borderRadius: '0.75rem',
-    fontSize: '1rem',
+    fontSize: '0.9rem',
     fontWeight: '500',
     cursor: 'pointer',
     transition: 'all 0.3s ease',

@@ -77,6 +77,7 @@ export default function Navbar({ onLogout }) {
   const [isNavbarHovered, setIsNavbarHovered] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
+  const [isFlashcardsDropdownOpen, setIsFlashcardsDropdownOpen] = useState(false);
 
   const isLight = resolvedTheme === 'light';
   const textColor = isLight ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.8)';
@@ -185,6 +186,114 @@ export default function Navbar({ onLogout }) {
               if (path === '/stats') return 'stats';
               return null;
             };
+            
+            // Special handling for Flashcards dropdown
+            if (item.path === '/flashcards') {
+              return (
+                <div
+                  key={item.path}
+                  style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                  onMouseEnter={() => setIsFlashcardsDropdownOpen(true)}
+                  onMouseLeave={() => setIsFlashcardsDropdownOpen(false)}
+                >
+                  <button
+                    data-tutorial={getTutorialAttr(item.path)}
+                    style={{
+                      ...styles.link,
+                      color: textColor,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '0 0 0.25rem 0',
+                      ...(isActive ? {
+                        color: activeTextColor,
+                        borderBottomColor: activeTextColor,
+                        fontWeight: 700,
+                        textShadow: isLight ? "0 0 10px rgba(0, 120, 200, 0.3)" : "0 0 10px rgba(100, 181, 246, 0.4)"
+                      } : {
+                        color: inactiveTextColor,
+                        borderBottomColor: "transparent",
+                        fontWeight: 600
+                      }),
+                      ...(isFlashcardsDropdownOpen && {
+                        color: activeTextColor,
+                        textShadow: isLight
+                          ? "0 0 20px rgba(0, 120, 200, 0.6), 0 0 30px rgba(0, 120, 200, 0.4)"
+                          : "0 0 20px rgba(100, 181, 246, 0.8), 0 0 30px rgba(100, 181, 246, 0.5)"
+                      })
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.textShadow = isLight
+                        ? "0 0 20px rgba(0, 120, 200, 0.6), 0 0 30px rgba(0, 120, 200, 0.4)"
+                        : "0 0 20px rgba(100, 181, 246, 0.8), 0 0 30px rgba(100, 181, 246, 0.5)";
+                      e.currentTarget.style.color = activeTextColor;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isFlashcardsDropdownOpen) {
+                        e.currentTarget.style.textShadow = isActive
+                          ? (isLight ? "0 0 10px rgba(0, 120, 200, 0.3)" : "0 0 10px rgba(100, 181, 246, 0.4)")
+                          : "none";
+                        e.currentTarget.style.color = isActive ? activeTextColor : inactiveTextColor;
+                      }
+                    }}
+                  >
+                    Flashcards
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isFlashcardsDropdownOpen && (
+                    <div style={{
+                      ...styles.dropdown,
+                      backgroundColor: isLight ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.08)',
+                      border: `1px solid ${borderColor}`,
+                      boxShadow: isLight
+                        ? '0 8px 32px rgba(0, 120, 200, 0.2), 0 0 40px rgba(0, 120, 200, 0.1)'
+                        : '0 8px 32px rgba(59, 130, 255, 0.3), 0 0 40px rgba(59, 130, 255, 0.2)',
+                      backdropFilter: 'blur(12px)',
+                    }}>
+                      <NavLink
+                        to="/flashcards?tab=manage"
+                        style={{
+                          ...styles.dropdownItem,
+                          color: inactiveTextColor,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = activeTextColor;
+                          e.currentTarget.style.textShadow = isLight
+                            ? "0 0 20px rgba(0, 120, 200, 0.6), 0 0 30px rgba(0, 120, 200, 0.4)"
+                            : "0 0 20px rgba(100, 181, 246, 0.8), 0 0 30px rgba(100, 181, 246, 0.5)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = inactiveTextColor;
+                          e.currentTarget.style.textShadow = "none";
+                        }}
+                      >
+                        Manage Flashcards
+                      </NavLink>
+                      <NavLink
+                        to="/flashcards?tab=study"
+                        style={{
+                          ...styles.dropdownItem,
+                          color: inactiveTextColor,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = activeTextColor;
+                          e.currentTarget.style.textShadow = isLight
+                            ? "0 0 20px rgba(0, 120, 200, 0.6), 0 0 30px rgba(0, 120, 200, 0.4)"
+                            : "0 0 20px rgba(100, 181, 246, 0.8), 0 0 30px rgba(100, 181, 246, 0.5)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = inactiveTextColor;
+                          e.currentTarget.style.textShadow = "none";
+                        }}
+                      >
+                        Study Mode
+                      </NavLink>
+                    </div>
+                  )}
+                </div>
+              );
+            }
             
             return (
               <NavLink
@@ -635,5 +744,29 @@ const styles = {
     pointerEvents: "auto",
     userSelect: "none",
     outline: "none",
+  },
+  dropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: '-50%',
+    width: '200px',
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
+    zIndex: 10,
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    backdropFilter: 'blur(12px)',
+    background: 'rgba(255, 255, 255, 0.08)',
+  },
+  dropdownItem: {
+    padding: '0.75rem 1.5rem',
+    fontSize: '0.95rem',
+    fontWeight: 600,
+    color: 'rgba(255, 255, 255, 0.6)',
+    textDecoration: 'none',
+    display: 'block',
+    transition: 'color 0.2s ease, text-shadow 0.3s ease',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
+    cursor: 'pointer',
   },
 };

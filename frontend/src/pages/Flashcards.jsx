@@ -37,7 +37,11 @@ function Flashcards({ userProfile }) {
       <div style={styles.contentWrapper}>
         <div style={styles.header}>
           <h1 style={styles.title}>Your Flashcards</h1>
-          <p style={styles.subtitle}>Create and manage your personal flashcard collection</p>
+          <p style={styles.subtitle}>
+            {activeTab === 'manage' 
+              ? 'Create and manage your personal flashcard collection'
+              : 'Test your knowledge by studying your flashcards in interactive mode'}
+          </p>
         </div>
 
         <div style={styles.contentContainer}>
@@ -161,7 +165,7 @@ const styles = {
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
     border: '1px solid var(--border-color)',
     width: '100%',
-    maxWidth: '1200px',
+    maxWidth: '1800px',
     margin: '0 auto',
     minHeight: '75vh',
     display: 'flex',
