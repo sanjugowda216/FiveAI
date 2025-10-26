@@ -179,6 +179,7 @@ export default function Navbar({ onLogout }) {
               if (path === '/dashboard') return 'home';
               if (path === '/courses') return 'courses';
               if (path === '/practice') return 'practice';
+              if (path === '/flashcards') return 'flashcards';
               if (path === '/community') return 'community';
               if (path === '/calendar') return 'calendar';
               if (path === '/stats') return 'stats';
