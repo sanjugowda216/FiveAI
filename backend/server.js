@@ -6,6 +6,7 @@ import frqRoutes from "./routes/frqRoutes.js";
 import communityRoutes from "./routes/communityRoutes.js";
 import studyPlanRoutes from "./routes/studyPlanRoutes.js";
 import practiceTestRoutes from "./routes/practiceTestRoutes.js";
+import flashcardRoutes from "./routes/flashcardRoutes.js";
 import { initializeCedParsing } from "./services/cedParser.js";
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/frq", frqRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/study-plan", studyPlanRoutes);
 app.use("/api/practice-test", practiceTestRoutes);
+app.use("/api/flashcards", flashcardRoutes);
 
 // Initialize CED parsing on startup
 async function startServer() {
