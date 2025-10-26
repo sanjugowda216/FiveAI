@@ -237,7 +237,7 @@ export default function StudyCalendar() {
             style={styles.secondaryButton}
             onClick={generateStudyPlan}
           >
-            🤖 Generate AI Study Plan
+            Generate AI Study Plan
           </button>
         </div>
       </div>

@@ -304,7 +304,7 @@ export default function Community() {
                     style={styles.answerToggle}
                   >
                     <div style={styles.answerHeader}>
-                      <span style={styles.aiLabel}>🤖 AI Answer</span>
+                      <span style={styles.aiLabel}>AI Answer</span>
                       <span style={styles.toggleIcon}>
                         {expandedAnswers.has(q.id) ? '▼' : '▶'}
                       </span>
@@ -563,7 +563,7 @@ const styles = {
     color: "var(--text-primary)",
     lineHeight: 1.6,
     whiteSpace: "pre-wrap",
-    padding: "0 1.5rem 1.5rem 1.5rem",
+    padding: "1.5rem 1.5rem 1.5rem 1.5rem",
     borderTop: "1px solid var(--border-color)",
     backgroundColor: "rgba(0, 120, 200, 0.02)",
   },
