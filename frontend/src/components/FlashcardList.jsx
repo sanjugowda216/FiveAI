@@ -18,8 +18,8 @@ function FlashcardList({ refreshKey, userId, onFoldersChange }) {
       const allCards = await listFlashcards(userId);
       setCards(allCards);
       
-      // Extract unique folders from cards
-      const uniqueFolders = [...new Set(allCards.map(card => card.folder).filter(Boolean))];
+      // Extract unique folders from cards - this is the source of truth
+      const uniqueFolders = [...new Set(allCards.map(card => card.folder).filter(Boolean))].sort();
       setFolders(uniqueFolders);
       onFoldersChange?.(uniqueFolders);
     } catch(e){ 
@@ -48,7 +48,12 @@ function FlashcardList({ refreshKey, userId, onFoldersChange }) {
 
   async function createFolder() {
     if (!newFolderName.trim()) return;
-    setFolders([...folders, newFolderName.trim()]);
+    // Folders are automatically created when flashcards are added to them
+    // This just adds the folder name to the local list for display purposes
+    const trimmedName = newFolderName.trim();
+    if (!folders.includes(trimmedName)) {
+      setFolders([...folders, trimmedName]);
+    }
     setNewFolderName('');
     setShowFolderForm(false);
   }
