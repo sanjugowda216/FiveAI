@@ -3,6 +3,49 @@ import { apCourses } from "../data/apCourses";
 
 const featuredCourses = apCourses.slice(0, 4);
 
+const studyTips = [
+  {
+    title: "Active Recall",
+    description: "Test yourself regularly instead of just re-reading. This boosts retention by 50% and strengthens neural pathways.",
+    tips: ["Use flashcards", "Practice tests", "Quiz yourself daily"]
+  },
+  {
+    title: "Spaced Repetition",
+    description: "Review material at strategic intervals to lock information into long-term memory more effectively.",
+    tips: ["Day 1 review", "Week 1 review", "Month 1 review"]
+  },
+  {
+    title: "Practice FRQs",
+    description: "Free response questions make up 50% of your score. Master the skill of writing clear, organized responses.",
+    tips: ["Practice writing", "Time yourself", "Get feedback"]
+  },
+  {
+    title: "Mix Topics",
+    description: "Alternate between different subjects and question types to prevent boredom and build stronger neural connections.",
+    tips: ["Switch subjects", "Vary difficulty", "Random order"]
+  },
+  {
+    title: "Stay Consistent",
+    description: "Daily 15-30 minute study sessions beat cramming. Consistency builds knowledge gradually and reduces anxiety.",
+    tips: ["Set a schedule", "Study daily", "Track progress"]
+  },
+  {
+    title: "Teach Others",
+    description: "Explaining concepts to someone else reveals gaps in your understanding and cements your own learning.",
+    tips: ["Study groups", "Tutoring", "Explain aloud"]
+  },
+  {
+    title: "Quality Sleep",
+    description: "Sleep consolidates memory and enhances cognitive function. Get 7-9 hours nightly for peak exam performance.",
+    tips: ["Consistent schedule", "Dark room", "No screens"]
+  },
+  {
+    title: "Active Reading",
+    description: "Don't just passively read. Highlight, annotate, and summarize to engage with material actively.",
+    tips: ["Take notes", "Summarize", "Create outlines"]
+  }
+];
+
 export default function Dashboard({
   userEmail,
   preferredName,
@@ -21,6 +64,7 @@ export default function Dashboard({
     longestStreak: 0,
     lastStudyDate: null,
   });
+  const [activeTipIndex, setActiveTipIndex] = useState(0);
 
   // Load streak data from localStorage
   useEffect(() => {
@@ -31,6 +75,9 @@ export default function Dashboard({
       lastStudyDate: savedStreakData.lastStudyDate || null,
     });
   }, []);
+
+  const currentTip = studyTips[activeTipIndex];
+  const nextTip = studyTips[(activeTipIndex + 1) % studyTips.length];
 
   return (
     <section style={styles.wrapper}>
@@ -64,44 +111,6 @@ export default function Dashboard({
           </div>
         </div>
       </header>
-
-      {/* Browse Courses Button */}
-      <div style={styles.browseSection}>
-        <button style={styles.secondaryCta} onClick={onBrowseCourses}>
-          Browse All AP Courses
-        </button>
-      </div>
-
-      <div style={styles.callout}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = "#0078C8";
-          e.currentTarget.style.boxShadow =
-            "0 10px 28px var(--shadow-color), 0 0 24px rgba(0, 120, 200, 0.4)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = "var(--border-color)";
-          e.currentTarget.style.boxShadow = "0 10px 28px var(--shadow-color)";
-        }}
-      >
-        <div>
-          <p style={styles.calloutTitle}>Jump back in</p>
-          <p style={styles.calloutBody}>
-            {hasCourseSelected
-              ? `Start a new practice session for ${selectedCourseName} and track your improvements.`
-              : "Select a course to unlock adaptive practice questions and detailed feedback."}
-          </p>
-        </div>
-        <button
-          style={{
-            ...styles.primaryCta,
-            ...(hasCourseSelected ? {} : styles.disabledCta),
-          }}
-          onClick={onStartPractice}
-          disabled={!hasCourseSelected}
-        >
-          Start Practice
-        </button>
-      </div>
 
       <section style={styles.pinnedSection}
         onMouseEnter={(e) => {
@@ -172,29 +181,68 @@ export default function Dashboard({
         )}
       </section>
 
-      <div
-        style={styles.tips}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = "#0078C8";
-          e.currentTarget.style.boxShadow =
-            "0 10px 28px var(--shadow-color), 0 0 24px rgba(0, 120, 200, 0.4)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = "var(--border-color)";
-          e.currentTarget.style.boxShadow = "0 10px 24px var(--shadow-color)";
-        }}
-      >
-        <p style={styles.tipTitle}>Roadmap</p>
-        <ul style={styles.tipList}>
-          <li>Track your progress in "My Stats" to see your improvements over time.</li>
-          <li>
-            Practice with FRQs and get detailed feedback to prepare for exam day.
-          </li>
-          <li>
-            HighFive automatically saves your progress across all AP courses.
-          </li>
-        </ul>
-      </div>
+      {/* Study Tips Carousel */}
+      <section style={styles.tipsSection}>
+        <div style={styles.tipsContainer}>
+          {/* Main Card */}
+          <div style={{
+            ...styles.tipsMainCard,
+            opacity: 1,
+            transform: "scale(1)",
+            zIndex: 10
+          }}>
+            <div style={styles.tipNumberBadge}>{activeTipIndex + 1}/{studyTips.length}</div>
+            <h3 style={styles.tipMainTitle}>{currentTip.title}</h3>
+            <p style={styles.tipMainDescription}>{currentTip.description}</p>
+            <div style={styles.tipsList}>
+              {currentTip.tips.map((tip, idx) => (
+                <div key={idx} style={styles.tipItem}>
+                  <span style={styles.tipBullet}>→</span>
+                  <span style={styles.tipItemText}>{tip}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Navigation */}
+        <div style={styles.tipsNav}>
+          <button
+            onClick={() => setActiveTipIndex((prev) => (prev - 1 + studyTips.length) % studyTips.length)}
+            style={styles.navButton}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "rgba(0, 120, 200, 0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "rgba(0, 120, 200, 0.1)";
+            }}
+          >
+            ← Previous
+          </button>
+
+          <div style={styles.progressBar}>
+            <div style={{
+              ...styles.progressFill,
+              width: `${((activeTipIndex + 1) / studyTips.length) * 100}%`
+            }} />
+          </div>
+
+          <button
+            onClick={() => setActiveTipIndex((prev) => (prev + 1) % studyTips.length)}
+            style={styles.navButton}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "rgba(0, 120, 200, 0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "rgba(0, 120, 200, 0.1)";
+            }}
+          >
+            Next →
+          </button>
+        </div>
+      </section>
+
     </section>
   );
 }
@@ -216,7 +264,6 @@ const styles = {
     transition: "all 0.3s ease",
     backdropFilter: "blur(10px)",
   },
-  // Streak Overview Styles
   streakOverview: {
     display: "flex",
     alignItems: "center",
@@ -276,11 +323,6 @@ const styles = {
     borderBottom: "1px solid var(--border-color)",
     marginBottom: "1rem",
   },
-  browseSection: {
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "1rem",
-  },
   heading: {
     fontSize: "2.5rem",
     fontWeight: 800,
@@ -298,39 +340,6 @@ const styles = {
     color: "var(--text-secondary)",
     marginTop: "0.75rem",
     marginBottom: 0,
-    transition: "color 0.3s ease",
-  },
-  callout: {
-    backgroundColor: "var(--bg-secondary)",
-    borderRadius: "16px",
-    padding: "2.5rem 3rem",
-    boxShadow: "0 12px 32px var(--shadow-color), 0 0 0 1px var(--border-color)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: "2rem",
-    border: "none",
-    transition: "all 0.3s ease",
-    backdropFilter: "blur(10px)",
-    background: "linear-gradient(135deg, var(--bg-secondary) 0%, rgba(0, 120, 200, 0.03) 100%)",
-  },
-  calloutTitle: {
-    fontSize: "0.95rem",
-    fontWeight: 700,
-    color: "var(--text-secondary)",
-    margin: 0,
-    textTransform: "uppercase",
-    letterSpacing: "0.08em",
-    transition: "color 0.3s ease",
-  },
-  calloutBody: {
-    fontSize: "1.05rem",
-    color: "var(--text-primary)",
-    marginTop: "0.5rem",
-    marginBottom: 0,
-    maxWidth: "560px",
-    lineHeight: 1.6,
     transition: "color 0.3s ease",
   },
   pinnedSection: {
@@ -410,64 +419,6 @@ const styles = {
     fontSize: "0.95rem",
     transition: "color 0.3s ease",
   },
-  primaryCta: {
-    padding: "0.9rem 1.9rem",
-    backgroundColor: "#0078C8",
-    color: "#FFFFFF",
-    border: "none",
-    borderRadius: "0.85rem",
-    fontWeight: 700,
-    fontSize: "1rem",
-    cursor: "pointer",
-    transition: "background 0.2s ease",
-  },
-  secondaryCta: {
-    padding: "1.25rem 2.5rem",
-    backgroundColor: "var(--bg-primary)",
-    color: "var(--text-primary)",
-    border: "2px solid var(--border-color)",
-    borderRadius: "12px",
-    fontWeight: 600,
-    fontSize: "1.1rem",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-    boxShadow: "0 6px 20px var(--shadow-color)",
-    backdropFilter: "blur(10px)",
-    background: "linear-gradient(135deg, var(--bg-primary) 0%, rgba(0, 120, 200, 0.05) 100%)",
-  },
-  disabledCta: {
-    backgroundColor: "var(--text-secondary)",
-    cursor: "not-allowed",
-    opacity: 0.7,
-  },
-  featureTitle: {
-    fontSize: "1rem",
-    fontWeight: 700,
-    color: "var(--text-secondary)",
-    marginBottom: "1rem",
-    textTransform: "uppercase",
-    letterSpacing: "0.1em",
-    transition: "color 0.3s ease",
-  },
-  featureGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "1.25rem",
-  },
-  featureCard: {
-    padding: "1.5rem",
-    borderRadius: "1rem",
-    border: "2px solid transparent",
-    boxShadow: "0 10px 24px var(--shadow-color)",
-    backgroundColor: "var(--bg-secondary)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: "0.75rem",
-    cursor: "pointer",
-    transition: "transform 0.18s ease, box-shadow 0.18s ease, background-color 0.3s ease, border-color 0.3s ease",
-    color: "var(--text-primary)",
-  },
   cardLabel: {
     margin: 0,
     fontSize: "1.05rem",
@@ -486,35 +437,133 @@ const styles = {
     textTransform: "capitalize",
     transition: "background-color 0.3s ease",
   },
-  tips: {
+  tipsSection: {
     backgroundColor: "var(--bg-secondary)",
-    borderRadius: "16px",
-    padding: "2.5rem 3rem",
-    boxShadow: "0 12px 32px var(--shadow-color), 0 0 0 1px var(--border-color)",
-    border: "none",
+    borderRadius: "1.5rem",
+    padding: "3rem 2.5rem",
+    boxShadow: "0 10px 24px var(--shadow-color)",
+    border: "2px solid var(--border-color)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "2.5rem",
     transition: "all 0.3s ease",
-    backdropFilter: "blur(10px)",
-    background: "linear-gradient(135deg, var(--bg-secondary) 0%, rgba(0, 120, 200, 0.03) 100%)",
+    background: "linear-gradient(135deg, rgba(0, 120, 200, 0.04) 0%, var(--bg-secondary) 100%)",
+    maxWidth: "1000px",  },
+  tipsContainer: {
+    position: "relative",
+    height: "380px",
+    perspective: "1000px",
+    marginLeft: "-20px",
   },
-  tipTitle: {
-    fontSize: "1.3rem",
+  tipsMainCard: {
+    position: "absolute",
+    width: "100%",
+    maxWidth: "850px",
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "16px",
+    padding: "1.5rem",
+    boxShadow: "0 20px 40px rgba(0, 120, 200, 0.15), 0 0 0 1px var(--border-color)",
+    transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    border: "2px solid var(--border-color)",
+    maxWidth: "850px",
+    marginRight: "20px",
+  },
+  tipsPreviewCard: {
+    position: "absolute",
+    width: "100%",
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "16px",
+    padding: "1.5rem",
+    boxShadow: "0 12px 24px rgba(0, 120, 200, 0.08)",
+    border: "1px solid var(--border-color)",
+    transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    pointerEvents: "none",
+  },
+  tipNumberBadge: {
+    display: "inline-block",
+    backgroundColor: "rgba(0, 120, 200, 0.15)",
+    color: "#0078C8",
+    padding: "0.5rem 1rem",
+    borderRadius: "20px",
+    fontSize: "0.85rem",
+    fontWeight: 700,
+    marginBottom: "1rem",
+    letterSpacing: "0.5px",
+  },
+  tipMainTitle: {
+    margin: "0 0 1rem 0",
+    fontSize: "1.8rem",
     fontWeight: 800,
     color: "var(--text-primary)",
-    margin: 0,
-    marginBottom: "1.5rem",
-    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    background: "linear-gradient(135deg, #0078C8 0%, var(--text-primary) 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",
-    textTransform: "uppercase",
-    letterSpacing: "0.1em",
-    transition: "color 0.3s ease",
   },
-  tipList: {
-    margin: 0,
-    paddingLeft: "1.5rem",
+  tipMainDescription: {
+    margin: "0 0 1.5rem 0",
+    fontSize: "1.05rem",
     color: "var(--text-secondary)",
-    lineHeight: 1.8,
-    transition: "color 0.3s ease",
+    lineHeight: 1.7,
+    fontWeight: 500,
+  },
+  tipsList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.75rem",
+  },
+  tipItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
+    fontSize: "0.95rem",
+    color: "var(--text-secondary)",
+  },
+  tipBullet: {
+    color: "#0078C8",
+    fontWeight: 700,
+    fontSize: "1.1rem",
+  },
+  tipItemText: {
+    fontWeight: 500,
+  },
+  tipPreviewTitle: {
+    margin: 0,
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    color: "var(--text-primary)",
+    opacity: 0.6,
+  },
+  tipsNav: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "2rem",
+  },
+  navButton: {
+    padding: "0.75rem 1.5rem",
+    backgroundColor: "rgba(0, 120, 200, 0.1)",
+    color: "#0078C8",
+    border: "1px solid #0078C8",
+    borderRadius: "8px",
+    fontWeight: 600,
+    fontSize: "0.95rem",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+  },
+  progressBar: {
+    width: "100%",
+    maxWidth: "300px",
+    height: "6px",
+    backgroundColor: "rgba(0, 120, 200, 0.15)",
+    borderRadius: "10px",
+    overflow: "hidden",
+    border: "1px solid rgba(0, 120, 200, 0.2)",
+  },
+  progressFill: {
+    height: "100%",
+    backgroundColor: "#0078C8",
+    borderRadius: "10px",
+    transition: "width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
   },
 };
