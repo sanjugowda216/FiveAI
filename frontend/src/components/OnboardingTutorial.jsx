@@ -64,13 +64,21 @@ const OnboardingTutorial = ({ onComplete }) => {
   ];
 
   useEffect(() => {
-    // Check if user has already seen the tutorial
+    // Check if user is a guest
+    const isGuest = localStorage.getItem('isGuest') === 'true';
+    
+    // Always show tutorial for guests
+    if (isGuest) {
+      setTimeout(() => setIsVisible(true), 500);
+      return;
+    }
+    
+    // For logged-in users, check if they've seen the tutorial
     const hasSeenTutorial = localStorage.getItem('hasSeenTutorial');
     // TEMPORARY: Uncomment to test tutorial (forces it to show)
     const forceShowTutorial = localStorage.getItem('forceShowTutorial');
     
     if (!hasSeenTutorial || forceShowTutorial === 'true') {
-      // Small delay to let the page render
       setTimeout(() => setIsVisible(true), 500);
     }
   }, []);
@@ -88,7 +96,11 @@ const OnboardingTutorial = ({ onComplete }) => {
   };
 
   const completeTutorial = () => {
-    localStorage.setItem('hasSeenTutorial', 'true');
+    // Don't save completion for guests - always show tutorial
+    const isGuest = localStorage.getItem('isGuest') === 'true';
+    if (!isGuest) {
+      localStorage.setItem('hasSeenTutorial', 'true');
+    }
     setIsVisible(false);
     onComplete?.();
   };
@@ -180,19 +192,19 @@ const OnboardingTutorial = ({ onComplete }) => {
       >
         <div
           style={{
-            backgroundColor: 'var(--bg-primary)',
+            backgroundColor: '#fff',
             borderRadius: '12px',
             padding: '1.5rem',
             maxWidth: '320px',
             boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
-            border: '1px solid var(--border-color)'
+            border: '1px solid rgba(0, 0, 0, 0.1)'
           }}
         >
           <h3 style={{
             margin: '0 0 0.5rem 0',
             fontSize: '1.25rem',
             fontWeight: 600,
-            color: 'var(--text-primary)'
+            color: '#022037'
           }}>
             {currentStepData.title}
           </h3>
@@ -200,7 +212,7 @@ const OnboardingTutorial = ({ onComplete }) => {
           <p style={{
             margin: '0 0 1.5rem 0',
             fontSize: '0.95rem',
-            color: 'var(--text-secondary)',
+            color: '#234456',
             lineHeight: 1.6
           }}>
             {currentStepData.message}
@@ -213,7 +225,8 @@ const OnboardingTutorial = ({ onComplete }) => {
           }}>
             <span style={{
               fontSize: '0.875rem',
-              color: 'var(--text-secondary)'
+              color: '#234456',
+              fontWeight: 600
             }}>
               Step {currentStep + 1} of {steps.length}
             </span>
@@ -223,17 +236,17 @@ const OnboardingTutorial = ({ onComplete }) => {
                 onClick={handleSkip}
                 style={{
                   background: 'transparent',
-                  color: 'var(--text-secondary)',
-                  border: '1px solid var(--border-color)',
+                  color: '#234456',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
                   borderRadius: '6px',
                   padding: '0.5rem 1rem',
                   fontSize: '0.875rem',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.2s'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = 'var(--bg-secondary)';
+                  e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
                 }}
                 onMouseLeave={(e) => {
                   e.target.style.backgroundColor = 'transparent';
@@ -245,13 +258,13 @@ const OnboardingTutorial = ({ onComplete }) => {
               <button
                 onClick={handleNext}
                 style={{
-                  background: 'var(--accent-primary)',
+                  background: '#0078C8',
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
                   padding: '0.5rem 1.5rem',
                   fontSize: '0.875rem',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.2s'
                 }}
