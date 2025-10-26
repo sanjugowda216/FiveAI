@@ -4,26 +4,37 @@ import MultiSelectDropdown from '../components/MultiSelectDropdown';
 import { generateAIStudyPlan, generateAdaptiveStudyPlan } from '../utils/api.js';
 
 export default function StudyCalendar() {
+  // State management
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [studySessions, setStudySessions] = useState({});
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [showAddSession, setShowAddSession] = useState(false);
+  const [showSchedulePopup, setShowSchedulePopup] = useState(false);
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+  const [studyPlanData, setStudyPlanData] = useState(null);
+  const [performanceData, setPerformanceData] = useState({});
+
+  // Form states
   const [newSession, setNewSession] = useState({
     courseId: '',
     duration: 60,
     type: 'mcq',
     notes: ''
   });
+  const [scheduleForm, setScheduleForm] = useState({
+    courseId: '',
+    weeks: 4,
+    hoursPerDay: 2
+  });
+
+  // Streak data
   const [streakData, setStreakData] = useState({
     currentStreak: 0,
     longestStreak: 0,
     lastStudyDate: null,
     studyMinutes: {}
   });
-  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
-  const [studyPlanData, setStudyPlanData] = useState(null);
-  const [performanceData, setPerformanceData] = useState({});
 
   // Color palette for AP courses
   const courseColors = {
@@ -92,66 +103,51 @@ export default function StudyCalendar() {
   // Calculate streak based on study minutes
   const calculateStreak = (studyMinutes) => {
     const today = new Date();
-    const dates = Object.keys(studyMinutes).sort((a, b) => new Date(b) - new Date(a));
+    let streak = 0;
+    let currentDate = new Date(today);
     
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let tempStreak = 0;
-    let lastStudyDate = null;
-
-    // Calculate current streak
-    for (let i = 0; i < dates.length; i++) {
-      const date = new Date(dates[i]);
-      const daysDiff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+    while (true) {
+      const dateKey = currentDate.toISOString().split('T')[0];
+      const minutes = studyMinutes[dateKey] || 0;
       
-      if (i === 0) {
-        if (daysDiff <= 1) {
-          currentStreak = 1;
-          tempStreak = 1;
-          lastStudyDate = date;
-        }
+      if (minutes >= 15) {
+        streak++;
+        currentDate.setDate(currentDate.getDate() - 1);
       } else {
-        const prevDate = new Date(dates[i - 1]);
-        const daysBetween = Math.floor((prevDate - date) / (1000 * 60 * 60 * 24));
-        
-        if (daysBetween === 1) {
-          tempStreak++;
-          if (i === 0 || daysDiff <= 1) {
-            currentStreak = tempStreak;
-          }
-        } else {
-          tempStreak = 1;
-        }
+        break;
       }
-      
-      longestStreak = Math.max(longestStreak, tempStreak);
     }
-
-    return { currentStreak, longestStreak, lastStudyDate };
+    
+    return streak;
   };
 
-  // Update streak when study sessions change
+  // Update streak data when study sessions change
   useEffect(() => {
     const studyMinutes = {};
-    Object.keys(studySessions).forEach(dateStr => {
-      const sessions = studySessions[dateStr];
+    Object.keys(studySessions).forEach(date => {
+      const sessions = studySessions[date];
       const totalMinutes = sessions.reduce((sum, session) => sum + (session.duration || 0), 0);
-      if (totalMinutes >= 15) { // Only count days with 15+ minutes
-        studyMinutes[dateStr] = totalMinutes;
+      if (totalMinutes > 0) {
+        studyMinutes[date] = totalMinutes;
       }
     });
 
-    const { currentStreak, longestStreak, lastStudyDate } = calculateStreak(studyMinutes);
+    const currentStreak = calculateStreak(studyMinutes);
+    const longestStreak = Math.max(currentStreak, streakData.longestStreak);
     
-    const newStreakData = {
+    setStreakData(prev => ({
+      ...prev,
       currentStreak,
       longestStreak,
-      lastStudyDate,
       studyMinutes
-    };
+    }));
 
-    setStreakData(newStreakData);
-    localStorage.setItem('streakData', JSON.stringify(newStreakData));
+    // Save to localStorage
+    localStorage.setItem('streakData', JSON.stringify({
+      currentStreak,
+      longestStreak,
+      studyMinutes
+    }));
   }, [studySessions]);
 
   // Save study sessions to localStorage
@@ -162,10 +158,6 @@ export default function StudyCalendar() {
 
   // Generate AI study plan using backend service
   const generateStudyPlan = async () => {
-    console.log('Selected courses:', selectedCourses);
-    console.log('Selected courses type:', typeof selectedCourses);
-    console.log('Selected courses length:', selectedCourses ? selectedCourses.length : 'undefined');
-    
     if (!selectedCourses || selectedCourses.length === 0) {
       alert('Please select at least one AP course to generate a study plan');
       return;
@@ -173,49 +165,31 @@ export default function StudyCalendar() {
 
     setIsGeneratingPlan(true);
     
-    // Declare variables outside try block for error handling
-    let examDatesForPlan = {};
-    
-    // Test backend connectivity first
     try {
-      const testResponse = await fetch('http://localhost:5001/api/study-plan/health');
-      const testData = await testResponse.json();
-      console.log('Backend connectivity test:', testData);
-    } catch (testError) {
-      console.error('Backend connectivity test failed:', testError);
-      alert('Cannot connect to backend server. Please make sure the backend is running on port 5001.');
-      setIsGeneratingPlan(false);
-      return;
-    }
-    
-    try {
-      // Prepare exam dates for selected courses
-      if (selectedCourses && selectedCourses.length > 0) {
-        selectedCourses.forEach(courseId => {
-          if (apExamDates[courseId]) {
-            examDatesForPlan[courseId] = apExamDates[courseId].toISOString().split('T')[0];
-          }
-        });
-      } else {
-        throw new Error('No courses selected');
+      // Test backend connectivity first
+      try {
+        const testResponse = await fetch('http://localhost:5001/api/study-plan/health');
+        const testData = await testResponse.json();
+        console.log('Backend connectivity test:', testData);
+      } catch (testError) {
+        console.error('Backend connectivity test failed:', testError);
+        alert('Cannot connect to backend server. Please make sure the backend is running on port 5001.');
+        setIsGeneratingPlan(false);
+        return;
       }
+      
+      // Prepare exam dates for selected courses
+      const examDatesForPlan = {};
+      selectedCourses.forEach(courseId => {
+        if (apExamDates[courseId]) {
+          examDatesForPlan[courseId] = apExamDates[courseId].toISOString().split('T')[0];
+        }
+      });
 
       // Get performance data from localStorage
       const savedPerformanceData = JSON.parse(localStorage.getItem('performanceData') || '{}');
       
       // Generate study plan using backend AI service
-      console.log('Calling generateAIStudyPlan with:', {
-        selectedCourses,
-        examDates: examDatesForPlan,
-        currentDate: new Date().toISOString().split('T')[0],
-        studyPreferences: {
-          preferredStudyTime: 'evening',
-          sessionLength: 60,
-          difficultyProgression: true
-        },
-        performanceData: savedPerformanceData
-      });
-      
       const response = await generateAIStudyPlan({
         selectedCourses,
         examDates: examDatesForPlan,
@@ -228,14 +202,7 @@ export default function StudyCalendar() {
         performanceData: savedPerformanceData
       });
       
-      console.log('AI Study Plan Response:', response);
-
       if (response.success && response.studyPlan) {
-        // Validate response structure
-        if (!response.studyPlan.studyPlan || !response.studyPlan.studyPlan.dailySchedule) {
-          console.error('Invalid study plan response: missing dailySchedule');
-          throw new Error('Invalid study plan response: missing daily schedule data');
-        }
         setStudyPlanData(response.studyPlan);
         
         // Convert AI study plan to calendar sessions
@@ -258,8 +225,6 @@ export default function StudyCalendar() {
               }));
             }
           });
-        } else {
-          console.warn('No dailySchedule found in study plan response');
         }
 
         // Merge with existing sessions
@@ -272,37 +237,13 @@ export default function StudyCalendar() {
         });
 
         saveStudySessions(updatedSessions);
-        
-        // Show success message with plan details and save option
-        const shouldSave = confirm(`AI study plan generated successfully!\n\nPlan Overview: ${response.studyPlan.overview}\nTotal Sessions: ${response.studyPlan.metadata?.totalSessions || 'N/A'}\nEstimated Study Hours: ${response.studyPlan.metadata?.estimatedStudyHours || 'N/A'}\n\nWould you like to save this plan for the entire year?`);
-        
-        if (shouldSave) {
-          // Save the study plan to localStorage for the year
-          const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
-          const planId = `plan_${Date.now()}`;
-          savedPlans[planId] = {
-            id: planId,
-            name: `Study Plan - ${selectedCourses.map(c => apCourses.find(course => course.id === c)?.name || c).join(', ')}`,
-            courses: selectedCourses,
-            studyPlan: response.studyPlan,
-            createdAt: new Date().toISOString(),
-            examDates: examDatesForPlan
-          };
-          localStorage.setItem('savedStudyPlans', JSON.stringify(savedPlans));
-          alert('Study plan saved successfully! You can access it anytime from your saved plans.');
-        }
+        alert(`AI study plan generated for ${selectedCourses.length} course(s)!`);
       } else {
-        throw new Error('Failed to generate study plan');
+        throw new Error(response.message || 'Failed to generate study plan');
       }
     } catch (error) {
-      console.error('Error generating AI study plan:', error);
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        selectedCourses,
-        examDatesForPlan
-      });
-      alert(`Failed to generate AI study plan: ${error.message}. Please check the console for details.`);
+      console.error('Error generating study plan:', error);
+      alert(`Failed to generate study plan: ${error.message}. Please check the console for details.`);
     } finally {
       setIsGeneratingPlan(false);
     }
@@ -310,9 +251,6 @@ export default function StudyCalendar() {
 
   // Generate adaptive study plan based on performance
   const generateAdaptivePlan = async () => {
-    console.log('Selected courses for adaptive plan:', selectedCourses);
-    console.log('Selected courses length:', selectedCourses.length);
-    
     if (selectedCourses.length === 0) {
       alert('Please select at least one AP course to generate an adaptive study plan');
       return;
@@ -320,20 +258,14 @@ export default function StudyCalendar() {
 
     setIsGeneratingPlan(true);
     
-    // Declare variables outside try block for error handling
-    let examDatesForPlan = {};
-    
     try {
       // Prepare exam dates for selected courses
-      if (selectedCourses && selectedCourses.length > 0) {
-        selectedCourses.forEach(courseId => {
-          if (apExamDates[courseId]) {
-            examDatesForPlan[courseId] = apExamDates[courseId].toISOString().split('T')[0];
-          }
-        });
-      } else {
-        throw new Error('No courses selected');
-      }
+      const examDatesForPlan = {};
+      selectedCourses.forEach(courseId => {
+        if (apExamDates[courseId]) {
+          examDatesForPlan[courseId] = apExamDates[courseId].toISOString().split('T')[0];
+        }
+      });
 
       // Get performance data from localStorage
       const savedPerformanceData = JSON.parse(localStorage.getItem('performanceData') || '{}');
@@ -359,11 +291,6 @@ export default function StudyCalendar() {
       });
 
       if (response.success && response.studyPlan) {
-        // Validate response structure
-        if (!response.studyPlan.studyPlan || !response.studyPlan.studyPlan.dailySchedule) {
-          console.error('Invalid adaptive study plan response: missing dailySchedule');
-          throw new Error('Invalid adaptive study plan response: missing daily schedule data');
-        }
         setStudyPlanData(response.studyPlan);
         
         // Convert AI study plan to calendar sessions
@@ -387,8 +314,6 @@ export default function StudyCalendar() {
               }));
             }
           });
-        } else {
-          console.warn('No dailySchedule found in adaptive study plan response');
         }
 
         // Merge with existing sessions
@@ -401,37 +326,12 @@ export default function StudyCalendar() {
         });
 
         saveStudySessions(updatedSessions);
-        
-        // Show success message with plan details and save option
-        const shouldSave = confirm(`Adaptive AI study plan generated successfully!\n\nThis plan is personalized based on your performance data.\n\nPlan Overview: ${response.studyPlan.overview}\nTotal Sessions: ${response.studyPlan.metadata?.totalSessions || 'N/A'}\nEstimated Study Hours: ${response.studyPlan.metadata?.estimatedStudyHours || 'N/A'}\n\nWould you like to save this plan for the entire year?`);
-        
-        if (shouldSave) {
-          // Save the study plan to localStorage for the year
-          const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
-          const planId = `adaptive_plan_${Date.now()}`;
-          savedPlans[planId] = {
-            id: planId,
-            name: `Adaptive Study Plan - ${selectedCourses.map(c => apCourses.find(course => course.id === c)?.name || c).join(', ')}`,
-            courses: selectedCourses,
-            studyPlan: response.studyPlan,
-            createdAt: new Date().toISOString(),
-            examDates: examDatesForPlan,
-            isAdaptive: true
-          };
-          localStorage.setItem('savedStudyPlans', JSON.stringify(savedPlans));
-          alert('Adaptive study plan saved successfully! You can access it anytime from your saved plans.');
-        }
+        alert(`Adaptive study plan generated for ${selectedCourses.length} course(s)!`);
       } else {
-        throw new Error('Failed to generate adaptive study plan');
+        throw new Error(response.message || 'Failed to generate adaptive study plan');
       }
     } catch (error) {
       console.error('Error generating adaptive study plan:', error);
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        selectedCourses,
-        examDatesForPlan
-      });
       alert(`Failed to generate adaptive study plan: ${error.message}. Please check the console for details.`);
     } finally {
       setIsGeneratingPlan(false);
@@ -467,6 +367,224 @@ export default function StudyCalendar() {
     setNewSession({ courseId: '', duration: 60, type: 'mcq', notes: '' });
   };
 
+  // Generate AI study schedule
+  const generateStudySchedule = async () => {
+    if (!scheduleForm.courseId) {
+      alert('Please select a course');
+      return;
+    }
+
+    const course = apCourses.find(c => c.id === scheduleForm.courseId);
+    if (!course) {
+      alert('Course not found');
+      return;
+    }
+
+    setIsGeneratingPlan(true);
+    
+    try {
+      // Test backend connectivity first
+      try {
+        const testResponse = await fetch('http://localhost:5001/api/study-plan/health');
+        const testData = await testResponse.json();
+        console.log('Backend connectivity test:', testData);
+      } catch (testError) {
+        console.error('Backend connectivity test failed:', testError);
+        alert('Cannot connect to backend server. Please make sure the backend is running on port 5001.');
+        setIsGeneratingPlan(false);
+        return;
+      }
+
+      // Prepare exam dates for the selected course
+      const examDatesForPlan = {};
+      if (apExamDates[scheduleForm.courseId]) {
+        examDatesForPlan[scheduleForm.courseId] = apExamDates[scheduleForm.courseId].toISOString().split('T')[0];
+      }
+
+      // Get performance data from localStorage
+      const savedPerformanceData = JSON.parse(localStorage.getItem('performanceData') || '{}');
+      
+      // Calculate end date based on weeks input
+      const startDate = new Date();
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + (scheduleForm.weeks * 7));
+      
+      // Generate AI study plan using the schedule form inputs
+      const response = await generateAIStudyPlan({
+        selectedCourses: [scheduleForm.courseId],
+        examDates: examDatesForPlan,
+        currentDate: startDate.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
+        studyPreferences: {
+          preferredStudyTime: 'evening',
+          sessionLength: Math.floor((scheduleForm.hoursPerDay * 60) / Math.ceil(scheduleForm.hoursPerDay)),
+          difficultyProgression: true,
+          totalWeeks: scheduleForm.weeks,
+          hoursPerDay: scheduleForm.hoursPerDay,
+          skipWeekends: true,
+          studyDaysPerWeek: 5,
+          includeWeekends: false
+        },
+        performanceData: savedPerformanceData
+      });
+      
+      if (response.success && response.studyPlan) {
+        // Check if the AI returned an empty schedule (fallback case)
+        const dailySchedule = response.studyPlan.studyPlan.dailySchedule;
+        if (!dailySchedule || dailySchedule.length === 0) {
+          console.warn('AI returned empty schedule, creating basic schedule instead');
+          // Create basic schedule directly
+          const startDate = new Date();
+          const updatedSessions = { ...studySessions };
+          
+          // Generate basic sessions for the specified number of weeks
+          for (let week = 0; week < scheduleForm.weeks; week++) {
+            for (let day = 0; day < 7; day++) {
+              const sessionDate = new Date(startDate);
+              sessionDate.setDate(startDate.getDate() + (week * 7) + day);
+              
+              // Skip weekends
+              if (sessionDate.getDay() === 0 || sessionDate.getDay() === 6) {
+                continue;
+              }
+              
+              const dateKey = sessionDate.toISOString().split('T')[0];
+              
+              // Create study sessions based on hours per day
+              const sessionsPerDay = Math.ceil(scheduleForm.hoursPerDay);
+              for (let session = 0; session < sessionsPerDay; session++) {
+                const sessionId = `${Date.now()}-${week}-${day}-${session}`;
+                const sessionType = session % 2 === 0 ? 'mcq' : 'frq';
+                
+                const studySession = {
+                  id: sessionId,
+                  courseId: scheduleForm.courseId,
+                  courseName: course.name,
+                  duration: Math.floor((scheduleForm.hoursPerDay * 60) / sessionsPerDay),
+                  type: sessionType,
+                  notes: `Week ${week + 1}, Day ${day + 1} - ${sessionType.toUpperCase()} practice (AI Fallback)`,
+                  isAIGenerated: false,
+                  isScheduled: true
+                };
+
+                if (!updatedSessions[dateKey]) {
+                  updatedSessions[dateKey] = [];
+                }
+                updatedSessions[dateKey].push(studySession);
+              }
+            }
+          }
+
+          saveStudySessions(updatedSessions);
+          setShowSchedulePopup(false);
+          setScheduleForm({ courseId: '', weeks: 4, hoursPerDay: 2 });
+          alert(`Basic study schedule created for ${course.name} over ${scheduleForm.weeks} weeks! (AI returned empty schedule)`);
+          return;
+        }
+        
+        setStudyPlanData(response.studyPlan);
+        
+        // Convert AI study plan to calendar sessions
+        const sessions = {};
+        if (dailySchedule && Array.isArray(dailySchedule)) {
+          dailySchedule.forEach(day => {
+            const dateKey = day.date;
+            if (day.sessions && Array.isArray(day.sessions)) {
+              sessions[dateKey] = day.sessions.map(session => ({
+                id: `${session.courseId}-${dateKey}-${Math.random().toString(36).substr(2, 9)}`,
+                courseId: session.courseId,
+                courseName: session.courseName,
+                duration: session.duration,
+                type: session.type,
+                notes: session.notes,
+                focus: session.focus,
+                difficulty: session.difficulty,
+                priority: session.priority,
+                isAIGenerated: true,
+                isScheduled: true
+              }));
+            }
+          });
+        }
+
+        // Merge with existing sessions
+        const updatedSessions = { ...studySessions };
+        Object.keys(sessions).forEach(date => {
+          if (!updatedSessions[date]) {
+            updatedSessions[date] = [];
+          }
+          updatedSessions[date] = [...updatedSessions[date], ...sessions[date]];
+        });
+
+        saveStudySessions(updatedSessions);
+        setShowSchedulePopup(false);
+        setScheduleForm({ courseId: '', weeks: 4, hoursPerDay: 2 });
+        alert(`AI study schedule created for ${course.name} over ${scheduleForm.weeks} weeks with ${scheduleForm.hoursPerDay} hours per day!`);
+      } else {
+        throw new Error(response.message || 'Failed to generate study schedule');
+      }
+    } catch (error) {
+      console.error('Error generating study schedule:', error);
+      
+      // Offer fallback to create basic schedule
+      const useFallback = confirm(`AI study plan generation failed: ${error.message}\n\nWould you like to create a basic study schedule instead?`);
+      
+      if (useFallback) {
+        // Create basic study schedule as fallback
+        const course = apCourses.find(c => c.id === scheduleForm.courseId);
+        const startDate = new Date();
+        const updatedSessions = { ...studySessions };
+        
+        // Generate basic sessions for the specified number of weeks
+        for (let week = 0; week < scheduleForm.weeks; week++) {
+          for (let day = 0; day < 7; day++) {
+            const sessionDate = new Date(startDate);
+            sessionDate.setDate(startDate.getDate() + (week * 7) + day);
+            
+            // Skip weekends
+            if (sessionDate.getDay() === 0 || sessionDate.getDay() === 6) {
+              continue;
+            }
+            
+            const dateKey = sessionDate.toISOString().split('T')[0];
+            
+            // Create study sessions based on hours per day
+            const sessionsPerDay = Math.ceil(scheduleForm.hoursPerDay);
+            for (let session = 0; session < sessionsPerDay; session++) {
+              const sessionId = `${Date.now()}-${week}-${day}-${session}`;
+              const sessionType = session % 2 === 0 ? 'mcq' : 'frq';
+              
+              const studySession = {
+                id: sessionId,
+                courseId: scheduleForm.courseId,
+                courseName: course.name,
+                duration: Math.floor((scheduleForm.hoursPerDay * 60) / sessionsPerDay),
+                type: sessionType,
+                notes: `Week ${week + 1}, Day ${day + 1} - ${sessionType.toUpperCase()} practice (Basic Schedule)`,
+                isAIGenerated: false,
+                isScheduled: true
+              };
+
+              if (!updatedSessions[dateKey]) {
+                updatedSessions[dateKey] = [];
+              }
+              updatedSessions[dateKey].push(studySession);
+            }
+          }
+        }
+
+        saveStudySessions(updatedSessions);
+        setShowSchedulePopup(false);
+        setScheduleForm({ courseId: '', weeks: 4, hoursPerDay: 2 });
+        alert(`Basic study schedule created for ${course.name} over ${scheduleForm.weeks} weeks!`);
+      } else {
+        alert('Study schedule creation cancelled.');
+      }
+    } finally {
+      setIsGeneratingPlan(false);
+    }
+  };
+
   // Delete study session
   const deleteStudySession = (dateKey, sessionId) => {
     const updatedSessions = { ...studySessions };
@@ -474,57 +592,11 @@ export default function StudyCalendar() {
     saveStudySessions(updatedSessions);
   };
 
-  // Load saved study plan to calendar
-  const loadSavedPlan = (plan) => {
-    if (!plan.studyPlan || !plan.studyPlan.dailySchedule) {
-      alert('Invalid study plan data');
-      return;
-    }
-
-    // Convert saved study plan to calendar sessions
-    const sessions = {};
-    plan.studyPlan.dailySchedule.forEach(day => {
-      const dateKey = day.date;
-      if (day.sessions && Array.isArray(day.sessions)) {
-        sessions[dateKey] = day.sessions.map(session => ({
-          id: `${session.courseId}-${dateKey}-${Math.random().toString(36).substr(2, 9)}`,
-          courseId: session.courseId,
-          courseName: session.courseName,
-          duration: session.duration,
-          type: session.type,
-          notes: session.notes,
-          focus: session.focus,
-          difficulty: session.difficulty,
-          priority: session.priority,
-          isAIGenerated: true,
-          isAdaptive: plan.isAdaptive || false,
-          isFromSavedPlan: true
-        }));
-      }
-    });
-
-    // Merge with existing sessions
-    const updatedSessions = { ...studySessions };
-    Object.keys(sessions).forEach(date => {
-      if (!updatedSessions[date]) {
-        updatedSessions[date] = [];
-      }
-      updatedSessions[date] = [...updatedSessions[date], ...sessions[date]];
-    });
-
-    saveStudySessions(updatedSessions);
-    alert(`Study plan "${plan.name}" loaded to calendar successfully!`);
-  };
-
-  // Delete saved study plan
-  const deleteSavedPlan = (planId) => {
-    if (confirm('Are you sure you want to delete this study plan?')) {
-      const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
-      delete savedPlans[planId];
-      localStorage.setItem('savedStudyPlans', JSON.stringify(savedPlans));
-      // Force re-render by updating state
-      setStudySessions({...studySessions});
-    }
+  // Navigate months
+  const navigateMonth = (direction) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(newDate.getMonth() + direction);
+    setCurrentDate(newDate);
   };
 
   // Get days in month
@@ -560,16 +632,12 @@ export default function StudyCalendar() {
   // Check if date has AP exam
   const getExamForDate = (date) => {
     const dateKey = date.toISOString().split('T')[0];
-    return Object.entries(apExamDates).find(([courseId, examDate]) => 
-      examDate.toISOString().split('T')[0] === dateKey
-    );
-  };
-
-  // Navigate months
-  const navigateMonth = (direction) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
+    for (const [courseId, examDate] of Object.entries(apExamDates)) {
+      if (examDate.toISOString().split('T')[0] === dateKey) {
+        return [courseId, examDate];
+      }
+    }
+    return null;
   };
 
   const days = getDaysInMonth(currentDate);
@@ -581,489 +649,466 @@ export default function StudyCalendar() {
   return (
     <>
       <section style={styles.wrapper}>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>Study Calendar</h1>
-          <p style={styles.subtitle}>
-            Plan your AP study sessions and track your progress leading up to exam dates.
-          </p>
-        </div>
-        <div style={styles.headerActions}>
-          <button
-            style={styles.primaryButton}
-            onClick={() => setShowAddSession(true)}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
-              e.currentTarget.style.backgroundColor = "#2563EB";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
-              e.currentTarget.style.backgroundColor = "#3B82F6";
-            }}
-          >
-            + Add Study Session
-          </button>
-          <button
-            style={styles.secondaryButton}
-            onClick={generateStudyPlan}
-            disabled={isGeneratingPlan}
-            onMouseEnter={(e) => {
-              if (!isGeneratingPlan) {
-                e.currentTarget.style.boxShadow = "0 8px 12px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3)";
-                e.currentTarget.style.backgroundColor = "#059669";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isGeneratingPlan) {
-                e.currentTarget.style.boxShadow = "0 4px 6px rgba(16, 185, 129, 0.3)";
-                e.currentTarget.style.backgroundColor = "#10B981";
-              }
-            }}
-          >
-            {isGeneratingPlan ? '⏳ Generating...' : '🤖 Generate AI Study Plan'}
-          </button>
-          <button
-            style={{
-              ...styles.secondaryButton,
-              backgroundColor: "#8B5CF6",
-              opacity: isGeneratingPlan ? 0.6 : 1,
-              cursor: isGeneratingPlan ? 'not-allowed' : 'pointer'
-            }}
-            onClick={generateAdaptivePlan}
-            disabled={isGeneratingPlan}
-            onMouseEnter={(e) => {
-              if (!isGeneratingPlan) {
-                e.currentTarget.style.boxShadow = "0 8px 12px rgba(139, 92, 246, 0.4), 0 0 20px rgba(139, 92, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.3)";
-                e.currentTarget.style.backgroundColor = "#7C3AED";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isGeneratingPlan) {
-                e.currentTarget.style.boxShadow = "0 4px 6px rgba(139, 92, 246, 0.3)";
-                e.currentTarget.style.backgroundColor = "#8B5CF6";
-              }
-            }}
-          >
-            {isGeneratingPlan ? '⏳ Generating...' : '🧠 Generate Adaptive Plan'}
-          </button>
-          <button
-            style={{
-              ...styles.secondaryButton,
-              backgroundColor: "#F59E0B",
-              opacity: isGeneratingPlan ? 0.6 : 1,
-              cursor: isGeneratingPlan ? 'not-allowed' : 'pointer'
-            }}
-            onClick={() => {
-              console.log('Current selectedCourses state:', selectedCourses);
-              console.log('Setting test course...');
-              setSelectedCourses(['ap-psychology']);
-            }}
-            disabled={isGeneratingPlan}
-          >
-            🧪 Test Course Selection
-          </button>
-        </div>
-      </div>
-
-      {/* Streak Display */}
-      <div style={styles.streakContainer}>
-        <div style={styles.streakCard}>
-          <div style={styles.streakIcon}>
-            🔥
+        <div style={styles.header}>
+          <div>
+            <h1 style={styles.title}>Study Calendar</h1>
+            <p style={styles.subtitle}>
+              Plan your AP study sessions and track your progress leading up to exam dates.
+            </p>
           </div>
-          <div style={styles.streakInfo}>
-            <div style={styles.streakNumber}>{streakData.currentStreak}</div>
-            <div style={styles.streakLabel}>
-              {streakData.currentStreak === 0 ? 'Start your streak!' : 
-               streakData.currentStreak === 1 ? 'day streak' : 'day streak'}
-            </div>
-            <div style={styles.streakSubtext}>
-              {streakData.currentStreak === 0 ? 'Study 15+ minutes to begin' :
-               streakData.currentStreak >= 50 ? 'Incredible! You\'re unstoppable!' :
-               streakData.currentStreak >= 30 ? 'Amazing! You\'re on fire!' :
-               streakData.currentStreak >= 7 ? 'Great job! Keep it up!' :
-               'Keep studying daily!'}
-            </div>
-          </div>
-          <div style={styles.streakStats}>
-            <div style={styles.longestStreak}>
-              <div style={styles.longestNumber}>{streakData.longestStreak}</div>
-              <div style={styles.longestLabel}>Longest</div>
-            </div>
+          <div style={styles.headerActions}>
+            <button
+              style={styles.primaryButton}
+              onClick={() => setShowAddSession(true)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
+                e.currentTarget.style.backgroundColor = "#2563EB";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
+                e.currentTarget.style.backgroundColor = "#3B82F6";
+              }}
+            >
+              + Add Study Session
+            </button>
+            <button
+              style={styles.scheduleButton}
+              onClick={() => setShowSchedulePopup(true)}
+              disabled={isGeneratingPlan}
+              onMouseEnter={(e) => {
+                if (!isGeneratingPlan) {
+                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(168, 85, 247, 0.4), 0 0 20px rgba(168, 85, 247, 0.5), 0 0 30px rgba(168, 85, 247, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#7C3AED";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isGeneratingPlan) {
+                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(168, 85, 247, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#A855F7";
+                }
+              }}
+            >
+              {isGeneratingPlan ? '⏳ Generating AI Plan...' : '🤖 Create AI Study Schedule'}
+            </button>
+            <button
+              style={styles.secondaryButton}
+              onClick={generateStudyPlan}
+              disabled={isGeneratingPlan}
+              onMouseEnter={(e) => {
+                if (!isGeneratingPlan) {
+                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#059669";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isGeneratingPlan) {
+                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(16, 185, 129, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#10B981";
+                }
+              }}
+            >
+              {isGeneratingPlan ? '⏳ Generating...' : '🤖 Generate AI Study Plan'}
+            </button>
+            <button
+              style={styles.adaptiveButton}
+              onClick={generateAdaptivePlan}
+              disabled={isGeneratingPlan}
+              onMouseEnter={(e) => {
+                if (!isGeneratingPlan) {
+                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(139, 92, 246, 0.4), 0 0 20px rgba(139, 92, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#7C3AED";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isGeneratingPlan) {
+                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(139, 92, 246, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#8B5CF6";
+                }
+              }}
+            >
+              {isGeneratingPlan ? '⏳ Generating...' : '🧠 Generate Adaptive Plan'}
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Calendar */}
-      <div style={styles.calendarContainer}>
-        <div style={styles.calendarHeader}>
-          <button
-            style={styles.navButton}
-            onClick={() => navigateMonth(-1)}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateX(-4px) scale(1.1)";
-              e.currentTarget.style.borderColor = "#0078C8";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 120, 200, 0.3)";
-              e.currentTarget.style.backgroundColor = "rgba(0, 120, 200, 0.1)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateX(0) scale(1)";
-              e.currentTarget.style.borderColor = "var(--border-color)";
-              e.currentTarget.style.boxShadow = "none";
-              e.currentTarget.style.backgroundColor = "var(--bg-secondary)";
-            }}
-          >
-            ←
-          </button>
-          <h2 style={styles.monthTitle}>
-            {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-          </h2>
-          <button
-            style={styles.navButton}
-            onClick={() => navigateMonth(1)}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateX(4px) scale(1.1)";
-              e.currentTarget.style.borderColor = "#0078C8";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 120, 200, 0.3)";
-              e.currentTarget.style.backgroundColor = "rgba(0, 120, 200, 0.1)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateX(0) scale(1)";
-              e.currentTarget.style.borderColor = "var(--border-color)";
-              e.currentTarget.style.boxShadow = "none";
-              e.currentTarget.style.backgroundColor = "var(--bg-secondary)";
-            }}
-          >
-            →
-          </button>
-        </div>
-
-        <div style={styles.calendarGrid}>
-          {/* Day headers */}
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} style={styles.dayHeader}>{day}</div>
-          ))}
-          
-          {/* Calendar days */}
-          {days.map((day, index) => {
-            if (!day) {
-              return <div key={index} style={styles.emptyDay}></div>;
-            }
-
-            const sessions = getSessionsForDate(day);
-            const exam = getExamForDate(day);
-            const isToday = day.toDateString() === new Date().toDateString();
-            const isSelected = day.toDateString() === selectedDate.toDateString();
-            
-            // Check if this date has any exam for selected courses
-            const selectedCourseExam = selectedCourses.find(courseId => {
-              const examDate = apExamDates[courseId];
-              return examDate && examDate.toDateString() === day.toDateString();
-            });
-
-            return (
-              <div
-                key={index}
-                style={{
-                  ...styles.calendarDay,
-                  ...(isToday ? styles.today : {}),
-                  ...(isSelected ? styles.selectedDay : {}),
-                  ...(exam ? styles.examDay : {}),
-                  ...(selectedCourseExam ? styles.selectedExamDay : {})
-                }}
-                onClick={() => setSelectedDate(day)}
-              >
-                <div style={styles.dayNumber}>{day.getDate()}</div>
-                
-                {exam && (
-                  <div style={styles.examBadge}>
-                    📝 {apCourses.find(c => c.id === exam[0])?.name || exam[0]}
-                  </div>
-                )}
-                
-                {selectedCourseExam && !exam && (
-                  <div style={styles.selectedExamBadge}>
-                    📝 {apCourses.find(c => c.id === selectedCourseExam)?.name || selectedCourseExam}
-                  </div>
-                )}
-                
-                {sessions.length > 0 && (
-                  <div style={styles.sessionIndicators}>
-                    {sessions.slice(0, 2).map((session, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          ...styles.sessionBar,
-                          backgroundColor: courseColors[session.courseId] || '#6B7280',
-                          opacity: session.type === 'mcq' ? 0.8 : 0.6
-                        }}
-                        title={`${session.courseName} - ${session.type.toUpperCase()}`}
-                      />
-                    ))}
-                    {sessions.length > 2 && (
-                      <div style={styles.moreIndicator}>+{sessions.length - 2}</div>
-                    )}
-                  </div>
-                )}
+        {/* Streak Display */}
+        <div style={styles.streakContainer}>
+          <div style={styles.streakCard}>
+            <div style={styles.streakIcon}>🔥</div>
+            <div style={styles.streakInfo}>
+              <div style={styles.streakNumber}>{streakData.currentStreak}</div>
+              <div style={styles.streakLabel}>
+                {streakData.currentStreak === 0 ? 'Start your streak!' : 
+                 streakData.currentStreak === 1 ? 'day streak' : 'day streak'}
               </div>
-            );
-          })}
+              <div style={styles.streakSubtext}>
+                {streakData.currentStreak === 0 ? 'Study 15+ minutes to begin' :
+                 streakData.currentStreak >= 50 ? 'Incredible! You\'re unstoppable!' :
+                 streakData.currentStreak >= 30 ? 'Amazing! You\'re on fire!' :
+                 streakData.currentStreak >= 7 ? 'Great job! Keep it up!' :
+                 'Keep studying daily!'}
+              </div>
+            </div>
+            <div style={styles.streakStats}>
+              <div style={styles.longestStreak}>
+                <div style={styles.longestNumber}>{streakData.longestStreak}</div>
+                <div style={styles.longestLabel}>Longest</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Course Selection for AI Planning - New Premium Dropdown */}
-      <div style={styles.dropdownContainer}>
-        <MultiSelectDropdown
-          options={apCourses}
-          selectedValues={selectedCourses}
-          onChange={(newSelectedCourses) => {
-            console.log('Course selection changed:', newSelectedCourses);
-            setSelectedCourses(newSelectedCourses);
-          }}
-          label="Select AP Courses to Display on Calendar"
-          placeholder="Select AP Courses"
-          searchPlaceholder="Search courses..."
-          colorMap={courseColors}
-        />
-      </div>
+        {/* Course Selection */}
+        <div style={styles.courseSelectionContainer}>
+          <h3 style={styles.courseSelectionTitle}>Select Courses for AI Study Plans</h3>
+          <MultiSelectDropdown
+            options={apCourses}
+            selectedValues={selectedCourses}
+            onChange={setSelectedCourses}
+            placeholder="Choose AP courses..."
+            disabled={isGeneratingPlan}
+          />
+          {selectedCourses.length > 0 && (
+            <div style={styles.selectedCoursesStatus}>
+              <div style={styles.statusDot}></div>
+              <span style={styles.statusText}>
+                {selectedCourses.length} course{selectedCourses.length !== 1 ? 's' : ''} selected
+              </span>
+            </div>
+          )}
+          {selectedCourses.length === 0 && (
+            <div style={styles.noCourseStatus}>
+              <div style={styles.statusDot}></div>
+              <span style={styles.statusText}>No courses selected</span>
+            </div>
+          )}
+        </div>
 
-      {/* Course Legend */}
-      <div style={styles.legendContainer}>
-        <h3 style={styles.sectionTitle}>Selected Courses:</h3>
-        {selectedCourses.length > 0 ? (
-          <div style={styles.legendGrid}>
-            {selectedCourses.map(courseId => {
-              const course = apCourses.find(c => c.id === courseId);
-              const examDate = apExamDates[courseId];
+        {/* Calendar */}
+        <div style={styles.calendarContainer}>
+          <div style={styles.calendarHeader}>
+            <button
+              style={styles.navButton}
+              onClick={() => navigateMonth(-1)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateX(-4px) scale(1.1)";
+                e.currentTarget.style.borderColor = "#0078C8";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 120, 200, 0.3)";
+                e.currentTarget.style.backgroundColor = "rgba(0, 120, 200, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateX(0) scale(1)";
+                e.currentTarget.style.borderColor = "var(--border-color)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.backgroundColor = "var(--bg-secondary)";
+              }}
+            >
+              ←
+            </button>
+            <h2 style={styles.monthTitle}>
+              {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+            </h2>
+            <button
+              style={styles.navButton}
+              onClick={() => navigateMonth(1)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateX(4px) scale(1.1)";
+                e.currentTarget.style.borderColor = "#0078C8";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 120, 200, 0.3)";
+                e.currentTarget.style.backgroundColor = "rgba(0, 120, 200, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateX(0) scale(1)";
+                e.currentTarget.style.borderColor = "var(--border-color)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.backgroundColor = "var(--bg-secondary)";
+              }}
+            >
+              →
+            </button>
+          </div>
+
+          <div style={styles.calendarGrid}>
+            {/* Day headers */}
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} style={styles.dayHeader}>{day}</div>
+            ))}
+            
+            {/* Calendar days */}
+            {days.map((day, index) => {
+              if (!day) {
+                return <div key={index} style={styles.emptyDay}></div>;
+              }
+
+              const sessions = getSessionsForDate(day);
+              const exam = getExamForDate(day);
+              const isToday = day.toDateString() === new Date().toDateString();
+              const isSelected = day.toDateString() === selectedDate.toDateString();
+              
+              // Check if this date has any exam for selected courses
+              const selectedCourseExam = selectedCourses.find(courseId => {
+                const examDate = apExamDates[courseId];
+                return examDate && examDate.toDateString() === day.toDateString();
+              });
+
               return (
-                <div key={courseId} style={styles.legendItem}>
-                  <div
-                    style={{
-                      ...styles.legendColorDot,
-                      backgroundColor: courseColors[courseId] || '#6B7280'
-                    }}
-                  />
-                  <span style={styles.legendLabel}>
-                    {course?.name || courseId}
-                    {examDate && (
-                      <span style={styles.examDateText}>
-                        {' '}(Exam: {examDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})
-                      </span>
-                    )}
-                  </span>
+                <div
+                  key={index}
+                  style={{
+                    ...styles.calendarDay,
+                    ...(isToday ? styles.today : {}),
+                    ...(isSelected ? styles.selectedDay : {}),
+                    ...(exam ? styles.examDay : {}),
+                    ...(selectedCourseExam ? styles.selectedExamDay : {})
+                  }}
+                  onClick={() => setSelectedDate(day)}
+                >
+                  <div style={styles.dayNumber}>{day.getDate()}</div>
+                  
+                  {exam && (
+                    <div style={styles.examBadge}>
+                      📝 {apCourses.find(c => c.id === exam[0])?.name || exam[0]}
+                    </div>
+                  )}
+                  
+                  {selectedCourseExam && !exam && (
+                    <div style={styles.selectedExamBadge}>
+                      📝 {apCourses.find(c => c.id === selectedCourseExam)?.name || selectedCourseExam}
+                    </div>
+                  )}
+                  
+                  {sessions.length > 0 && (
+                    <div style={styles.sessionIndicators}>
+                      {sessions.slice(0, 2).map((session, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            ...styles.sessionBar,
+                            backgroundColor: courseColors[session.courseId] || '#6B7280',
+                            opacity: session.type === 'mcq' ? 0.8 : 0.6
+                          }}
+                          title={`${session.courseName} - ${session.type.toUpperCase()}`}
+                        />
+                      ))}
+                      {sessions.length > 2 && (
+                        <div style={styles.moreIndicator}>+{sessions.length - 2}</div>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
-        ) : (
-          <div style={styles.noCourseStatus}>
-            <div style={styles.statusDot} />
-            <span style={styles.statusText}>None</span>
-          </div>
-        )}
-      </div>
+        </div>
 
-      {/* Saved Study Plans */}
-      <div style={styles.savedPlansContainer}>
-        <h3 style={styles.sectionTitle}>Saved Study Plans:</h3>
-        {(() => {
-          const savedPlans = JSON.parse(localStorage.getItem('savedStudyPlans') || '{}');
-          const planList = Object.values(savedPlans);
+        {/* Selected Date Details */}
+        <div style={styles.dateDetails}>
+          <h3 style={styles.dateTitle}>
+            {selectedDate.toLocaleDateString('en-US', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </h3>
           
-          if (planList.length === 0) {
-            return (
-              <div style={styles.noPlansStatus}>
-                <div style={styles.statusDot} />
-                <span style={styles.statusText}>No saved plans yet</span>
-              </div>
-            );
-          }
-          
-          return (
-            <div style={styles.plansGrid}>
-              {planList.map(plan => (
-                <div key={plan.id} style={styles.planCard}>
-                  <div style={styles.planHeader}>
-                    <h4 style={styles.planTitle}>{plan.name}</h4>
-                    <div style={styles.planMeta}>
-                      {plan.isAdaptive && <span style={styles.adaptiveBadge}>🧠 Adaptive</span>}
-                      <span style={styles.planDate}>
-                        {new Date(plan.createdAt).toLocaleDateString()}
+          <div style={styles.sessionsList}>
+            {getSessionsForDate(selectedDate).map((session, index) => (
+              <div key={session.id} style={styles.sessionCard}>
+                <div style={styles.sessionHeader}>
+                  <div style={styles.sessionInfo}>
+                    <div style={styles.sessionTitle}>
+                      {session.courseName}
+                    </div>
+                    <div style={styles.sessionMeta}>
+                      <span style={styles.sessionType}>
+                        {session.type.toUpperCase()}
                       </span>
+                      <span style={styles.sessionDuration}>
+                        {session.duration} min
+                      </span>
+                      {session.isAIGenerated && (
+                        <span style={styles.aiBadge}>AI</span>
+                      )}
+                      {session.isAdaptive && (
+                        <span style={styles.adaptiveBadge}>Adaptive</span>
+                      )}
                     </div>
                   </div>
-                  <div style={styles.planDetails}>
-                    <p style={styles.planCourses}>
-                      Courses: {plan.courses.map(c => apCourses.find(course => course.id === c)?.name || c).join(', ')}
-                    </p>
-                    <p style={styles.planStats}>
-                      Sessions: {plan.studyPlan.metadata?.totalSessions || 'N/A'} • 
-                      Hours: {plan.studyPlan.metadata?.estimatedStudyHours || 'N/A'}
-                    </p>
-                  </div>
-                  <div style={styles.planActions}>
-                    <button
-                      style={styles.loadPlanButton}
-                      onClick={() => loadSavedPlan(plan)}
-                    >
-                      📅 Load to Calendar
-                    </button>
-                    <button
-                      style={styles.deletePlanButton}
-                      onClick={() => deleteSavedPlan(plan.id)}
-                    >
-                      🗑️ Delete
-                    </button>
-                  </div>
+                  <button
+                    style={styles.deleteButton}
+                    onClick={() => deleteStudySession(selectedDate.toISOString().split('T')[0], session.id)}
+                    title="Delete session"
+                  >
+                    ×
+                  </button>
                 </div>
-              ))}
-            </div>
-          );
-        })()}
-      </div>
-
-      {/* Selected Date Details */}
-      <div style={styles.dateDetails}>
-        <h3 style={styles.sectionTitle}>
-          {selectedDate.toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })}
-        </h3>
-        
-        <div style={styles.sessionsList}>
-          {getSessionsForDate(selectedDate).map(session => (
-            <div key={session.id} style={styles.sessionCard}>
-              <div style={styles.sessionHeader}>
-                <div style={styles.sessionInfo}>
-                  <div style={styles.sessionTitleRow}>
-                    <div 
-                      style={{
-                        ...styles.courseColorIndicator,
-                        backgroundColor: courseColors[session.courseId] || '#6B7280'
-                      }}
-                    />
-                    <h4 style={styles.sessionTitle}>{session.courseName}</h4>
-                  </div>
-                  <p style={styles.sessionMeta}>
-                    {session.duration} min • {session.type.toUpperCase()} • 
-                    {session.isFromSavedPlan ? ' 📅 Saved Plan' : 
-                     session.isAIGenerated ? (session.isAdaptive ? ' 🧠 AI Adaptive' : ' 🤖 AI Generated') : ' ✏️ Manual'}
-                    {session.difficulty && ` • ${session.difficulty.charAt(0).toUpperCase() + session.difficulty.slice(1)}`}
-                    {session.priority && ` • ${session.priority.charAt(0).toUpperCase() + session.priority.slice(1)} Priority`}
-                  </p>
-                  {session.focus && (
-                    <p style={styles.sessionFocus}>
-                      <strong>Focus:</strong> {session.focus}
-                    </p>
-                  )}
-                </div>
-                <button
-                  style={styles.deleteButton}
-                  onClick={() => deleteStudySession(selectedDate.toISOString().split('T')[0], session.id)}
+                {session.notes && (
+                  <p style={styles.sessionNotes}>{session.notes}</p>
+                )}
+              </div>
+            ))}
+            
+            {getSessionsForDate(selectedDate).length === 0 && (
+              <div style={styles.emptyState}>
+                <p>No study sessions scheduled for this date.</p>
+                <button 
+                  style={styles.addSessionButton}
+                  onClick={() => setShowAddSession(true)}
                 >
-                  ×
+                  Add Study Session
                 </button>
               </div>
-              {session.notes && (
-                <p style={styles.sessionNotes}>{session.notes}</p>
-              )}
-            </div>
-          ))}
-          
-          {getSessionsForDate(selectedDate).length === 0 && (
-            <div style={styles.emptyState}>
-              <p>No study sessions scheduled for this date.</p>
-              <button 
-                style={styles.addSessionButton}
-                onClick={() => setShowAddSession(true)}
-              >
-                Add Study Session
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Add Session Modal */}
-      {showAddSession && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <h3 style={styles.modalTitle}>Add Study Session</h3>
-            
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Course:</label>
-              <select
-                style={styles.select}
-                value={newSession.courseId}
-                onChange={(e) => setNewSession({...newSession, courseId: e.target.value})}
-              >
-                <option value="">Select a course</option>
-                {apCourses.map(course => (
-                  <option key={course.id} value={course.id}>
-                    {course.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Duration (minutes):</label>
-              <input
-                type="number"
-                style={styles.input}
-                value={newSession.duration}
-                onChange={(e) => setNewSession({...newSession, duration: parseInt(e.target.value)})}
-                min="15"
-                max="180"
-              />
-            </div>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Type:</label>
-              <select
-                style={styles.select}
-                value={newSession.type}
-                onChange={(e) => setNewSession({...newSession, type: e.target.value})}
-              >
-                <option value="mcq">Multiple Choice</option>
-                <option value="frq">Free Response</option>
-                <option value="mixed">Mixed Practice</option>
-                <option value="review">Review</option>
-              </select>
-            </div>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Notes (optional):</label>
-              <textarea
-                style={styles.textarea}
-                value={newSession.notes}
-                onChange={(e) => setNewSession({...newSession, notes: e.target.value})}
-                placeholder="Add any notes about this study session..."
-                rows="3"
-              />
-            </div>
-
-            <div style={styles.modalActions}>
-              <button 
-                style={styles.cancelButton}
-                onClick={() => setShowAddSession(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                style={styles.saveButton}
-                onClick={addStudySession}
-              >
-                Add Session
-              </button>
-            </div>
+            )}
           </div>
         </div>
-      )}
-    </section>
+
+        {/* Add Session Modal */}
+        {showAddSession && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.modal}>
+              <h3 style={styles.modalTitle}>Add Study Session</h3>
+              
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Course:</label>
+                <select
+                  style={styles.select}
+                  value={newSession.courseId}
+                  onChange={(e) => setNewSession({...newSession, courseId: e.target.value})}
+                >
+                  <option value="">Select a course</option>
+                  {apCourses.map(course => (
+                    <option key={course.id} value={course.id}>
+                      {course.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Duration (minutes):</label>
+                <input
+                  type="number"
+                  style={styles.input}
+                  value={newSession.duration}
+                  onChange={(e) => setNewSession({...newSession, duration: parseInt(e.target.value)})}
+                  min="15"
+                  max="180"
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Type:</label>
+                <select
+                  style={styles.select}
+                  value={newSession.type}
+                  onChange={(e) => setNewSession({...newSession, type: e.target.value})}
+                >
+                  <option value="mcq">Multiple Choice</option>
+                  <option value="frq">Free Response</option>
+                  <option value="mixed">Mixed Practice</option>
+                  <option value="review">Review</option>
+                </select>
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Notes (optional):</label>
+                <textarea
+                  style={styles.textarea}
+                  value={newSession.notes}
+                  onChange={(e) => setNewSession({...newSession, notes: e.target.value})}
+                  placeholder="Add any notes about this study session..."
+                  rows="3"
+                />
+              </div>
+
+              <div style={styles.modalActions}>
+                <button 
+                  style={styles.cancelButton}
+                  onClick={() => setShowAddSession(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  style={styles.saveButton}
+                  onClick={addStudySession}
+                >
+                  Add Session
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Study Schedule Modal */}
+        {showSchedulePopup && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.modal}>
+              <h3 style={styles.modalTitle}>Create AI Study Schedule</h3>
+              <p style={styles.modalSubtitle}>Generate a personalized AI-powered study plan for your AP course</p>
+              
+              <div style={styles.formGroup}>
+                <label style={styles.label}>For which class do you want a schedule?</label>
+                <select
+                  style={styles.select}
+                  value={scheduleForm.courseId}
+                  onChange={(e) => setScheduleForm({...scheduleForm, courseId: e.target.value})}
+                >
+                  <option value="">Select a course</option>
+                  {apCourses.map(course => (
+                    <option key={course.id} value={course.id}>
+                      {course.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>For how many weeks do we want it?</label>
+                <input
+                  type="number"
+                  style={styles.input}
+                  value={scheduleForm.weeks}
+                  onChange={(e) => setScheduleForm({...scheduleForm, weeks: parseInt(e.target.value)})}
+                  min="1"
+                  max="12"
+                />
+                <small style={styles.inputHelp}>Recommended: 4-8 weeks</small>
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>How many hours per day do we want to spend on it?</label>
+                <input
+                  type="number"
+                  style={styles.input}
+                  value={scheduleForm.hoursPerDay}
+                  onChange={(e) => setScheduleForm({...scheduleForm, hoursPerDay: parseFloat(e.target.value)})}
+                  min="0.5"
+                  max="8"
+                  step="0.5"
+                />
+                <small style={styles.inputHelp}>Recommended: 1-3 hours per day</small>
+              </div>
+
+              <div style={styles.modalActions}>
+                <button 
+                  style={styles.cancelButton}
+                  onClick={() => setShowSchedulePopup(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  style={styles.scheduleCreateButton}
+                  onClick={generateStudySchedule}
+                  disabled={isGeneratingPlan}
+                >
+                  {isGeneratingPlan ? '⏳ Generating...' : '🤖 Generate AI Schedule'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
     </>
   );
 }
@@ -1082,74 +1127,6 @@ const styles = {
     color: "var(--text-primary)",
     transition: "background-color 0.3s ease, color 0.3s ease, height 0.3s ease",
   },
-  // Streak Styles
-  streakContainer: {
-    marginBottom: "2rem",
-    display: "flex",
-    justifyContent: "center",
-  },
-  streakCard: {
-    backgroundColor: "var(--bg-primary)",
-    borderRadius: "16px",
-    padding: "1.5rem",
-    boxShadow: "0 8px 32px var(--shadow-color)",
-    border: "2px solid var(--border-color)",
-    display: "flex",
-    alignItems: "center",
-    gap: "1.5rem",
-    minWidth: "400px",
-    transition: "all 0.3s ease",
-  },
-  streakIcon: {
-    fontSize: "3rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  streakInfo: {
-    flex: 1,
-    textAlign: "left",
-  },
-  streakNumber: {
-    fontSize: "2.5rem",
-    fontWeight: "800",
-    color: "#FF6B35",
-    lineHeight: 1,
-    marginBottom: "0.25rem",
-  },
-  streakLabel: {
-    fontSize: "1rem",
-    fontWeight: "600",
-    color: "var(--text-secondary)",
-    marginBottom: "0.5rem",
-  },
-  streakSubtext: {
-    fontSize: "0.9rem",
-    color: "var(--text-secondary)",
-    fontWeight: "500",
-  },
-  streakStats: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingLeft: "1rem",
-    borderLeft: "2px solid var(--border-color)",
-  },
-  longestStreak: {
-    textAlign: "center",
-  },
-  longestNumber: {
-    fontSize: "1.5rem",
-    fontWeight: "700",
-    color: "var(--text-primary)",
-    lineHeight: 1,
-  },
-  longestLabel: {
-    fontSize: "0.8rem",
-    color: "var(--text-secondary)",
-    fontWeight: "500",
-    marginTop: "0.25rem",
-  },
   header: {
     display: "flex",
     justifyContent: "space-between",
@@ -1160,21 +1137,27 @@ const styles = {
   },
   title: {
     fontSize: "2.5rem",
-    fontWeight: 700,
+    fontWeight: 800,
     color: "var(--text-primary)",
-    marginBottom: "0.5rem",
+    margin: 0,
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
     transition: "color 0.3s ease",
   },
   subtitle: {
     fontSize: "1.1rem",
     color: "var(--text-secondary)",
-    margin: 0,
+    margin: "0.5rem 0 0 0",
+    fontWeight: 400,
     transition: "color 0.3s ease",
   },
   headerActions: {
     display: "flex",
     gap: "1rem",
     flexWrap: "wrap",
+    alignItems: "center",
   },
   primaryButton: {
     backgroundColor: "#3B82F6",
@@ -1187,6 +1170,24 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     boxShadow: "0 4px 6px rgba(59, 130, 246, 0.3)",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+  },
+  scheduleButton: {
+    backgroundColor: "#A855F7",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.75rem",
+    padding: "0.75rem 1.5rem",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 4px 6px rgba(168, 85, 247, 0.3)",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
   },
   secondaryButton: {
     backgroundColor: "#10B981",
@@ -1199,57 +1200,113 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     boxShadow: "0 4px 6px rgba(16, 185, 129, 0.3)",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
   },
-  dropdownContainer: {
-    position: "relative",
-    width: "100%",
+  adaptiveButton: {
+    backgroundColor: "#8B5CF6",
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: "0.75rem",
+    padding: "0.75rem 1.5rem",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 4px 6px rgba(139, 92, 246, 0.3)",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+  },
+  streakContainer: {
     marginBottom: "2rem",
-    zIndex: 1000,
+    display: "flex",
+    justifyContent: "center",
   },
-  sectionTitle: {
+  streakCard: {
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "1rem",
+    padding: "1.5rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "1.5rem",
+    boxShadow: "0 4px 12px var(--shadow-color)",
+    border: "1px solid var(--border-color)",
+    transition: "all 0.3s ease",
+    maxWidth: "500px",
+    width: "100%",
+  },
+  streakIcon: {
+    fontSize: "2.5rem",
+    animation: "streakPulse 2s ease-in-out infinite",
+  },
+  streakInfo: {
+    flex: 1,
+    textAlign: "center",
+  },
+  streakNumber: {
+    fontSize: "2.5rem",
+    fontWeight: 800,
+    color: "var(--text-primary)",
+    lineHeight: 1,
+    transition: "color 0.3s ease",
+  },
+  streakLabel: {
+    fontSize: "1rem",
+    color: "var(--text-secondary)",
+    fontWeight: 600,
+    marginTop: "0.25rem",
+    transition: "color 0.3s ease",
+  },
+  streakSubtext: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    marginTop: "0.5rem",
+    fontWeight: 400,
+    transition: "color 0.3s ease",
+  },
+  streakStats: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  longestStreak: {
+    textAlign: "center",
+  },
+  longestNumber: {
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    color: "var(--text-primary)",
+    transition: "color 0.3s ease",
+  },
+  longestLabel: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    fontWeight: 500,
+    marginTop: "0.25rem",
+    transition: "color 0.3s ease",
+  },
+  courseSelectionContainer: {
+    backgroundColor: "var(--bg-primary)",
+    borderRadius: "1rem",
+    padding: "1.5rem",
+    marginBottom: "2rem",
+    border: "1px solid var(--border-color)",
+    transition: "all 0.3s ease",
+  },
+  courseSelectionTitle: {
     fontSize: "1.2rem",
     fontWeight: 600,
     color: "var(--text-primary)",
     marginBottom: "1rem",
     transition: "color 0.3s ease",
   },
-  legendContainer: {
-    backgroundColor: "var(--bg-primary)",
-    borderRadius: "1rem",
-    padding: "1.5rem",
-    marginBottom: "2rem",
-    border: "1px solid var(--border-color)",
-    transition: "all 0.3s ease, max-height 0.3s ease, opacity 0.3s ease",
-    position: "relative",
-    zIndex: 0,
-  },
-  legendGrid: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "1rem",
-  },
-  legendItem: {
+  selectedCoursesStatus: {
     display: "flex",
     alignItems: "center",
     gap: "0.75rem",
-  },
-  legendColorDot: {
-    width: "14px",
-    height: "14px",
-    borderRadius: "50%",
-    flexShrink: 0,
-  },
-  legendLabel: {
-    fontSize: "0.9rem",
-    color: "var(--text-secondary)",
-    fontWeight: 500,
-    transition: "color 0.3s ease",
-  },
-  examDateText: {
-    fontSize: "0.8rem",
-    color: "var(--text-secondary)",
-    fontWeight: 400,
-    transition: "color 0.3s ease",
+    marginTop: "1rem",
   },
   noCourseStatus: {
     display: "flex",
@@ -1393,6 +1450,13 @@ const styles = {
     border: "1px solid var(--border-color)",
     transition: "all 0.3s ease",
   },
+  dateTitle: {
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    color: "var(--text-primary)",
+    marginBottom: "1rem",
+    transition: "color 0.3s ease",
+  },
   sessionsList: {
     display: "flex",
     flexDirection: "column",
@@ -1415,57 +1479,71 @@ const styles = {
   sessionInfo: {
     flex: 1,
   },
-  sessionTitleRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    marginBottom: "0.25rem",
-  },
-  courseColorIndicator: {
-    width: "12px",
-    height: "12px",
-    borderRadius: "50%",
-    flexShrink: 0,
-  },
   sessionTitle: {
-    fontSize: "1rem",
+    fontSize: "1.1rem",
     fontWeight: 600,
     color: "var(--text-primary)",
-    margin: 0,
+    marginBottom: "0.25rem",
     transition: "color 0.3s ease",
   },
   sessionMeta: {
-    fontSize: "0.8rem",
-    color: "var(--text-secondary)",
-    margin: "0.25rem 0 0 0",
-    transition: "color 0.3s ease",
+    display: "flex",
+    gap: "0.75rem",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
-  sessionNotes: {
-    fontSize: "0.9rem",
-    color: "var(--text-secondary)",
-    margin: 0,
-    fontStyle: "italic",
-    transition: "color 0.3s ease",
+  sessionType: {
+    backgroundColor: "rgba(59, 130, 246, 0.1)",
+    color: "#3B82F6",
+    padding: "0.25rem 0.5rem",
+    borderRadius: "0.375rem",
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    textTransform: "uppercase",
   },
-  sessionFocus: {
-    fontSize: "0.85rem",
-    color: "var(--text-primary)",
-    margin: "0.5rem 0 0 0",
+  sessionDuration: {
+    color: "var(--text-secondary)",
+    fontSize: "0.875rem",
     fontWeight: 500,
     transition: "color 0.3s ease",
   },
+  aiBadge: {
+    backgroundColor: "rgba(16, 185, 129, 0.1)",
+    color: "#10B981",
+    padding: "0.25rem 0.5rem",
+    borderRadius: "0.375rem",
+    fontSize: "0.75rem",
+    fontWeight: 600,
+  },
+  adaptiveBadge: {
+    backgroundColor: "rgba(139, 92, 246, 0.1)",
+    color: "#8B5CF6",
+    padding: "0.25rem 0.5rem",
+    borderRadius: "0.375rem",
+    fontSize: "0.75rem",
+    fontWeight: 600,
+  },
+  sessionNotes: {
+    color: "var(--text-secondary)",
+    fontSize: "0.875rem",
+    lineHeight: 1.5,
+    margin: 0,
+    transition: "color 0.3s ease",
+  },
   deleteButton: {
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
-    color: "#DC2626",
+    backgroundColor: "transparent",
     border: "none",
-    borderRadius: "50%",
-    width: "24px",
-    height: "24px",
-    fontSize: "1rem",
+    color: "#EF4444",
+    fontSize: "1.5rem",
     cursor: "pointer",
+    padding: "0.25rem",
+    borderRadius: "0.25rem",
+    transition: "all 0.2s",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    width: "2rem",
+    height: "2rem",
   },
   emptyState: {
     textAlign: "center",
@@ -1478,11 +1556,12 @@ const styles = {
     color: "#FFFFFF",
     border: "none",
     borderRadius: "0.5rem",
-    padding: "0.5rem 1rem",
+    padding: "0.75rem 1.5rem",
     fontSize: "0.9rem",
     fontWeight: 600,
     cursor: "pointer",
     marginTop: "1rem",
+    transition: "all 0.3s ease",
   },
   modalOverlay: {
     position: "fixed",
@@ -1510,6 +1589,12 @@ const styles = {
     fontSize: "1.5rem",
     fontWeight: 700,
     color: "var(--text-primary)",
+    marginBottom: "1.5rem",
+    transition: "color 0.3s ease",
+  },
+  modalSubtitle: {
+    fontSize: "0.9rem",
+    color: "var(--text-secondary)",
     marginBottom: "1.5rem",
     transition: "color 0.3s ease",
   },
@@ -1555,6 +1640,13 @@ const styles = {
     color: "var(--text-primary)",
     transition: "all 0.3s ease",
   },
+  inputHelp: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    marginTop: "0.25rem",
+    display: "block",
+    transition: "color 0.3s ease",
+  },
   modalActions: {
     display: "flex",
     gap: "1rem",
@@ -1582,101 +1674,16 @@ const styles = {
     fontWeight: 600,
     cursor: "pointer",
   },
-  // Saved Plans Styles
-  savedPlansContainer: {
-    backgroundColor: "var(--bg-primary)",
-    borderRadius: "1rem",
-    padding: "1.5rem",
-    marginBottom: "2rem",
-    border: "1px solid var(--border-color)",
-    transition: "all 0.3s ease",
-  },
-  noPlansStatus: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.75rem",
-  },
-  plansGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-    gap: "1rem",
-    marginTop: "1rem",
-  },
-  planCard: {
-    backgroundColor: "var(--bg-secondary)",
-    borderRadius: "0.75rem",
-    padding: "1rem",
-    border: "1px solid var(--border-color)",
-    transition: "all 0.3s ease",
-    cursor: "pointer",
-  },
-  planHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: "0.75rem",
-  },
-  planTitle: {
-    fontSize: "1rem",
-    fontWeight: 600,
-    color: "var(--text-primary)",
-    margin: 0,
-    flex: 1,
-  },
-  planMeta: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-    gap: "0.25rem",
-  },
-  adaptiveBadge: {
-    fontSize: "0.75rem",
-    color: "#8B5CF6",
-    fontWeight: 600,
-    backgroundColor: "rgba(139, 92, 246, 0.1)",
-    padding: "0.25rem 0.5rem",
-    borderRadius: "0.25rem",
-  },
-  planDate: {
-    fontSize: "0.75rem",
-    color: "var(--text-secondary)",
-  },
-  planDetails: {
-    marginBottom: "1rem",
-  },
-  planCourses: {
-    fontSize: "0.85rem",
-    color: "var(--text-secondary)",
-    margin: "0 0 0.5rem 0",
-  },
-  planStats: {
-    fontSize: "0.8rem",
-    color: "var(--text-secondary)",
-    margin: 0,
-  },
-  planActions: {
-    display: "flex",
-    gap: "0.5rem",
-  },
-  loadPlanButton: {
-    backgroundColor: "#10B981",
+  scheduleCreateButton: {
+    backgroundColor: "#A855F7",
     color: "#FFFFFF",
     border: "none",
     borderRadius: "0.5rem",
-    padding: "0.5rem 1rem",
-    fontSize: "0.8rem",
+    padding: "0.75rem 1.5rem",
+    fontSize: "0.9rem",
     fontWeight: 600,
     cursor: "pointer",
-    flex: 1,
-  },
-  deletePlanButton: {
-    backgroundColor: "#EF4444",
-    color: "#FFFFFF",
-    border: "none",
-    borderRadius: "0.5rem",
-    padding: "0.5rem 1rem",
-    fontSize: "0.8rem",
-    fontWeight: 600,
-    cursor: "pointer",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 4px 6px rgba(168, 85, 247, 0.3)",
   },
 };

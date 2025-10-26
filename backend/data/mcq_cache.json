@@ -300,5 +300,157 @@
       "generatedAt": "2025-10-21T04:05:02.438Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
     }
+  },
+  "ap-english-language": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following components of the rhetorical situation refers to the reason an author writes a text?",
+          "options": [
+            "A. Exigence",
+            "B. Audience",
+            "C. Writer",
+            "D. Purpose"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The purpose refers to the reason an author writes a text, aiming to inform, persuade, entertain, or express."
+        },
+        {
+          "id": "q2",
+          "question": "In the context of argumentation, claims must be supported by which of the following?",
+          "options": [
+            "A. Conclusions",
+            "B. Evidence",
+            "C. Opinions",
+            "D. Speculation"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Claims in an argument must be backed by evidence to be considered valid and convincing."
+        },
+        {
+          "id": "q3",
+          "question": "What is the role of an audience in the rhetorical situation?",
+          "options": [
+            "A. To provide context for the argument",
+            "B. To serve as the primary source of evidence",
+            "C. To influence the writer's purpose",
+            "D. To evaluate the writer's credibility"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The audience influences the writer's purpose as the author must consider the beliefs, values, or needs of the audience."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following best describes 'exigence' in the rhetorical situation?",
+          "options": [
+            "A. The context in which a text is produced",
+            "B. The specific issue or problem that prompts the text",
+            "C. The audience's response to the text",
+            "D. The author's background and experience"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Exigence refers to the specific issue or problem that prompts the creation of the text."
+        },
+        {
+          "id": "q5",
+          "question": "When analyzing an argument, what is a critical first step?",
+          "options": [
+            "A. Identifying the evidence",
+            "B. Understanding the claim",
+            "C. Evaluating the author's credibility",
+            "D. Disregarding emotional appeals"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Understanding the claim is essential as it forms the foundation of the argument being analyzed."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following outcomes is NOT a goal of the AP English Language and Composition course?",
+          "options": [
+            "A. Enhancing writing skills",
+            "B. Preparing for college-level coursework",
+            "C. Memorizing literary devices",
+            "D. Developing critical reading skills"
+          ],
+          "correctAnswer": "C",
+          "explanation": "While understanding literary devices is important, the focus is on critical reading and writing skills rather than mere memorization."
+        },
+        {
+          "id": "q7",
+          "question": "What does the acronym 'CLE' stand for in the context of the course framework?",
+          "options": [
+            "A. Claims and Evidence",
+            "B. Contextual Learning Environment",
+            "C. Critical Literary Evaluation",
+            "D. Creative Language Expression"
+          ],
+          "correctAnswer": "A",
+          "explanation": "'CLE' stands for Claims and Evidence, which are crucial components when analyzing arguments."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following skills is prioritized in Unit 1 of the AP English Language course?",
+          "options": [
+            "A. Synthesizing information",
+            "B. Analyzing stylistic elements",
+            "C. Identifying components of the rhetorical situation",
+            "D. Organizing persuasive essays"
+          ],
+          "correctAnswer": "C",
+          "explanation": "Unit 1 focuses on understanding the components of the rhetorical situation, which is foundational for further analysis."
+        },
+        {
+          "id": "q9",
+          "question": "What does the term 'reasoning and organization' refer to in the AP English Language course?",
+          "options": [
+            "A. The use of emotional appeals in writing",
+            "B. The logical structure and coherence of arguments",
+            "C. The author's personal beliefs",
+            "D. The historical context of texts"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Reasoning and organization pertain to how logically and coherently an argument is structured."
+        },
+        {
+          "id": "q10",
+          "question": "Which of the following is an example of a claim?",
+          "options": [
+            "A. Many people believe exercise is important.",
+            "B. Exercise is essential for maintaining physical health.",
+            "C. Some studies suggest exercise can improve mood.",
+            "D. It is common to see athletes training every day."
+          ],
+          "correctAnswer": "B",
+          "explanation": "A claim is a statement that asserts a belief or opinion that can be supported by evidence."
+        },
+        {
+          "id": "q11",
+          "question": "What is the purpose of the Progress Checks in the AP English Language course?",
+          "options": [
+            "A. To grade students on their writing",
+            "B. To provide formative feedback on understanding",
+            "C. To assess student knowledge at the end of the year",
+            "D. To prepare students for the final exam"
+          ],
+          "correctAnswer": "B",
+          "explanation": "Progress Checks are designed to provide formative feedback to help students identify areas where they need improvement."
+        },
+        {
+          "id": "q12",
+          "question": "Which of the following best represents the relationship between the big ideas and course skills in the AP English Language framework?",
+          "options": [
+            "A. They are independent of one another",
+            "B. Big ideas are more important than skills",
+            "C. Course skills spiral across big ideas throughout units",
+            "D. Skills are only assessed at the end of the course"
+          ],
+          "correctAnswer": "C",
+          "explanation": "The course framework emphasizes that skills spiral across the big ideas throughout the units, enhancing learning depth."
+        }
+      ],
+      "generatedAt": "2025-10-21T05:56:22.320Z",
+      "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
+    }
   }
 }
