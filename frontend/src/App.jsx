@@ -14,6 +14,8 @@ import Stats from "./pages/Stats";
 import StudyCalendar from "./pages/StudyCalendar";
 import Settings from "./pages/Settings";
 import Community from "./pages/Community";
+import PracticeTest from "./pages/PracticeTest";
+import OnboardingTutorial from "./components/OnboardingTutorial";
 import { auth, db } from "./firebase";
 import {
   findCourseByName,
@@ -350,6 +352,7 @@ function AppContent() {
   return (
     <div className="dashboard-shell">
       <Navbar onLogout={handleLogout} />
+      <OnboardingTutorial />
       <main className="dashboard-content">
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -419,6 +422,7 @@ function AppContent() {
           <Route path="/stats" element={<Stats stats={userProfile?.stats} />} />
           <Route path="/calendar" element={<StudyCalendar />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/practice-test/:courseId" element={<PracticeTest userProfile={userProfile} />} />
           <Route path="/settings" element={<Settings userProfile={userProfile} />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
