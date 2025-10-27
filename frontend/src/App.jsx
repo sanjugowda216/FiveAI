@@ -374,8 +374,7 @@ function AppContent() {
                       cursor: "pointer",
                       fontWeight: 600,
                       fontSize: "0.9rem",
-                      transition: "all 0.2s ease",
-                      marginBottom: "0.75rem"
+                      transition: "all 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
                       e.target.style.background = "#0078C8";
@@ -387,13 +386,6 @@ function AppContent() {
                     }}
                   >
                     Continue as Guest
-                  </button>
-                  <br />
-                  <button
-                    onClick={() => navigate("/")}
-                    className="text-blue-600 hover:text-blue-800 text-sm underline bg-transparent border-none cursor-pointer"
-                  >
-                    Back to Home
                   </button>
                 </div>
               </div>

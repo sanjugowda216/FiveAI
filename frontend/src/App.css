@@ -97,8 +97,7 @@ html, body, #root {
   max-width: 90%;
   box-shadow: 
     0 20px 60px rgba(0, 0, 0, 0.3),
-    0 0 100px rgba(0, 120, 200, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 0 100px rgba(0, 120, 200, 0.1);
   text-align: center;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -162,11 +161,10 @@ html, body, #root {
 .form input:focus {
   outline: none;
   border-color: #0078C8;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(0, 0, 0, 0.03);
   box-shadow: 
     0 0 0 4px rgba(0, 120, 200, 0.1),
-    0 4px 20px rgba(0, 120, 200, 0.2),
-    inset 0 0 0 1px rgba(255, 255, 255, 1);
+    0 4px 20px rgba(0, 120, 200, 0.2);
 }
 
 .form button {

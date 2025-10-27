@@ -12,6 +12,7 @@ export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const normalizeSelectedCourse = (raw) => {
     if (!raw) return null;
@@ -139,13 +140,37 @@ export default function Login({ onLoginSuccess }) {
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+      <div style={{ position: 'relative' }}>
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <label style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          fontSize: '0.875rem',
+          color: 'rgba(0, 0, 0, 0.6)',
+          cursor: 'pointer',
+          marginTop: '0.5rem',
+          marginLeft: '0.25rem'
+        }}>
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={(e) => setShowPassword(e.target.checked)}
+            style={{
+              cursor: 'pointer',
+              width: '16px',
+              height: '16px'
+            }}
+          />
+          Show password
+        </label>
+      </div>
       <button type="submit">Login</button>
       {msg && <p className="msg">{msg}</p>}
     </form>
