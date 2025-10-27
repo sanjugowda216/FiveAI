@@ -130,9 +130,14 @@ export default function Stats({ stats, userProfile }) {
               <span style={styles.guestBannerText}>
                 <strong>Login to save your progress!</strong> Your stats are only saved locally while browsing as a guest.
               </span>
-              <a href="/login" style={styles.guestBannerButton}>
-                Login
-              </a>
+              <div style={styles.guestBannerButtons}>
+                <a href="/login" style={styles.guestBannerButton}>
+                  Login
+                </a>
+                <button onClick={() => { localStorage.setItem('isGuest', 'true'); window.location.href = '/dashboard'; }} style={styles.guestButton}>
+                  Continue as Guest
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -160,9 +165,14 @@ export default function Stats({ stats, userProfile }) {
             <span style={styles.guestBannerText}>
               <strong>Login to save your progress!</strong> Your stats are only saved locally while browsing as a guest.
             </span>
-            <a href="/login" style={styles.guestBannerButton}>
-              Login
-            </a>
+            <div style={styles.guestBannerButtons}>
+              <a href="/login" style={styles.guestBannerButton}>
+                Login
+              </a>
+              <button onClick={() => { localStorage.setItem('isGuest', 'true'); window.location.href = '/dashboard'; }} style={styles.guestButton}>
+                Continue as Guest
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -569,6 +579,23 @@ const styles = {
     borderRadius: "0.5rem",
     textDecoration: "none",
     fontWeight: 600,
+    transition: "all 0.2s ease",
+    whiteSpace: "nowrap",
+  },
+  guestBannerButtons: {
+    display: "flex",
+    gap: "0.75rem",
+    alignItems: "center",
+  },
+  guestButton: {
+    background: "transparent",
+    border: "2px solid #F59E0B",
+    color: "#F59E0B",
+    padding: "0.5rem 1.5rem",
+    borderRadius: "0.5rem",
+    cursor: "pointer",
+    fontWeight: 600,
+    fontSize: "0.95rem",
     transition: "all 0.2s ease",
     whiteSpace: "nowrap",
   },
