@@ -679,7 +679,7 @@ export default function Home() {
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: 18, fontWeight: 700, color: "#022037", marginBottom: 8 }}>Sanjana Gowda</div>
               <div style={{ color: "#234456", fontSize: 14, lineHeight: 1.5 }}>
-                Full-stack engineer passionate about AI and machine learning. Swimmer and co-president of Girls Who Code who loves building educational tools.
+                Full-stack engineer passionate about AI and machine learning. Swimmer and co-president of Girls Who Code who loves advocating for women in STEM.
               </div>
             </div>
           </div>
