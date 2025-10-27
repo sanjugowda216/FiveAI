@@ -27,6 +27,7 @@ export default function Home() {
       "Master AP exams with confidence",
       "Powered by official CED content",
       "Adaptive practice that works",
+      "Find your passion",
     ],
     []
   );
