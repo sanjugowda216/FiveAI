@@ -4,605 +4,151 @@
       "questions": [
         {
           "id": "q1",
-          "question": "Which of the following best describes the concept of the 'Global Tapestry' as it relates to the period c. 1200 to c. 1450?",
+          "question": "Which of the following developments most directly contributed to the formation of large, centralized states in East Asia during the period from 1200 to 1450?",
           "options": [
-            "A diverse network of cultures and societies",
-            "A military alliance between empires",
-            "A trade route connecting Asia and Europe",
-            "A series of agricultural innovations"
+            "The spread of Buddhism",
+            "The establishment of Confucianism as a state philosophy",
+            "The rise of nomadic empires",
+            "The development of maritime trade routes"
           ],
-          "correctAnswer": "A",
-          "explanation": "The 'Global Tapestry' refers to the interconnectedness and diversity of cultures and societies that developed during this period."
+          "correctAnswer": "B",
+          "explanation": "The establishment of Confucianism as a state philosophy provided a framework for governance and social order, facilitating the centralization of power."
         },
         {
           "id": "q2",
-          "question": "What was a significant technological innovation that facilitated trade along the Silk Roads during the period c. 1200 to c. 1450?",
+          "question": "What was one significant outcome of the interactions between the Islamic world and Europe during the period from 1200 to 1450?",
           "options": [
-            "The compass",
-            "The wheel",
-            "The printing press",
-            "The steam engine"
+            "Increased isolation of European nations",
+            "The decline of trade routes between Africa and Asia",
+            "The transfer of knowledge and technology",
+            "The rise of feudalism in the Islamic world"
           ],
-          "correctAnswer": "A",
-          "explanation": "The compass was a crucial technological innovation that improved navigation and facilitated maritime trade."
+          "correctAnswer": "C",
+          "explanation": "The transfer of knowledge and technology, particularly in areas like mathematics and medicine, was a significant outcome of interactions between the Islamic world and Europe."
         },
         {
           "id": "q3",
-          "question": "Which of the following empires is noted for its extensive bureaucracy and use of examination systems to select officials during the period c. 1200 to c. 1450?",
+          "question": "Which of the following best describes the role of women in societies across the globe during the period 1200 to 1450?",
           "options": [
-            "The Ottoman Empire",
-            "The Song Dynasty",
-            "The Mongol Empire",
-            "The Byzantine Empire"
+            "Women had no political power in any region",
+            "Women were primarily involved in agricultural work",
+            "Women were often excluded from religious practices",
+            "Women's roles varied significantly based on culture and region"
           ],
-          "correctAnswer": "B",
-          "explanation": "The Song Dynasty is known for its use of a meritocratic examination system to select bureaucratic officials."
+          "correctAnswer": "D",
+          "explanation": "Women's roles varied significantly based on culture and region, with some societies granting women more autonomy and others enforcing strict patriarchal norms."
         },
         {
           "id": "q4",
-          "question": "In the context of Unit 1, how did religion play a role in shaping societies between c. 1200 and c. 1450?",
+          "question": "The expansion of trade routes during the period from 1200 to 1450 most directly led to which of the following?",
           "options": [
-            "It caused widespread conflict and wars",
-            "It unified diverse groups under a single belief system",
-            "It was solely a personal matter with no impact on society",
-            "It was used to justify conquest and expansion"
+            "Increased cultural exchanges among civilizations",
+            "The decline of urban centers",
+            "The rise of isolationist policies",
+            "The end of the Silk Road"
           ],
-          "correctAnswer": "B",
-          "explanation": "Religion often served to unify diverse groups and provided a framework for social organization."
+          "correctAnswer": "A",
+          "explanation": "The expansion of trade routes, such as the Silk Road and maritime routes, facilitated increased cultural exchanges among civilizations."
         },
         {
           "id": "q5",
-          "question": "Which of the following best describes the status of women in many societies during the period c. 1200 to c. 1450?",
+          "question": "Which of the following was a major factor in the spread of the Black Death in the 14th century?",
           "options": [
-            "Women held equal political power as men",
-            "Women were primarily confined to domestic roles",
-            "Women were leaders of major empires",
-            "Women had no rights or social roles"
+            "Increased agricultural production",
+            "Decline of urban populations",
+            "Expansion of trade networks",
+            "Isolation of rural communities"
           ],
-          "correctAnswer": "B",
-          "explanation": "In many societies during this period, women were primarily confined to domestic roles, although their status varied significantly based on culture."
+          "correctAnswer": "C",
+          "explanation": "The expansion of trade networks allowed for the rapid spread of the Black Death across Europe and Asia."
         },
         {
           "id": "q6",
-          "question": "What was one of the main reasons for the increased trade along the Indian Ocean during the period c. 1200 to c. 1450?",
+          "question": "The development of the Bhakti movement in India during the late medieval period was primarily a response to which of the following?",
           "options": [
-            "Decline of land-based empires",
-            "Increased agricultural production in Europe",
-            "Technological advancements in shipbuilding",
-            "The spread of monotheistic religions"
+            "The influence of European missionaries",
+            "The rigid caste system and ritualistic practices",
+            "Invasions by Muslim rulers",
+            "The growth of trade in the Indian Ocean"
           ],
-          "correctAnswer": "C",
-          "explanation": "Technological advancements in shipbuilding, such as the lateen sail, facilitated longer and more efficient maritime trade routes."
+          "correctAnswer": "B",
+          "explanation": "The Bhakti movement arose as a response to the rigid caste system and ritualistic practices, promoting personal devotion to gods."
         },
         {
           "id": "q7",
-          "question": "Which of the following factors contributed to the rise of the Mongol Empire during the period c. 1200 to c. 1450?",
+          "question": "Which of the following was a characteristic feature of the Mongol Empire at its height?",
           "options": [
-            "The use of gunpowder",
-            "A strong centralized government",
-            "Superior horsemanship and military tactics",
-            "The spread of democracy"
+            "A centralized government with a single capital",
+            "The promotion of a single religious belief across its territories",
+            "The establishment of a vast trade network across Eurasia",
+            "The exclusion of conquered peoples from military service"
           ],
           "correctAnswer": "C",
-          "explanation": "The Mongols were known for their exceptional horsemanship and military tactics, which allowed them to conquer vast territories."
+          "explanation": "The Mongol Empire established a vast trade network across Eurasia, facilitating trade and cultural exchange."
         },
         {
           "id": "q8",
-          "question": "How did the spread of the plague in the 14th century impact trade and society in the period c. 1200 to c. 1450?",
+          "question": "Which of the following statements best describes the impact of the Crusades on European society?",
           "options": [
-            "It led to the strengthening of trade networks",
-            "It caused a decline in population and labor shortages",
-            "It had little effect on society",
-            "It resulted in the immediate end of the Silk Roads"
+            "They led to the permanent expulsion of Muslims from Spain.",
+            "They resulted in significant technological stagnation in Europe.",
+            "They stimulated trade and cultural exchanges with the East.",
+            "They caused the complete decline of feudalism."
           ],
-          "correctAnswer": "B",
-          "explanation": "The spread of the plague led to a significant decline in population, resulting in labor shortages and economic disruption."
+          "correctAnswer": "C",
+          "explanation": "The Crusades stimulated trade and cultural exchanges with the East, introducing Europeans to new goods and ideas."
         },
         {
           "id": "q9",
-          "question": "Which of the following was a key characteristic of the feudal system in Europe during the period c. 1200 to c. 1450?",
+          "question": "Which of the following was a significant technological innovation during the period from 1200 to 1450 that improved maritime trade?",
           "options": [
-            "Centralized government control",
-            "Social mobility based on wealth",
-            "Land ownership tied to social status",
-            "Democratic political structures"
-          ],
-          "correctAnswer": "C",
-          "explanation": "The feudal system was characterized by land ownership being directly tied to social status and obligations between lords and vassals."
-        },
-        {
-          "id": "q10",
-          "question": "What role did the city of Timbuktu play in the period c. 1200 to c. 1450?",
-          "options": [
-            "It was a major center of Islamic scholarship and trade",
-            "It was the capital of the Byzantine Empire",
-            "It served as a military outpost for the Mongol Empire",
-            "It was primarily known for its agricultural output"
-          ],
-          "correctAnswer": "A",
-          "explanation": "Timbuktu became a major center of Islamic scholarship and trade, particularly in gold and salt."
-        },
-        {
-          "id": "q11",
-          "question": "Which of the following was a major outcome of the interaction between different cultures during the period c. 1200 to c. 1450?",
-          "options": [
-            "Isolation of societies",
-            "Cultural syncretism",
-            "The decline of trade networks",
-            "The rise of absolute monarchies"
-          ],
-          "correctAnswer": "B",
-          "explanation": "Cultural syncretism occurred as different cultures interacted through trade, leading to the blending of traditions and ideas."
-        },
-        {
-          "id": "q12",
-          "question": "What was the significance of the trans-Saharan trade routes during the period c. 1200 to c. 1450?",
-          "options": [
-            "They connected Europe and Asia directly",
-            "They facilitated the exchange of goods and ideas between North Africa and West Africa",
-            "They had little impact on local economies",
-            "They were primarily used for military conquests"
-          ],
-          "correctAnswer": "B",
-          "explanation": "The trans-Saharan trade routes were crucial for facilitating the exchange of goods, such as gold and salt, as well as ideas between North and West Africa."
-        }
-      ],
-      "generatedAt": "2025-10-21T04:03:28.593Z",
-      "cedHash": "5f71349777bed53cef2dca9bff394352"
-    },
-    "unit-2": {
-      "questions": [
-        {
-          "id": "q1",
-          "question": "Which of the following best describes the impact of the Silk Roads during the period from c. 1200 to c. 1450?",
-          "options": [
-            "They facilitated the spread of technology and ideas across continents.",
-            "They were primarily used for military conquests.",
-            "They isolated different cultures from one another.",
-            "They were mainly a European trade network."
-          ],
-          "correctAnswer": "A",
-          "explanation": "The Silk Roads facilitated extensive cultural, technological, and economic exchanges across Asia and Europe, significantly impacting societies along the routes."
-        },
-        {
-          "id": "q2",
-          "question": "What was a significant consequence of the expansion of the Mongol Empire in the 13th century?",
-          "options": [
-            "The development of maritime trade routes.",
-            "The establishment of a unified language across Asia.",
-            "Increased trade and communication across Eurasia.",
-            "The isolation of Eastern Europe from Western Europe."
-          ],
-          "correctAnswer": "C",
-          "explanation": "The Mongol Empire's vast territory connected diverse cultures and regions, leading to increased trade and communication across Eurasia."
-        },
-        {
-          "id": "q3",
-          "question": "Which of the following regions was most significantly influenced by Indian Ocean trade routes from c. 1200 to c. 1450?",
-          "options": [
-            "Northern Europe",
-            "Sub-Saharan Africa",
-            "Southeast Asia",
-            "The Americas"
-          ],
-          "correctAnswer": "C",
-          "explanation": "Southeast Asia was significantly influenced by Indian Ocean trade, serving as a critical hub for maritime commerce and cultural exchange."
-        },
-        {
-          "id": "q4",
-          "question": "In the context of the Networks of Exchange, what role did the city of Timbuktu play during this period?",
-          "options": [
-            "It served as a major center for Islamic scholarship.",
-            "It was a primary agricultural center for Europe.",
-            "It was the capital of the Mongol Empire.",
-            "It was a key industrial hub for manufacturing."
-          ],
-          "correctAnswer": "A",
-          "explanation": "Timbuktu became a major center for Islamic scholarship and trade, facilitating the exchange of knowledge and goods in West Africa."
-        },
-        {
-          "id": "q5",
-          "question": "Which of the following was a characteristic of the trade networks established during this period?",
-          "options": [
-            "Trade was limited to luxury goods only.",
-            "Trade networks were primarily controlled by European powers.",
-            "Cultural exchanges often accompanied trade.",
-            "Trade routes were predominantly land-based."
-          ],
-          "correctAnswer": "C",
-          "explanation": "Cultural exchanges often accompanied trade during this period, as merchants shared ideas and practices along with goods."
-        },
-        {
-          "id": "q6",
-          "question": "What technological advancement significantly improved maritime trade during the period from c. 1200 to c. 1450?",
-          "options": [
+            "The compass",
             "The steam engine",
-            "The compass",
             "The printing press",
-            "The longbow"
+            "The land surveyor"
           ],
-          "correctAnswer": "B",
-          "explanation": "The compass was a significant technological advancement that improved navigation and maritime trade during this period."
-        },
-        {
-          "id": "q7",
-          "question": "What was a primary reason for the growth of trade in the Indian Ocean during this period?",
-          "options": [
-            "The establishment of European colonies",
-            "The demand for spices and luxury goods",
-            "The decline of land-based empires",
-            "The isolation of Asian markets"
-          ],
-          "correctAnswer": "B",
-          "explanation": "The demand for spices, textiles, and other luxury goods drove the growth of trade in the Indian Ocean."
-        },
-        {
-          "id": "q8",
-          "question": "Which of the following best represents the concept of 'Dar al-Islam' during the period from c. 1200 to c. 1450?",
-          "options": [
-            "A region where Islamic laws were not enforced.",
-            "A place where different religions coexisted peacefully.",
-            "A term denoting areas under Islamic rule and influence.",
-            "A geographic area solely focused on trade."
-          ],
-          "correctAnswer": "C",
-          "explanation": "'Dar al-Islam' refers to regions where Islamic law was practiced and where Islamic culture and influence were prevalent."
-        },
-        {
-          "id": "q9",
-          "question": "Which of the following statements about the exchange of goods along the Silk Roads is true?",
-          "options": [
-            "Silk was the only significant good traded along the routes.",
-            "Only luxury items were traded, excluding everyday goods.",
-            "Silk Roads facilitated the exchange of both luxury and everyday goods.",
-            "Trade was primarily conducted by land and had no maritime component."
-          ],
-          "correctAnswer": "C",
-          "explanation": "The Silk Roads facilitated the exchange of a wide variety of goods, including both luxury items like silk and everyday goods."
+          "correctAnswer": "A",
+          "explanation": "The compass was a significant technological innovation that improved navigation and facilitated maritime trade."
         },
         {
           "id": "q10",
-          "question": "What was one significant effect of the spread of Islam along trade routes during this period?",
+          "question": "What role did the city of Timbuktu play in the West African empires during the period from 1200 to 1450?",
           "options": [
-            "The decline of literacy rates in trading cities.",
-            "The establishment of banking systems based on Islamic principles.",
-            "The eradication of local cultures and religions.",
-            "The isolation of trade routes from cultural exchanges."
+            "It was a major center for Islamic education and scholarship.",
+            "It was primarily a military stronghold against European invaders.",
+            "It served as the capital of the Mali Empire only.",
+            "It was the birthplace of the Swahili city-states."
           ],
-          "correctAnswer": "B",
-          "explanation": "The spread of Islam along trade routes contributed to the establishment of banking systems based on Islamic principles, facilitating trade."
+          "correctAnswer": "A",
+          "explanation": "Timbuktu was a major center for Islamic education and scholarship, attracting scholars from various regions."
         },
         {
           "id": "q11",
-          "question": "Which of the following was a major factor in the expansion of trade networks during the period from c. 1200 to c. 1450?",
+          "question": "Which of the following best explains the significance of the Song Dynasty in the context of global history from 1200 to 1450?",
           "options": [
-            "The rise of feudalism in Europe",
-            "Increased demand for commodities",
-            "The decline of the Mongol Empire",
-            "The establishment of the Roman Empire"
+            "It was known for its military conquests in Central Asia.",
+            "It initiated the first European colonization efforts in Asia.",
+            "It saw significant advancements in technology and culture.",
+            "It was the first dynasty to adopt democracy."
           ],
-          "correctAnswer": "B",
-          "explanation": "Increased demand for commodities such as spices, textiles, and precious metals drove the expansion of trade networks during this period."
+          "correctAnswer": "C",
+          "explanation": "The Song Dynasty is known for its significant advancements in technology and culture, including developments in agriculture, commerce, and the arts."
         },
         {
           "id": "q12",
-          "question": "What role did the Hanseatic League play in the context of trade during the late medieval period?",
+          "question": "The system of feudalism in Europe during the Middle Ages was primarily characterized by what?",
           "options": [
-            "It served as a military alliance against the Mongols.",
-            "It facilitated trade among Northern European cities.",
-            "It was a religious organization promoting Christianity.",
-            "It focused solely on agricultural production."
+            "Centralized control by monarchs",
+            "A rigid caste system",
+            "Mutual obligations between lords and vassals",
+            "The dominance of urban merchants"
           ],
-          "correctAnswer": "B",
-          "explanation": "The Hanseatic League was a commercial alliance that facilitated trade among Northern European cities, promoting economic cooperation."
+          "correctAnswer": "C",
+          "explanation": "Feudalism was characterized by mutual obligations between lords and vassals, where land was exchanged for military service and loyalty."
         }
       ],
-      "generatedAt": "2025-10-21T04:05:02.438Z",
+      "generatedAt": "2025-10-27T02:08:36.086Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
-    }
-  },
-<<<<<<< HEAD
-  "ap-english-language": {
-=======
-  "ap-calculus-ab": {
->>>>>>> fba75a336ba4fb26a40d3009537c66421504a2ae
-    "unit-1": {
-      "questions": [
-        {
-          "id": "q1",
-<<<<<<< HEAD
-          "question": "Which of the following components of the rhetorical situation refers to the reason an author writes a text?",
-          "options": [
-            "A. Exigence",
-            "B. Audience",
-            "C. Writer",
-            "D. Purpose"
-          ],
-          "correctAnswer": "D",
-          "explanation": "The purpose refers to the reason an author writes a text, aiming to inform, persuade, entertain, or express."
-        },
-        {
-          "id": "q2",
-          "question": "In the context of argumentation, claims must be supported by which of the following?",
-          "options": [
-            "A. Conclusions",
-            "B. Evidence",
-            "C. Opinions",
-            "D. Speculation"
-          ],
-          "correctAnswer": "B",
-          "explanation": "Claims in an argument must be backed by evidence to be considered valid and convincing."
-        },
-        {
-          "id": "q3",
-          "question": "What is the role of an audience in the rhetorical situation?",
-          "options": [
-            "A. To provide context for the argument",
-            "B. To serve as the primary source of evidence",
-            "C. To influence the writer's purpose",
-            "D. To evaluate the writer's credibility"
-          ],
-          "correctAnswer": "C",
-          "explanation": "The audience influences the writer's purpose as the author must consider the beliefs, values, or needs of the audience."
-        },
-        {
-          "id": "q4",
-          "question": "Which of the following best describes 'exigence' in the rhetorical situation?",
-          "options": [
-            "A. The context in which a text is produced",
-            "B. The specific issue or problem that prompts the text",
-            "C. The audience's response to the text",
-            "D. The author's background and experience"
-          ],
-          "correctAnswer": "B",
-          "explanation": "Exigence refers to the specific issue or problem that prompts the creation of the text."
-        },
-        {
-          "id": "q5",
-          "question": "When analyzing an argument, what is a critical first step?",
-          "options": [
-            "A. Identifying the evidence",
-            "B. Understanding the claim",
-            "C. Evaluating the author's credibility",
-            "D. Disregarding emotional appeals"
-          ],
-          "correctAnswer": "B",
-          "explanation": "Understanding the claim is essential as it forms the foundation of the argument being analyzed."
-        },
-        {
-          "id": "q6",
-          "question": "Which of the following outcomes is NOT a goal of the AP English Language and Composition course?",
-          "options": [
-            "A. Enhancing writing skills",
-            "B. Preparing for college-level coursework",
-            "C. Memorizing literary devices",
-            "D. Developing critical reading skills"
-          ],
-          "correctAnswer": "C",
-          "explanation": "While understanding literary devices is important, the focus is on critical reading and writing skills rather than mere memorization."
-        },
-        {
-          "id": "q7",
-          "question": "What does the acronym 'CLE' stand for in the context of the course framework?",
-          "options": [
-            "A. Claims and Evidence",
-            "B. Contextual Learning Environment",
-            "C. Critical Literary Evaluation",
-            "D. Creative Language Expression"
-          ],
-          "correctAnswer": "A",
-          "explanation": "'CLE' stands for Claims and Evidence, which are crucial components when analyzing arguments."
-        },
-        {
-          "id": "q8",
-          "question": "Which of the following skills is prioritized in Unit 1 of the AP English Language course?",
-          "options": [
-            "A. Synthesizing information",
-            "B. Analyzing stylistic elements",
-            "C. Identifying components of the rhetorical situation",
-            "D. Organizing persuasive essays"
-          ],
-          "correctAnswer": "C",
-          "explanation": "Unit 1 focuses on understanding the components of the rhetorical situation, which is foundational for further analysis."
-        },
-        {
-          "id": "q9",
-          "question": "What does the term 'reasoning and organization' refer to in the AP English Language course?",
-          "options": [
-            "A. The use of emotional appeals in writing",
-            "B. The logical structure and coherence of arguments",
-            "C. The author's personal beliefs",
-            "D. The historical context of texts"
-          ],
-          "correctAnswer": "B",
-          "explanation": "Reasoning and organization pertain to how logically and coherently an argument is structured."
-        },
-        {
-          "id": "q10",
-          "question": "Which of the following is an example of a claim?",
-          "options": [
-            "A. Many people believe exercise is important.",
-            "B. Exercise is essential for maintaining physical health.",
-            "C. Some studies suggest exercise can improve mood.",
-            "D. It is common to see athletes training every day."
-          ],
-          "correctAnswer": "B",
-          "explanation": "A claim is a statement that asserts a belief or opinion that can be supported by evidence."
-        },
-        {
-          "id": "q11",
-          "question": "What is the purpose of the Progress Checks in the AP English Language course?",
-          "options": [
-            "A. To grade students on their writing",
-            "B. To provide formative feedback on understanding",
-            "C. To assess student knowledge at the end of the year",
-            "D. To prepare students for the final exam"
-          ],
-          "correctAnswer": "B",
-          "explanation": "Progress Checks are designed to provide formative feedback to help students identify areas where they need improvement."
-        },
-        {
-          "id": "q12",
-          "question": "Which of the following best represents the relationship between the big ideas and course skills in the AP English Language framework?",
-          "options": [
-            "A. They are independent of one another",
-            "B. Big ideas are more important than skills",
-            "C. Course skills spiral across big ideas throughout units",
-            "D. Skills are only assessed at the end of the course"
-          ],
-          "correctAnswer": "C",
-          "explanation": "The course framework emphasizes that skills spiral across the big ideas throughout the units, enhancing learning depth."
-        }
-      ],
-      "generatedAt": "2025-10-21T05:56:22.320Z",
-      "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
-=======
-          "question": "Evaluate the limit: lim_(x→3) (x^2 - 9)/(x - 3).",
-          "options": [
-            "0",
-            "6",
-            "3",
-            "6/3"
-          ],
-          "correctAnswer": "B",
-          "explanation": "This limit evaluates to 6 after factoring the numerator and canceling the common term."
-        },
-        {
-          "id": "q2",
-          "question": "Which of the following statements about the function f(x) = 1/(x - 2) is true?",
-          "options": [
-            "f(x) is continuous for all x",
-            "f(x) has a vertical asymptote at x = 2",
-            "f(x) approaches 0 as x approaches 2",
-            "f(2) = 1"
-          ],
-          "correctAnswer": "B",
-          "explanation": "The function has a vertical asymptote at x = 2, where it is not defined."
-        },
-        {
-          "id": "q3",
-          "question": "Find the limit: lim_(x→0) (sin(5x)/x).",
-          "options": [
-            "5",
-            "1",
-            "0",
-            "undefined"
-          ],
-          "correctAnswer": "A",
-          "explanation": "Using the limit property lim_(x→0) (sin(kx)/x) = k, we find that the limit is 5."
-        },
-        {
-          "id": "q4",
-          "question": "Determine the value of the limit: lim_(x→∞) (3x^2 + 2x)/(2x^2 + 5).",
-          "options": [
-            "3/2",
-            "3",
-            "2/3",
-            "1"
-          ],
-          "correctAnswer": "A",
-          "explanation": "As x approaches infinity, the leading coefficients of the highest degree terms dominate, giving 3/2."
-        },
-        {
-          "id": "q5",
-          "question": "If f(x) = x^3 - 6x^2 + 9x + 1, what is f'(2)?",
-          "options": [
-            "1",
-            "5",
-            "7",
-            "3"
-          ],
-          "correctAnswer": "C",
-          "explanation": "Calculating the derivative f'(x) = 3x^2 - 12x + 9 and evaluating at x=2 gives f'(2) = 7."
-        },
-        {
-          "id": "q6",
-          "question": "Which of the following functions is continuous at x = 1?",
-          "options": [
-            "f(x) = 1/(x - 1)",
-            "f(x) = x^2 - 1",
-            "f(x) = |x - 1|",
-            "f(x) = step function"
-          ],
-          "correctAnswer": "C",
-          "explanation": "The absolute value function |x - 1| is continuous everywhere, including at x = 1."
-        },
-        {
-          "id": "q7",
-          "question": "Evaluate the limit: lim_(x→1) (x^2 - 1)/(x - 1).",
-          "options": [
-            "1",
-            "0",
-            "2",
-            "undefined"
-          ],
-          "correctAnswer": "C",
-          "explanation": "Factoring gives (x-1)(x+1)/(x-1), and the limit evaluates to 2 after canceling."
-        },
-        {
-          "id": "q8",
-          "question": "What is the limit of f(x) = x^2 + 3x as x approaches -3?",
-          "options": [
-            "0",
-            "3",
-            "-3",
-            "-6"
-          ],
-          "correctAnswer": "D",
-          "explanation": "Direct substitution yields f(-3) = (-3)^2 + 3(-3) = 9 - 9 = 0."
-        },
-        {
-          "id": "q9",
-          "question": "A function has a limit of 5 as x approaches 2. What can we conclude?",
-          "options": [
-            "f(2) = 5",
-            "f is continuous at x = 2",
-            "lim_(x→2) f(x) = 5",
-            "f(2) does not exist"
-          ],
-          "correctAnswer": "C",
-          "explanation": "We can conclude that lim_(x→2) f(x) = 5, but we cannot conclude anything about f(2) without more information."
-        },
-        {
-          "id": "q10",
-          "question": "Which of the following describes a removable discontinuity?",
-          "options": [
-            "f(x) = 1/(x^2 - 4)",
-            "f(x) = (x^2 - 1)/(x - 1)",
-            "f(x) = 3/(x - 3)",
-            "f(x) = sin(x)/x"
-          ],
-          "correctAnswer": "B",
-          "explanation": "The function (x^2 - 1)/(x - 1) has a removable discontinuity at x=1 after canceling."
-        },
-        {
-          "id": "q11",
-          "question": "Evaluate the limit: lim_(x→∞) (5x)/(2x + 1).",
-          "options": [
-            "0",
-            "5/2",
-            "5",
-            "2/5"
-          ],
-          "correctAnswer": "B",
-          "explanation": "As x approaches infinity, the leading coefficients dominate, resulting in 5/2."
-        },
-        {
-          "id": "q12",
-          "question": "What type of discontinuity occurs at x = 0 for the function f(x) = 1/x?",
-          "options": [
-            "Removable",
-            "Jump",
-            "Infinite",
-            "Continuous"
-          ],
-          "correctAnswer": "C",
-          "explanation": "f(x) = 1/x has an infinite discontinuity at x = 0, where it is undefined."
-        }
-      ],
-      "generatedAt": "2025-10-22T05:16:59.371Z",
-      "cedHash": "34e04ca920d39358cc327fcc335bf597"
->>>>>>> fba75a336ba4fb26a40d3009537c66421504a2ae
     }
   }
 }
