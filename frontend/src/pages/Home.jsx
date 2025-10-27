@@ -526,7 +526,7 @@ export default function Home() {
       <section id="features" ref={featuresRef} style={styles.featuresSection}>
         <h2 style={styles.sectionTitle}>Everything You Need to Succeed</h2>
         <p style={styles.sectionSubtitle}>
-          Built with your success in mind
+          Tools designed to help you excel
         </p>
 
         <div style={styles.featuresGrid}>
