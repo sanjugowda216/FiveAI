@@ -324,15 +324,16 @@ function AppContent() {
           element={
             <div className="login-screen">
               <div className="card">
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem" }}>
                   <img 
                     src="/logo.png" 
                     alt="HighFive Logo" 
                     style={{
-                      width: "32px",
-                      height: "32px",
-                      marginRight: "8px",
-                      borderRadius: "6px"
+                      width: "48px",
+                      height: "48px",
+                      marginRight: "12px",
+                      borderRadius: "10px",
+                      boxShadow: "0 4px 15px rgba(0, 120, 200, 0.25)"
                     }}
                   />
                   <h1 className="title">HighFive</h1>
