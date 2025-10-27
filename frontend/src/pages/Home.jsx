@@ -710,7 +710,7 @@ export default function Home() {
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <div style={{ marginBottom: 8, fontWeight: 700, fontSize: 18 }}>HighFive</div>
           <div style={{ opacity: 0.95, fontSize: 14 }}>
-            © 2025 HighFive. Making AP exam preparation more accessible for students everywhere.
+            2025 HighFive. Making AP exam preparation more accessible for students everywhere.
           </div>
         </div>
       </footer>
