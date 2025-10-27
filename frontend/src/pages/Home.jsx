@@ -613,10 +613,10 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureTitle}>Community</div>
+            <div style={styles.featureTitle}>Instant Feedback</div>
             <div style={styles.featureText}>
-              Ask questions and get help from other students. Share knowledge 
-              and learn together.
+              Get immediate feedback on your practice tests. Upload text or images 
+              for FRQ grading with detailed explanations.
             </div>
           </div>
 
@@ -631,10 +631,10 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureTitle}>Instant Feedback</div>
+            <div style={styles.featureTitle}>Flashcards</div>
             <div style={styles.featureText}>
-              Get immediate feedback on your practice tests. Upload text or images 
-              for FRQ grading with detailed explanations.
+              Create and study personalized flashcards to help you memorize key concepts, 
+              terms, and definitions for your AP exams.
             </div>
           </div>
         </div>
