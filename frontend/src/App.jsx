@@ -322,7 +322,7 @@ function AppContent() {
         <Route 
           path="/login" 
           element={
-            <div className="login-screen">
+            <div className="login-screen" data-theme="light">
               <div className="card">
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem" }}>
                   <img 
@@ -356,10 +356,7 @@ function AppContent() {
                     </>
                   )}
                 </p>
-                <div className="text-center mt-4" style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-                  <p style={{ marginBottom: "0.75rem", fontSize: "0.9rem", color: "rgba(255,255,255,0.7)" }}>
-                    Or continue as a guest
-                  </p>
+                <div className="text-center mt-4" style={{ paddingTop: "1rem", borderTop: "1px solid rgba(0,0,0,0.1)", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   <button
                     onClick={() => {
                       localStorage.setItem('isGuest', 'true');
@@ -368,7 +365,7 @@ function AppContent() {
                     style={{
                       background: "transparent",
                       border: "2px solid #0078C8",
-                      color: "#fff",
+                      color: "#0078C8",
                       padding: "0.5rem 1.5rem",
                       borderRadius: "6px",
                       cursor: "pointer",
@@ -382,10 +379,25 @@ function AppContent() {
                     }}
                     onMouseLeave={(e) => {
                       e.target.style.background = "transparent";
-                      e.target.style.color = "#fff";
+                      e.target.style.color = "#0078C8";
                     }}
                   >
                     Continue as Guest
+                  </button>
+                  <button
+                    onClick={() => navigate("/")}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "rgba(0,0,0,0.6)",
+                      padding: "0.5rem 0",
+                      cursor: "pointer",
+                      fontWeight: 500,
+                      fontSize: "0.875rem",
+                      textDecoration: "underline"
+                    }}
+                  >
+                    Return to Home
                   </button>
                 </div>
               </div>
