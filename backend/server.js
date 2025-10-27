@@ -23,7 +23,7 @@ app.use(express.json({ limit: "10mb" }));
 
 // Simple test route
 app.get("/", (req, res) => {
-  res.send("HighFive backend is running 👑");
+  res.send("High5 backend is running 👑");
 });
 
 // Mount question routes
@@ -37,7 +37,7 @@ app.use("/api/flashcards", flashcardRoutes);
 // Initialize CED parsing on startup
 async function startServer() {
   try {
-    console.log("Starting HighFive backend server...");
+    console.log("Starting High5 backend server...");
     
     // Initialize CED parsing
     await initializeCedParsing();

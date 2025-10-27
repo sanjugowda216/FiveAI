@@ -24,7 +24,7 @@ const router = express.Router();
  */
 router.get('/', (req, res) => {
   res.json({
-    message: 'HighFive MCQ API',
+    message: 'High5 MCQ API',
     endpoints: {
       'GET /api/questions/units/:courseId': 'Get available units for a course',
       'GET /api/questions/:courseId/:unitNumber?isAuthenticated=true': 'Get MCQ questions for a specific unit (12 for authenticated, 6 for guests)',
