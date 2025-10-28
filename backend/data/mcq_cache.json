@@ -150,5 +150,307 @@
       "generatedAt": "2025-10-27T02:08:36.086Z",
       "cedHash": "5f71349777bed53cef2dca9bff394352"
     }
+  },
+  "ap-english-language": {
+    "unit-1": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best describes the rhetorical situation of a speech given to a high school graduation audience?",
+          "options": [
+            "The speaker's purpose is to entertain the audience with jokes.",
+            "The audience is primarily composed of educators who value academic achievement.",
+            "The context includes a celebration of accomplishments and a transition to adulthood.",
+            "The exigence is a call for action regarding educational reform."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The context of the speech includes a celebration of accomplishments, which is typical for graduation events."
+        },
+        {
+          "id": "q2",
+          "question": "In analyzing a persuasive essay, which of the following elements is most crucial for establishing credibility?",
+          "options": [
+            "The use of emotional appeals to connect with the audience.",
+            "The presence of anecdotal evidence from personal experience.",
+            "The author's qualifications and expertise on the subject matter.",
+            "The inclusion of quotes from popular culture."
+          ],
+          "correctAnswer": "C",
+          "explanation": "Establishing credibility is primarily achieved through the author's qualifications and expertise, which enhances trust."
+        },
+        {
+          "id": "q3",
+          "question": "Which of the following is an example of an effective counterargument in a debate about climate change?",
+          "options": [
+            "Climate change is a hoax perpetrated by scientists.",
+            "The economic costs of environmental regulations can harm businesses.",
+            "Many people do not believe in climate change, so it must not be real.",
+            "Investing in renewable energy creates more jobs than fossil fuels."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The economic costs of regulations can serve as a legitimate counterargument in the debate, presenting an alternative perspective."
+        },
+        {
+          "id": "q4",
+          "question": "What rhetorical strategy is primarily used in the following statement: 'We must choose between a future of environmental devastation or a world where our children can thrive'?",
+          "options": [
+            "Pathos",
+            "Logos",
+            "Ethos",
+            "Kairos"
+          ],
+          "correctAnswer": "A",
+          "explanation": "This statement appeals to emotions (pathos) by presenting a stark contrast between two futures, invoking a sense of urgency."
+        },
+        {
+          "id": "q5",
+          "question": "In an analysis of a political advertisement, which of the following best represents the appeal to logos?",
+          "options": [
+            "A testimonial from a famous celebrity endorsing the candidate.",
+            "Statistics showing the candidate's positive impact on the economy.",
+            "Images of the candidate engaging with community members.",
+            "Emotional music that plays during the advertisement."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Logos refers to logical reasoning, and statistics provide factual evidence to support the candidate's effectiveness."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best illustrates the concept of synthesis in writing?",
+          "options": [
+            "Combining personal anecdotes with academic research to support a thesis.",
+            "Focusing solely on one scholarly article to build an argument.",
+            "Presenting a series of unrelated facts to inform the audience.",
+            "Using quotes from different authors without connecting their ideas."
+          ],
+          "correctAnswer": "A",
+          "explanation": "Synthesis involves integrating various sources and perspectives to create a cohesive argument."
+        },
+        {
+          "id": "q7",
+          "question": "In the context of rhetorical analysis, which of the following elements would be the most critical to identify in a speaker's argument?",
+          "options": [
+            "The intended audience and their values.",
+            "The personal beliefs of the speaker.",
+            "The historical context in which the argument was made.",
+            "The length of the speech."
+          ],
+          "correctAnswer": "A",
+          "explanation": "Identifying the intended audience and their values is crucial for understanding how the argument is crafted to persuade."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following best describes the purpose of a thesis statement in an argumentative essay?",
+          "options": [
+            "To summarize the main points of the essay.",
+            "To present a claim that can be supported by evidence.",
+            "To provide background information on the topic.",
+            "To engage the reader's interest in the introduction."
+          ],
+          "correctAnswer": "B",
+          "explanation": "A thesis statement presents a claim that the essay will support with evidence, serving as a roadmap for the argument."
+        },
+        {
+          "id": "q9",
+          "question": "What rhetorical device is primarily employed in the phrase 'The pen is mightier than the sword'?",
+          "options": [
+            "Metaphor",
+            "Alliteration",
+            "Hyperbole",
+            "Simile"
+          ],
+          "correctAnswer": "A",
+          "explanation": "This phrase uses metaphor to suggest that writing and ideas can be more powerful than physical force."
+        },
+        {
+          "id": "q10",
+          "question": "In an argumentative text, which of the following best represents a logical fallacy?",
+          "options": [
+            "Presenting statistical data to support a claim.",
+            "Claiming that if one event happens, a series of negative outcomes will inevitably follow.",
+            "Using expert testimony to validate an argument.",
+            "Citing a historical example that supports the thesis."
+          ],
+          "correctAnswer": "B",
+          "explanation": "This represents a slippery slope fallacy, suggesting that one event will lead to an extreme chain of events without evidence."
+        },
+        {
+          "id": "q11",
+          "question": "Which of the following strategies would best enhance a writer's argument in a persuasive essay?",
+          "options": [
+            "Using complex vocabulary to impress the reader.",
+            "Appealing to the audience's emotions through personal stories.",
+            "Focusing exclusively on factual evidence without any emotional appeal.",
+            "Presenting only one side of the argument to avoid confusion."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Appealing to the audience's emotions through personal stories can help strengthen the argument by creating a connection."
+        },
+        {
+          "id": "q12",
+          "question": "In examining the rhetorical choices of a speech, which of the following elements is least likely to affect the audience's perception of the speaker?",
+          "options": [
+            "The speaker's tone and delivery style.",
+            "The visual imagery used in accompanying slides.",
+            "The structure of the speech and flow of ideas.",
+            "The length of the speech in minutes."
+          ],
+          "correctAnswer": "D",
+          "explanation": "While the length of the speech may influence engagement, it is the tone, structure, and imagery that more directly affect perception."
+        }
+      ],
+      "generatedAt": "2025-10-27T21:20:17.804Z",
+      "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
+    },
+    "unit-2": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which of the following best explains how the author's use of anecdotes in the passage contributes to the overall argument?",
+          "options": [
+            "The anecdotes provide personal experiences that resonate with the audience.",
+            "The anecdotes distract from the main argument and reduce its effectiveness.",
+            "The anecdotes offer statistical evidence to support the claims made.",
+            "The anecdotes are irrelevant and do not connect to the author's purpose."
+          ],
+          "correctAnswer": "A",
+          "explanation": "The use of anecdotes serves to create a personal connection with the audience, making the argument more relatable and compelling."
+        },
+        {
+          "id": "q2",
+          "question": "In the context of the passage, which rhetorical strategy is primarily employed by the author to appeal to ethos?",
+          "options": [
+            "Citing expert opinions to enhance credibility.",
+            "Using emotional language to elicit sympathy.",
+            "Presenting counterarguments to show fairness.",
+            "Incorporating personal stories to demonstrate vulnerability."
+          ],
+          "correctAnswer": "A",
+          "explanation": "Citing expert opinions establishes the author's credibility and aligns with the rhetorical appeal to ethos."
+        },
+        {
+          "id": "q3",
+          "question": "What is the primary purpose of the rhetorical question posed by the author in the third paragraph?",
+          "options": [
+            "To introduce a new topic for discussion.",
+            "To challenge the reader's assumptions about the subject.",
+            "To summarize the main argument of the passage.",
+            "To provide evidence supporting the author's claims."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Rhetorical questions are often used to provoke thought and challenge the audience's preconceptions, encouraging deeper engagement with the argument."
+        },
+        {
+          "id": "q4",
+          "question": "Which of the following statements best describes the author's tone in the passage?",
+          "options": [
+            "Ironic and sarcastic, undermining the subject matter.",
+            "Optimistic and hopeful, promoting a positive outlook.",
+            "Critical and confrontational, questioning established beliefs.",
+            "Neutral and informative, presenting facts without bias."
+          ],
+          "correctAnswer": "C",
+          "explanation": "The author's critical tone suggests a confrontational stance towards the subject matter, aiming to provoke thought and discussion."
+        },
+        {
+          "id": "q5",
+          "question": "How does the structure of the passage contribute to its overall effectiveness?",
+          "options": [
+            "It follows a chronological order that simplifies complex ideas.",
+            "It uses a problem-solution format that clearly outlines the author's argument.",
+            "It intersperses evidence and commentary, maintaining reader engagement.",
+            "It employs a repetitive structure that reinforces key points."
+          ],
+          "correctAnswer": "B",
+          "explanation": "A problem-solution format enhances clarity and guides the reader through the author's reasoning."
+        },
+        {
+          "id": "q6",
+          "question": "Which of the following best identifies the main claim made by the author in the passage?",
+          "options": [
+            "The current policies are insufficient to address the issues at hand.",
+            "Public opinion has shifted significantly over the past decade.",
+            "Historical precedents suggest a need for reform in this area.",
+            "Personal experiences illustrate the challenges faced by individuals."
+          ],
+          "correctAnswer": "A",
+          "explanation": "The main claim centers on the inadequacy of current policies in addressing the issues, which is supported throughout the passage."
+        },
+        {
+          "id": "q7",
+          "question": "In the passage, the author uses figurative language primarily to:",
+          "options": [
+            "Simplify complex concepts for the audience.",
+            "Create vivid imagery that enhances emotional appeal.",
+            "Establish a formal tone appropriate for the argument.",
+            "Provide factual evidence that supports the claims."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Figurative language enhances the emotional resonance of the argument, making it more impactful for the audience."
+        },
+        {
+          "id": "q8",
+          "question": "Which of the following best describes the author's intended audience for the passage?",
+          "options": [
+            "Experts in the field who require detailed analysis.",
+            "General readers who may lack background knowledge.",
+            "Political leaders seeking to enact change.",
+            "Students studying rhetorical techniques in writing."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The passage is designed to engage general readers, making the argument accessible without requiring specialized knowledge."
+        },
+        {
+          "id": "q9",
+          "question": "How does the author use contrast in the passage to strengthen the argument?",
+          "options": [
+            "By comparing different viewpoints to highlight the author's perspective.",
+            "By showing the negative consequences of ignoring the issue.",
+            "By juxtaposing past and present to demonstrate change.",
+            "By outlining the benefits of opposing arguments to appear fair-minded."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The contrast between the consequences of action versus inaction effectively underscores the urgency of the author's argument."
+        },
+        {
+          "id": "q10",
+          "question": "Which rhetorical device is most evident in the author's repeated use of the phrase 'We cannot afford to ignore'?",
+          "options": [
+            "Alliteration, creating a rhythmic quality to the text.",
+            "Anaphora, emphasizing the importance of the message.",
+            "Metaphor, suggesting a financial implication of inaction.",
+            "Hyperbole, exaggerating the consequences of ignorance."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Anaphora is the repetition of a phrase at the beginning of successive clauses, which emphasizes the urgency of the message."
+        },
+        {
+          "id": "q11",
+          "question": "What impact does the author's choice of imagery have on the reader's perception of the issue discussed in the passage?",
+          "options": [
+            "It creates a sense of detachment from the issue.",
+            "It evokes strong emotions that compel the reader to act.",
+            "It provides a clear factual basis for understanding the argument.",
+            "It introduces ambiguity that confuses the reader's understanding."
+          ],
+          "correctAnswer": "B",
+          "explanation": "Imagery evokes emotions that engage the reader and reinforce the urgency of the issue presented."
+        },
+        {
+          "id": "q12",
+          "question": "In the final paragraph, the author calls for action primarily to:",
+          "options": [
+            "Encourage reflection on the issue's complexities.",
+            "Motivate the audience to participate in advocacy.",
+            "Summarize the main points discussed in the passage.",
+            "Reinforce the credibility of the argument presented."
+          ],
+          "correctAnswer": "B",
+          "explanation": "The call to action serves to mobilize the audience, urging them to take steps towards addressing the issue."
+        }
+      ],
+      "generatedAt": "2025-10-27T22:32:08.543Z",
+      "cedHash": "b5d06c0b6025b3eb3f652491cced79c3"
+    }
   }
 }

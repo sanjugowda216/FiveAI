@@ -2,7 +2,7 @@
 
 ## What's New?
 
-A beautiful dark/light theme system has been added to HighFive with these features:
+A beautiful dark/light theme system has been added to High5 with these features:
 
 ### ✨ Features
 - **🖥️ System Theme (Default)**: Automatically follows your OS settings
@@ -35,7 +35,7 @@ In the **top right corner of the navbar** (next to the Logout button):
 ### Storage
 - Your choice is saved in browser storage
 - Same theme persists across sessions
-- Works across all HighFive pages
+- Works across all High5 pages
 
 ## System Preferences
 

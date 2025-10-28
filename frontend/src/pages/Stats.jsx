@@ -19,16 +19,38 @@ export default function Stats({ stats, userProfile }) {
       // Check localStorage for FRQ submission data  
       const frqData = JSON.parse(localStorage.getItem('frqSubmissions') || '{}');
       
+      // Clean up any invalid entries (courses with 0 questions or bad data)
+      const validMcqData = {};
+      Object.keys(mcqData).forEach(courseId => {
+        const courseData = mcqData[courseId];
+        // Only keep courses that have actually been practiced (totalQuestions > 0 and valid data)
+        if (courseData && 
+            typeof courseData === 'object' &&
+            typeof courseData.totalQuestions === 'number' &&
+            typeof courseData.correct === 'number' &&
+            courseData.totalQuestions > 0) {  // MUST have at least 1 question answered
+          validMcqData[courseId] = courseData;
+        }
+      });
+      
+      // Clean up localStorage if needed (only for guests, not logged-in users)
+      if (!isLoggedIn && Object.keys(mcqData).length !== Object.keys(validMcqData).length) {
+        localStorage.setItem('mcqStats', JSON.stringify(validMcqData));
+        console.log('Cleaned up invalid stats entries');
+      }
+      
       // Process each course to see if there's any activity
       apCourses.forEach(course => {
         const courseId = course.id;
-        const hasMcqData = mcqData[courseId] && (
-          mcqData[courseId].totalQuestions > 0 || 
-          mcqData[courseId].correct > 0 ||
-          mcqData[courseId].sessions?.length > 0
-        );
         
-        const hasFrqData = frqData[courseId] && frqData[courseId].length > 0;
+        // Check MCQ data - must have at least 1 question answered
+        const hasMcqData = validMcqData[courseId] && validMcqData[courseId].totalQuestions > 0;
+        
+        // Check FRQ data - must be an array with actual submissions
+        const hasFrqData = frqData[courseId] && 
+          Array.isArray(frqData[courseId]) && 
+          frqData[courseId].length > 0 &&
+          frqData[courseId].some(sub => sub && typeof sub === 'object');
         
         // Only add course if there's actual activity
         if (hasMcqData || hasFrqData) {
@@ -36,13 +58,13 @@ export default function Stats({ stats, userProfile }) {
             courseName: course.name,
             subject: course.subject,
             mcqStats: hasMcqData ? {
-              totalQuestions: mcqData[courseId].totalQuestions || 0,
-              correct: mcqData[courseId].correct || 0,
-              averageScore: mcqData[courseId].totalQuestions > 0 
-                ? Math.round((mcqData[courseId].correct / mcqData[courseId].totalQuestions) * 100 * 10) / 10
+              totalQuestions: validMcqData[courseId].totalQuestions || 0,
+              correct: validMcqData[courseId].correct || 0,
+              averageScore: validMcqData[courseId].totalQuestions > 0 
+                ? Math.round((validMcqData[courseId].correct / validMcqData[courseId].totalQuestions) * 100 * 10) / 10
                 : 0,
-              recentScores: mcqData[courseId].recentScores || [],
-              sessions: mcqData[courseId].sessions || []
+              recentScores: (validMcqData[courseId].recentScores && Array.isArray(validMcqData[courseId].recentScores)) ? validMcqData[courseId].recentScores : [],
+              sessions: (validMcqData[courseId].sessions && Array.isArray(validMcqData[courseId].sessions)) ? validMcqData[courseId].sessions : []
             } : null,
             frqStats: hasFrqData ? {
               totalSubmissions: frqData[courseId].length,

@@ -299,7 +299,7 @@ function AppContent() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
             <img 
               src="/logo.png" 
-              alt="HighFive Logo" 
+              alt="High5 Logo" 
               style={{
                 width: "32px",
                 height: "32px",
@@ -307,7 +307,7 @@ function AppContent() {
                 borderRadius: "6px"
               }}
             />
-            <h1 className="title">HighFive</h1>
+            <h1 className="title">High5</h1>
           </div>
           <p className="msg">Checking your session…</p>
         </div>
@@ -327,7 +327,7 @@ function AppContent() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem" }}>
                   <img 
                     src="/logo.png" 
-                    alt="HighFive Logo" 
+                    alt="High5 Logo" 
                     style={{
                       width: "48px",
                       height: "48px",
@@ -336,7 +336,7 @@ function AppContent() {
                       boxShadow: "0 4px 15px rgba(0, 120, 200, 0.25)"
                     }}
                   />
-                  <h1 className="title">HighFive</h1>
+                  <h1 className="title">High5</h1>
                 </div>
                 {isLogin ? (
                   <Login onLoginSuccess={handleAuthSuccess} />

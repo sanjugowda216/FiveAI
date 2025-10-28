@@ -84,7 +84,7 @@ export default function Dashboard({
       <header style={styles.header}>
         <div>
           <h1 style={styles.heading}>
-            {preferredName ? `Welcome back, ${preferredName}!` : userEmail ? `Welcome back, ${userEmail}!` : "Welcome to HighFive"}
+            {preferredName ? `Welcome back, ${preferredName}!` : userEmail ? `Welcome back, ${userEmail}!` : "Welcome to High5"}
           </h1>
           <p style={styles.subheading}>
             {hasCourseSelected
