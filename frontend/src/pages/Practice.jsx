@@ -227,6 +227,7 @@ export default function Practice({
           canGoNext={currentQuestionIndex < questions.length - 1}
           canGoPrevious={currentQuestionIndex > 0}
           courseId={activeCourseId}
+          userProfile={userProfile}
         />
       </section>
     );

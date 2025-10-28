@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext.jsx';
 import TextToSpeechButton from './TextToSpeechButton';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export default function QuestionCard({
   question,
@@ -11,7 +13,8 @@ export default function QuestionCard({
   onBackToUnits,
   canGoNext,
   canGoPrevious,
-  courseId
+  courseId,
+  userProfile
 }) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
@@ -88,50 +91,102 @@ export default function QuestionCard({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedAnswer) {
       setSubmitted(true);
       setShowExplanation(true);
       
       // Track stats for this question
       if (courseId) {
-        trackQuestionStats(courseId, selectedAnswer === question.correctAnswer);
+        await trackQuestionStats(courseId, selectedAnswer === question.correctAnswer);
       }
     }
   };
 
-  const trackQuestionStats = (courseId, isCorrect) => {
+  const trackQuestionStats = async (courseId, isCorrect) => {
     try {
-      // Get existing stats
-      const existingStats = JSON.parse(localStorage.getItem('mcqStats') || '{}');
-      
-      // Initialize course stats if not exists
-      if (!existingStats[courseId]) {
-        existingStats[courseId] = {
-          totalQuestions: 0,
-          correct: 0,
-          recentScores: [],
-          sessions: []
-        };
+      // For logged-in users: save to Firebase
+      if (userProfile && userProfile.uid) {
+        try {
+          const userRef = doc(db, 'users', userProfile.uid);
+          const currentScore = isCorrect ? 100 : 0;
+          
+          // Read current stats, update, then write back
+          const userSnap = await getDoc(userRef);
+          const userData = userSnap.data();
+          const userStats = userData?.stats || {};
+          
+          // Initialize course stats if needed
+          if (!userStats[courseId]) {
+            userStats[courseId] = {
+              totalQuestions: 0,
+              correct: 0,
+              recentScores: []
+            };
+          }
+          
+          // Update stats
+          userStats[courseId].totalQuestions = (userStats[courseId].totalQuestions || 0) + 1;
+          if (isCorrect) {
+            userStats[courseId].correct = (userStats[courseId].correct || 0) + 1;
+          }
+          
+          // Update last practiced timestamp
+          userStats[courseId].lastPracticed = new Date().toISOString();
+          
+          // Add to recent scores (keep last 20)
+          if (!userStats[courseId].recentScores) {
+            userStats[courseId].recentScores = [];
+          }
+          userStats[courseId].recentScores.push(currentScore);
+          if (userStats[courseId].recentScores.length > 20) {
+            userStats[courseId].recentScores = userStats[courseId].recentScores.slice(-20);
+          }
+          
+          // Write back to Firebase
+          await updateDoc(userRef, {
+            stats: userStats
+          });
+          
+          console.log('✅ Stats updated to Firebase:', {
+            courseId,
+            totalQuestions: userStats[courseId].totalQuestions,
+            correct: userStats[courseId].correct,
+            isCorrect
+          });
+        } catch (firebaseError) {
+          console.error('Error updating Firebase stats:', firebaseError);
+        }
+      } else {
+        // For guests: save to localStorage
+        const existingStats = JSON.parse(localStorage.getItem('mcqStats') || '{}');
+        
+        if (!existingStats[courseId]) {
+          existingStats[courseId] = {
+            totalQuestions: 0,
+            correct: 0,
+            recentScores: [],
+            sessions: []
+          };
+        }
+        
+        existingStats[courseId].totalQuestions += 1;
+        if (isCorrect) {
+          existingStats[courseId].correct += 1;
+        }
+        
+        // Update last practiced timestamp
+        existingStats[courseId].lastPracticed = new Date().toISOString();
+        
+        const currentScore = isCorrect ? 100 : 0;
+        existingStats[courseId].recentScores.push(currentScore);
+        if (existingStats[courseId].recentScores.length > 20) {
+          existingStats[courseId].recentScores.shift();
+        }
+        
+        localStorage.setItem('mcqStats', JSON.stringify(existingStats));
+        console.log('✅ Stats updated to localStorage (guest):', courseId);
       }
-      
-      // Update stats
-      existingStats[courseId].totalQuestions += 1;
-      if (isCorrect) {
-        existingStats[courseId].correct += 1;
-      }
-      
-      // Add to recent scores (keep last 20)
-      const currentScore = isCorrect ? 100 : 0;
-      existingStats[courseId].recentScores.push(currentScore);
-      if (existingStats[courseId].recentScores.length > 20) {
-        existingStats[courseId].recentScores.shift();
-      }
-      
-      // Save back to localStorage
-      localStorage.setItem('mcqStats', JSON.stringify(existingStats));
-      
-      console.log('Updated MCQ stats for', courseId, ':', existingStats[courseId]);
     } catch (error) {
       console.error('Error tracking question stats:', error);
     }
