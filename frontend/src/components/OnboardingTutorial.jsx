@@ -7,7 +7,7 @@ const OnboardingTutorial = ({ onComplete }) => {
   const steps = [
     {
       id: 'navbar',
-      title: 'Welcome to HighFive! 👋',
+      title: 'Welcome to High5! 👋',
       message: 'This is your navigation bar. Here you can access all the main features of the app.',
       position: 'bottom',
       targetSelector: '[data-tutorial="navbar"]'

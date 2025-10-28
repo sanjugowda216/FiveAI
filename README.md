@@ -1,10 +1,10 @@
-# HighFive
+# High5
 Congressional App Challenge
-# Running HighFive Locally
+# Running High5 Locally
 
 # Clone the repo and enter project
 git clone <YOUR_REPO_URL>
-cd HighFive
+cd High5
 
 # Backend
 cd backend

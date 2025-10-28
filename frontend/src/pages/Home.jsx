@@ -379,7 +379,7 @@ export default function Home() {
         <div onClick={() => scrollTo("top")} style={styles.logo}>
           <img 
             src="/logo.png" 
-            alt="HighFive Logo" 
+            alt="High5 Logo" 
             style={{
               width: "28px",
               height: "28px",
@@ -387,7 +387,7 @@ export default function Home() {
               borderRadius: "6px"
             }}
           />
-          HighFive
+          High5
         </div>
 
         <nav style={styles.nav}>
@@ -417,7 +417,7 @@ export default function Home() {
         <section ref={heroRef} style={styles.heroCard}>
           <h1 style={styles.heroTitle}>
             Prepare for AP Exams with{" "}
-            <span style={styles.heroGradient}>HighFive</span>
+            <span style={styles.heroGradient}>High5</span>
           </h1>
 
           <div style={styles.heroSubtitle}>
@@ -708,9 +708,9 @@ export default function Home() {
       {/* Footer */}
       <footer style={styles.footer}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <div style={{ marginBottom: 8, fontWeight: 700, fontSize: 18 }}>HighFive</div>
+          <div style={{ marginBottom: 8, fontWeight: 700, fontSize: 18 }}>High5</div>
           <div style={{ opacity: 0.95, fontSize: 14 }}>
-            2025 HighFive. Making AP exam preparation more accessible for students everywhere.
+            2025 High5. Making AP exam preparation more accessible for students everywhere.
           </div>
         </div>
       </footer>

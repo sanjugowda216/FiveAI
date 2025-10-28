@@ -152,7 +152,7 @@ export default function Navbar({ onLogout }) {
         <NavLink to="/dashboard" style={styles.brand}>
           <img 
             src="/logo.png" 
-            alt="HighFive Logo" 
+            alt="High5 Logo" 
             style={{
               width: "32px",
               height: "32px",
@@ -166,7 +166,7 @@ export default function Navbar({ onLogout }) {
             textShadow: isLight
               ? '0 0 10px rgba(0, 120, 200, 0.4), 0 0 20px rgba(0, 120, 200, 0.2)'
               : `0 0 10px #3B82FF, 0 0 20px #3B82FF, 0 0 30px #3B82FF, 0 0 40px #2563EB, 0 0 70px #2563EB, 0 0 80px #2563EB, 0 0 100px #1D4ED8, 0 0 150px #1E40AF`
-          }}>Five</span>
+          }}>5</span>
         </NavLink>
         <nav style={styles.nav} data-tutorial="navbar">
           {navItems.map((item) => {

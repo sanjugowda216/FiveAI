@@ -1,5 +1,5 @@
 {
-  "name": "highfive-backend",
+  "name": "high5-backend",
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",

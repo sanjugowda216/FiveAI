@@ -1,7 +1,7 @@
 # Theme System Implementation
 
 ## Overview
-A complete dark/light theme system has been implemented for HighFive with system preference detection and persistent user preferences.
+A complete dark/light theme system has been implemented for High5 with system preference detection and persistent user preferences.
 
 ## Features
 
