@@ -453,7 +453,7 @@ const styles = {
     position: "relative",
     height: "380px",
     perspective: "1000px",
-    marginLeft: "-20px",
+    marginLeft: "40px",
   },
   tipsMainCard: {
     position: "absolute",
