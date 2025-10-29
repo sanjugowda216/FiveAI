@@ -508,8 +508,8 @@ export default function Home() {
         <h2 style={styles.statsTitle}>Making AP Exams More Accessible</h2>
         <div style={styles.statsGrid}>
           <div style={styles.statCard}>
-            <div style={styles.statNumber}>2.8M</div>
-            <div style={styles.statLabel}>Students take AP exams annually across the US</div>
+            <div style={styles.statNumber}>4.1M</div>
+            <div style={styles.statLabel}>Over 4.1 million students take AP exams annually across the US</div>
           </div>
           <div style={styles.statCard}>
             <div style={styles.statNumber}>40</div>
