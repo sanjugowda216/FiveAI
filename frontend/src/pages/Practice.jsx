@@ -271,7 +271,6 @@ export default function Practice({
               onClick={() => handleUnitSelect(unit)}
             >
               <h3 style={styles.unitTitle}>Unit {unit.number}</h3>
-              <p style={styles.unitSubtitle}>{unit.title}</p>
               <div style={styles.unitStatus}>
                 {loadingUnitNumber === unit.number ? (
                   <>

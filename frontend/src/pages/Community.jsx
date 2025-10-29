@@ -3,7 +3,7 @@ import { apCourses } from "../data/apCourses";
 import { collection, addDoc, getDocs, query, orderBy, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-export default function Community() {
+export default function Community({ userProfile }) {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
   const [units, setUnits] = useState([]);
@@ -12,6 +12,8 @@ export default function Community() {
   const [expandedAnswers, setExpandedAnswers] = useState(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const isGuest = !userProfile || !userProfile.uid;
 
   // Toggle answer expansion
   const toggleAnswer = (questionId) => {
@@ -95,7 +97,7 @@ export default function Community() {
           if (data.units) {
             // Convert the units format to simple strings
             const unitStrings = data.units.map(unit => 
-              typeof unit === 'string' ? unit : `Unit ${unit.number}: ${unit.title}`
+              typeof unit === 'string' ? unit : `Unit ${unit.number}`
             );
             setUnits(unitStrings);
           } else {
@@ -238,25 +240,31 @@ export default function Community() {
       {selectedCourse && selectedUnit && (
         <div style={styles.askContainer}>
           <h3 style={styles.askTitle}>Ask a Question</h3>
-          <div style={styles.askForm}>
-            <textarea
-              value={newQuestion}
-              onChange={(e) => setNewQuestion(e.target.value)}
-              placeholder="Type your question here..."
-              style={styles.questionInput}
-              rows={3}
-            />
-            <button
-              onClick={handleAskQuestion}
-              disabled={isSubmitting || !newQuestion.trim()}
-              style={{
-                ...styles.askButton,
-                opacity: isSubmitting || !newQuestion.trim() ? 0.6 : 1,
-              }}
-            >
-              {isSubmitting ? "Asking..." : "Ask Question"}
-            </button>
-          </div>
+          {isGuest ? (
+            <div style={styles.guestMessage}>
+              <p style={styles.guestMessageText}>Login to ask questions and engage with the community!</p>
+            </div>
+          ) : (
+            <div style={styles.askForm}>
+              <textarea
+                value={newQuestion}
+                onChange={(e) => setNewQuestion(e.target.value)}
+                placeholder="Type your question here..."
+                style={styles.questionInput}
+                rows={3}
+              />
+              <button
+                onClick={handleAskQuestion}
+                disabled={isSubmitting || !newQuestion.trim()}
+                style={{
+                  ...styles.askButton,
+                  opacity: isSubmitting || !newQuestion.trim() ? 0.6 : 1,
+                }}
+              >
+                {isSubmitting ? "Asking..." : "Ask Question"}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -566,5 +574,18 @@ const styles = {
     padding: "1.5rem 1.5rem 1.5rem 1.5rem",
     borderTop: "1px solid var(--border-color)",
     backgroundColor: "rgba(0, 120, 200, 0.02)",
+  },
+  guestMessage: {
+    backgroundColor: "rgba(0, 120, 200, 0.1)",
+    borderRadius: "0.75rem",
+    padding: "1.5rem",
+    textAlign: "center",
+    border: "1px solid rgba(0, 120, 200, 0.3)",
+  },
+  guestMessageText: {
+    margin: 0,
+    fontSize: "1rem",
+    color: "#0078C8",
+    fontWeight: 600,
   },
 };
