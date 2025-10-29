@@ -541,10 +541,10 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureTitle}>CED-Powered Practice</div>
+            <div style={styles.featureTitle}>Official CED Content</div>
             <div style={styles.featureText}>
-              Practice tests generated from official AP Course and Exam Descriptions. 
-              Real content, real results.
+              All practice questions generated from official College Board Course and Exam Descriptions. 
+              Real content aligned to what you'll see on exam day.
             </div>
           </div>
 
@@ -559,28 +559,10 @@ export default function Home() {
               e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
             }}
           >
-            <div style={styles.featureTitle}>Adaptive Learning</div>
+            <div style={styles.featureTitle}>Adaptive Learning & Insights</div>
             <div style={styles.featureText}>
-              AI-powered practice that adapts to your strengths and weaknesses. 
-              Focus on what you need to improve.
-            </div>
-          </div>
-
-          <div
-            style={styles.featureCard}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-8px)";
-              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
-            }}
-          >
-            <div style={styles.featureTitle}>Track Your Progress</div>
-            <div style={styles.featureText}>
-              View detailed stats and analytics. Monitor your performance over time 
-              and celebrate your improvements.
+              AI-powered practice adapts to your strengths and weaknesses. Get instant feedback and detailed 
+              stats to track your progress and focus on what needs improvement.
             </div>
           </div>
 
@@ -599,24 +581,6 @@ export default function Home() {
             <div style={styles.featureText}>
               Plan your study sessions and stay organized. Set goals and track 
               your progress toward exam day.
-            </div>
-          </div>
-
-          <div
-            style={styles.featureCard}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-8px)";
-              e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.04)";
-            }}
-          >
-            <div style={styles.featureTitle}>Instant Feedback</div>
-            <div style={styles.featureText}>
-              Get immediate feedback on your practice tests. Upload text or images 
-              for FRQ grading with detailed explanations.
             </div>
           </div>
 
