@@ -277,10 +277,10 @@ const styles = {
   wrapper: {
     backgroundColor: "var(--bg-secondary)",
     borderRadius: "1.5rem",
-    padding: "3rem 4rem",
+    padding: "3rem 5rem",
     boxShadow: "0 20px 40px var(--shadow-color), 0 0 0 1px var(--border-color)",
     width: "100%",
-    maxWidth: "1200px",
+    maxWidth: "1400px",
     margin: "0 auto",
     boxSizing: "border-box",
     color: "var(--text-primary)",

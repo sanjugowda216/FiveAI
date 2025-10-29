@@ -127,6 +127,8 @@ const OnboardingTutorial = ({ onComplete }) => {
 
   const getTooltipStyle = () => {
     const offset = 20;
+    const popupWidth = 360; // maxWidth from the tooltip div
+    const screenWidth = window.innerWidth;
     let top, left;
 
     switch (currentStepData.position) {
@@ -151,6 +153,14 @@ const OnboardingTutorial = ({ onComplete }) => {
         left = rect.left + rect.width / 2;
     }
 
+    // Adjust left position to keep popup on screen
+    const halfWidth = popupWidth / 2;
+    if (left - halfWidth < 20) {
+      left = halfWidth + 20; // Keep 20px from left edge
+    } else if (left + halfWidth > screenWidth - 20) {
+      left = screenWidth - halfWidth - 20; // Keep 20px from right edge
+    }
+
     return {
       position: 'fixed',
       top: `${top}px`,
@@ -170,7 +180,7 @@ const OnboardingTutorial = ({ onComplete }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
           zIndex: 9998
         }}
       />
@@ -184,11 +194,12 @@ const OnboardingTutorial = ({ onComplete }) => {
             left: `${rect.left}px`,
             width: `${rect.width}px`,
             height: `${rect.height}px`,
-            border: '3px solid #3B82F6',
+            border: '4px solid #3B82F6',
             borderRadius: '8px',
             zIndex: 9999,
             pointerEvents: 'none',
-            boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)'
+            boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.85), 0 0 20px rgba(59, 130, 246, 0.5)',
+            backgroundColor: 'rgba(255, 255, 255, 0.15)'
           }}
         />
       )}
@@ -202,7 +213,9 @@ const OnboardingTutorial = ({ onComplete }) => {
             backgroundColor: '#fff',
             borderRadius: '12px',
             padding: '1.5rem',
-            maxWidth: '320px',
+            minWidth: '350px',
+            maxWidth: '360px',
+            width: 'auto',
             boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
             border: '1px solid rgba(0, 0, 0, 0.1)'
           }}
