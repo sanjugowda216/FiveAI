@@ -3,6 +3,47 @@ import { apCourses } from '../data/apCourses.js';
 import MultiSelectDropdown from '../components/MultiSelectDropdown';
 import { generateAIStudyPlan, generateAdaptiveStudyPlan } from '../utils/api.js';
 
+// Custom MultiSelectDropdown component to match the template
+const CustomMultiSelectDropdown = ({ options, selectedValues, onChange, placeholder, disabled }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const toggleOption = (id) => {
+    if (selectedValues.includes(id)) {
+      onChange(selectedValues.filter(v => v !== id));
+    } else {
+      onChange([...selectedValues, id]);
+    }
+  };
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        style={styles.dropdownButton}
+        disabled={disabled}
+      >
+        {selectedValues.length === 0 ? placeholder : `${selectedValues.length} course(s) selected`}
+        <span style={{ marginLeft: 'auto' }}>▼</span>
+      </button>
+      {isOpen && (
+        <div style={styles.dropdownMenu}>
+          {options.map(option => (
+            <label key={option.id} style={styles.dropdownItem}>
+              <input
+                type="checkbox"
+                checked={selectedValues.includes(option.id)}
+                onChange={() => toggleOption(option.id)}
+                style={{ marginRight: '0.5rem' }}
+              />
+              {option.name}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function StudyCalendar() {
   // State management
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -592,6 +633,36 @@ export default function StudyCalendar() {
     saveStudySessions(updatedSessions);
   };
 
+  // Remove all AI-generated study plans
+  const removeAllAIPlans = () => {
+    if (window.confirm('Are you sure you want to remove all AI-generated study plans? This action cannot be undone.')) {
+      const updatedSessions = {};
+      Object.keys(studySessions).forEach(dateKey => {
+        const nonAISessions = studySessions[dateKey].filter(session => !session.isAIGenerated);
+        if (nonAISessions.length > 0) {
+          updatedSessions[dateKey] = nonAISessions;
+        }
+      });
+      saveStudySessions(updatedSessions);
+      alert('All AI-generated study plans have been removed.');
+    }
+  };
+
+  // Remove all scheduled study plans
+  const removeAllScheduledPlans = () => {
+    if (window.confirm('Are you sure you want to remove all scheduled study plans? This action cannot be undone.')) {
+      const updatedSessions = {};
+      Object.keys(studySessions).forEach(dateKey => {
+        const nonScheduledSessions = studySessions[dateKey].filter(session => !session.isScheduled);
+        if (nonScheduledSessions.length > 0) {
+          updatedSessions[dateKey] = nonScheduledSessions;
+        }
+      });
+      saveStudySessions(updatedSessions);
+      alert('All scheduled study plans have been removed.');
+    }
+  };
+
   // Navigate months
   const navigateMonth = (direction) => {
     const newDate = new Date(currentDate);
@@ -648,141 +719,210 @@ export default function StudyCalendar() {
 
   return (
     <>
+      <style>
+        {`
+          @keyframes streakPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+          }
+          
+          @keyframes statusDotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+          }
+          
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          @keyframes slideInRight {
+            from {
+              opacity: 0;
+              transform: translateX(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+          
+          .calendar-day-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          }
+          
+          .calendar-day-hover:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+            border-color: rgba(59, 130, 246, 0.4) !important;
+            background-color: rgba(255, 255, 255, 0.08) !important;
+          }
+          
+          .session-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          }
+          
+          .session-card-hover:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2) !important;
+            border-color: rgba(59, 130, 246, 0.4) !important;
+          }
+          
+          .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+          }
+          
+          .slide-in-right {
+            animation: slideInRight 0.5s ease-out;
+          }
+        `}
+      </style>
       <section style={styles.wrapper}>
-        <div style={styles.header}>
-          <div>
-            <h1 style={styles.title}>Study Calendar</h1>
-            <p style={styles.subtitle}>
-              Plan your AP study sessions and track your progress leading up to exam dates.
-            </p>
-          </div>
-          <div style={styles.headerActions}>
-            <button
-              style={styles.primaryButton}
-              onClick={() => setShowAddSession(true)}
-              onMouseEnter={(e) => {
+        {/* Top Content - Full Width */}
+        <div style={styles.topContent}>
+          <div style={styles.header}>
+            <div>
+              <h1 style={styles.title}>Study Calendar</h1>
+              <p style={styles.subtitle}>
+                Plan your AP study sessions and track your progress leading up to exam dates.
+              </p>
+            </div>
+            <div style={styles.headerActions}>
+          <button
+            style={styles.primaryButton}
+            onClick={() => setShowAddSession(true)}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
+              e.currentTarget.style.backgroundColor = "#2563EB";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
+              e.currentTarget.style.backgroundColor = "#3B82F6";
+            }}
+          >
+            + Add Study Session
+          </button>
+          <button
+            style={styles.scheduleButton}
+            onClick={() => setShowSchedulePopup(true)}
+            disabled={isGeneratingPlan}
+            onMouseEnter={(e) => {
+              if (!isGeneratingPlan) {
                 e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
                 e.currentTarget.style.backgroundColor = "#2563EB";
-              }}
-              onMouseLeave={(e) => {
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isGeneratingPlan) {
                 e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
                 e.currentTarget.style.backgroundColor = "#3B82F6";
-              }}
-            >
-              + Add Study Session
-            </button>
-            <button
-              style={styles.scheduleButton}
-              onClick={() => setShowSchedulePopup(true)}
-              disabled={isGeneratingPlan}
-              onMouseEnter={(e) => {
-                if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#2563EB";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#3B82F6";
-                }
-              }}
-            >
-              {isGeneratingPlan ? '⏳ Generating AI Plan...' : 'Create AI Study Schedule'}
-            </button>
-            <button
-              style={styles.secondaryButton}
-              onClick={generateStudyPlan}
-              disabled={isGeneratingPlan}
-              onMouseEnter={(e) => {
-                if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#059669";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(16, 185, 129, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#10B981";
-                }
-              }}
-            >
-              {isGeneratingPlan ? '⏳ Generating...' : 'Generate AI Study Plan'}
-            </button>
-            <button
-              style={styles.adaptiveButton}
-              onClick={generateAdaptivePlan}
-              disabled={isGeneratingPlan}
-              onMouseEnter={(e) => {
-                if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#2563EB";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#3B82F6";
-                }
-              }}
-            >
-              {isGeneratingPlan ? '⏳ Generating...' : 'Generate Adaptive Plan'}
-            </button>
-          </div>
-        </div>
-
-        {/* Streak Display */}
-        <div style={styles.streakContainer}>
-          <div style={styles.streakCard}>
-            <div style={styles.streakIcon}>🔥</div>
-            <div style={styles.streakInfo}>
-              <div style={styles.streakNumber}>{streakData.currentStreak}</div>
-              <div style={styles.streakLabel}>
-                {streakData.currentStreak === 0 ? 'Start your streak!' : 
-                 streakData.currentStreak === 1 ? 'day streak' : 'day streak'}
-              </div>
-              <div style={styles.streakSubtext}>
-                {streakData.currentStreak === 0 ? 'Study 15+ minutes to begin' :
-                 streakData.currentStreak >= 50 ? 'Incredible! You\'re unstoppable!' :
-                 streakData.currentStreak >= 30 ? 'Amazing! You\'re on fire!' :
-                 streakData.currentStreak >= 7 ? 'Great job! Keep it up!' :
-                 'Keep studying daily!'}
-              </div>
-            </div>
-            <div style={styles.streakStats}>
-              <div style={styles.longestStreak}>
-                <div style={styles.longestNumber}>{streakData.longestStreak}</div>
-                <div style={styles.longestLabel}>Longest</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Course Selection */}
-        <div style={styles.courseSelectionContainer}>
-          <h3 style={styles.courseSelectionTitle}>Select Courses for AI Study Plans</h3>
-          <MultiSelectDropdown
-            options={apCourses}
-            selectedValues={selectedCourses}
-            onChange={setSelectedCourses}
-            placeholder="Choose AP courses..."
+              }
+            }}
+          >
+            {isGeneratingPlan ? '⏳ Generating AI Plan...' : 'Create AI Study Schedule'}
+          </button>
+          <button
+            style={styles.secondaryButton}
+            onClick={generateStudyPlan}
             disabled={isGeneratingPlan}
-          />
-          {selectedCourses.length > 0 && (
-            <div style={styles.selectedCoursesStatus}>
-              <div style={styles.statusDot}></div>
-              <span style={styles.statusText}>
-                {selectedCourses.length} course{selectedCourses.length !== 1 ? 's' : ''} selected
-              </span>
-            </div>
-          )}
-          {selectedCourses.length === 0 && (
-            <div style={styles.noCourseStatus}>
-              <div style={styles.statusDot}></div>
-              <span style={styles.statusText}>No courses selected</span>
-            </div>
-          )}
+            onMouseEnter={(e) => {
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 8px 12px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3)";
+                e.currentTarget.style.backgroundColor = "#059669";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(16, 185, 129, 0.3)";
+                e.currentTarget.style.backgroundColor = "#10B981";
+              }
+            }}
+          >
+            {isGeneratingPlan ? '⏳ Generating...' : 'Generate AI Study Plan'}
+          </button>
+          <button
+            style={styles.adaptiveButton}
+            onClick={generateAdaptivePlan}
+            disabled={isGeneratingPlan}
+            onMouseEnter={(e) => {
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
+                e.currentTarget.style.backgroundColor = "#2563EB";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isGeneratingPlan) {
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
+                e.currentTarget.style.backgroundColor = "#3B82F6";
+              }
+            }}
+          >
+            {isGeneratingPlan ? '⏳ Generating...' : 'Generate Adaptive Plan'}
+          </button>
         </div>
+      </div>
+
+      {/* Streak Display */}
+      <div style={styles.streakContainer}>
+        <div className="fade-in-up" style={styles.streakCard}>
+          <div style={styles.streakIcon}>🔥</div>
+          <div style={styles.streakInfo}>
+            <div style={styles.streakNumber}>{streakData.currentStreak}</div>
+            <div style={styles.streakLabel}>
+              {streakData.currentStreak === 0 ? 'Start your streak!' : 
+               streakData.currentStreak === 1 ? 'day streak' : 'day streak'}
+            </div>
+            <div style={styles.streakSubtext}>
+              {streakData.currentStreak === 0 ? 'Study 15+ minutes to begin' :
+               streakData.currentStreak >= 50 ? 'Incredible! You\'re unstoppable!' :
+               streakData.currentStreak >= 30 ? 'Amazing! You\'re on fire!' :
+               streakData.currentStreak >= 7 ? 'Great job! Keep it up!' :
+               'Keep studying daily!'}
+            </div>
+          </div>
+          <div style={styles.streakStats}>
+            <div style={styles.longestStreak}>
+              <div style={styles.longestNumber}>{streakData.longestStreak}</div>
+              <div style={styles.longestLabel}>Longest</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Course Selection */}
+      <div style={styles.courseSelectionContainer}>
+        <h3 style={styles.courseSelectionTitle}>Select Courses for AI Study Plans</h3>
+        <MultiSelectDropdown
+          options={apCourses}
+          selectedValues={selectedCourses}
+          onChange={setSelectedCourses}
+          placeholder="Choose AP courses..."
+          disabled={isGeneratingPlan}
+        />
+        {selectedCourses.length > 0 && (
+          <div style={styles.selectedCoursesStatus}>
+            <div style={styles.statusDot}></div>
+            <span style={styles.statusText}>
+              {selectedCourses.length} course{selectedCourses.length !== 1 ? 's' : ''} selected
+            </span>
+          </div>
+        )}
+        {selectedCourses.length === 0 && (
+          <div style={styles.noCourseStatus}>
+            <div style={styles.statusDot}></div>
+            <span style={styles.statusText}>No courses selected</span>
+          </div>
+        )}
+      </div>
+
+      {/* Calendar and Sidebar Section */}
+      <div style={styles.mainContent}>
 
         {/* Calendar */}
         <div style={styles.calendarContainer}>
@@ -854,12 +994,14 @@ export default function StudyCalendar() {
               return (
                 <div
                   key={index}
+                  className="calendar-day-hover fade-in-up"
                   style={{
                     ...styles.calendarDay,
                     ...(isToday ? styles.today : {}),
                     ...(isSelected ? styles.selectedDay : {}),
                     ...(exam ? styles.examDay : {}),
-                    ...(selectedCourseExam ? styles.selectedExamDay : {})
+                    ...(selectedCourseExam ? styles.selectedExamDay : {}),
+                    animationDelay: `${index * 0.05}s`
                   }}
                   onClick={() => setSelectedDate(day)}
                 >
@@ -901,20 +1043,38 @@ export default function StudyCalendar() {
           </div>
         </div>
 
-        {/* Selected Date Details */}
-        <div style={styles.dateDetails}>
-          <h3 style={styles.dateTitle}>
-            {selectedDate.toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}
-          </h3>
+          {/* Selected Date Details - Side Panel */}
+          <div style={styles.sidePanel}>
+          <div style={styles.sidePanelHeader}>
+            <div style={styles.dateInfo}>
+              <h3 style={styles.dateTitle}>
+                {selectedDate.toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })}
+              </h3>
+              <p style={styles.dateSubtitle}>
+                {selectedDate.getFullYear()}
+              </p>
+            </div>
+            <div style={styles.sessionCount}>
+              <span style={styles.sessionCountNumber}>
+                {getSessionsForDate(selectedDate).length}
+              </span>
+              <span style={styles.sessionCountLabel}>
+                {getSessionsForDate(selectedDate).length === 1 ? 'Session' : 'Sessions'}
+              </span>
+            </div>
+          </div>
+
           
           <div style={styles.sessionsList}>
             {getSessionsForDate(selectedDate).map((session, index) => (
-              <div key={session.id} style={styles.sessionCard}>
+                <div key={session.id} className="session-card-hover slide-in-right" style={{
+                  ...styles.sessionCard,
+                  animationDelay: `${index * 0.1}s`
+                }}>
                 <div style={styles.sessionHeader}>
                   <div style={styles.sessionInfo}>
                     <div style={styles.sessionTitle}>
@@ -934,6 +1094,44 @@ export default function StudyCalendar() {
                         <span style={styles.adaptiveBadge}>Adaptive</span>
                       )}
                     </div>
+                    {session.focus && (
+                      <div style={styles.sessionFocus}>
+                        <span style={styles.focusLabel}>Focus:</span>
+                        <span style={styles.focusText}>{session.focus}</span>
+                      </div>
+                    )}
+                    {session.difficulty && (
+                      <div style={styles.sessionDifficulty}>
+                        <span style={styles.difficultyLabel}>Level:</span>
+                        <span style={{
+                          ...styles.difficultyBadge,
+                          backgroundColor: session.difficulty === 'beginner' ? 'rgba(34, 197, 94, 0.1)' : 
+                                         session.difficulty === 'intermediate' ? 'rgba(251, 191, 36, 0.1)' : 
+                                         'rgba(239, 68, 68, 0.1)',
+                          color: session.difficulty === 'beginner' ? '#22C55E' : 
+                                session.difficulty === 'intermediate' ? '#F59E0B' : 
+                                '#EF4444'
+                        }}>
+                          {session.difficulty.charAt(0).toUpperCase() + session.difficulty.slice(1)}
+                        </span>
+                      </div>
+                    )}
+                    {session.priority && (
+                      <div style={styles.sessionPriority}>
+                        <span style={styles.priorityLabel}>Priority:</span>
+                        <span style={{
+                          ...styles.priorityBadge,
+                          backgroundColor: session.priority === 'high' ? 'rgba(239, 68, 68, 0.1)' : 
+                                         session.priority === 'medium' ? 'rgba(251, 191, 36, 0.1)' : 
+                                         'rgba(34, 197, 94, 0.1)',
+                          color: session.priority === 'high' ? '#EF4444' : 
+                                session.priority === 'medium' ? '#F59E0B' : 
+                                '#22C55E'
+                        }}>
+                          {session.priority.charAt(0).toUpperCase() + session.priority.slice(1)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <button
                     style={styles.deleteButton}
@@ -951,16 +1149,18 @@ export default function StudyCalendar() {
             
             {getSessionsForDate(selectedDate).length === 0 && (
               <div style={styles.emptyState}>
-                <p>No study sessions scheduled for this date.</p>
+                <div style={styles.emptyStateIcon}>📅</div>
+                <p style={styles.emptyStateText}>No study sessions scheduled for this date.</p>
                 <button 
                   style={styles.addSessionButton}
                   onClick={() => setShowAddSession(true)}
                 >
-                  Add Study Session
+                  + Add Study Session
                 </button>
               </div>
             )}
           </div>
+        </div>
         </div>
 
         {/* Add Session Modal */}
@@ -1108,6 +1308,7 @@ export default function StudyCalendar() {
             </div>
           </div>
         )}
+        </div>
       </section>
     </>
   );
@@ -1116,16 +1317,93 @@ export default function StudyCalendar() {
 const styles = {
   wrapper: {
     width: "100%",
-    maxWidth: "1200px",
+    maxWidth: "1400px",
     margin: "0 auto",
     backgroundColor: "var(--bg-secondary)",
-    borderRadius: "1.25rem",
-    padding: "2rem",
-    boxShadow: "0 12px 32px var(--shadow-color)",
+    borderRadius: "1.5rem",
+    padding: "2.5rem",
+    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05)",
     boxSizing: "border-box",
-    minHeight: "80vh",
+    minHeight: "85vh",
     color: "var(--text-primary)",
-    transition: "background-color 0.3s ease, color 0.3s ease, height 0.3s ease",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    backdropFilter: "blur(10px)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+  },
+  topContent: {
+    width: "100%",
+    marginBottom: "2rem",
+  },
+  mainContent: {
+    display: "flex",
+    gap: "1rem",
+    minHeight: "60vh",
+    alignItems: "flex-start",
+  },
+  leftContent: {
+    flex: "3.5",
+    minWidth: 0,
+  },
+  sidePanel: {
+    width: "320px",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: "1.5rem",
+    padding: "1.25rem",
+    border: "1px solid rgba(255, 255, 255, 0.15)",
+    backdropFilter: "blur(20px)",
+    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+    height: "fit-content",
+    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    flex: "0 0 320px",
+  },
+  sidePanelHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: "1.5rem",
+    paddingBottom: "1rem",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+  },
+  dateInfo: {
+    flex: 1,
+  },
+  sessionCount: {
+    textAlign: "center",
+    backgroundColor: "rgba(59, 130, 246, 0.1)",
+    borderRadius: "0.75rem",
+    padding: "0.75rem",
+    border: "1px solid rgba(59, 130, 246, 0.2)",
+  },
+  sessionCountNumber: {
+    display: "block",
+    fontSize: "1.5rem",
+    fontWeight: 800,
+    color: "#3B82F6",
+    lineHeight: 1,
+  },
+  sessionCountLabel: {
+    fontSize: "0.8rem",
+    color: "var(--text-secondary)",
+    fontWeight: 500,
+    marginTop: "0.25rem",
+  },
+  dateSubtitle: {
+    fontSize: "0.9rem",
+    color: "var(--text-secondary)",
+    margin: "0.25rem 0 0 0",
+    fontWeight: 400,
+  },
+  emptyStateIcon: {
+    fontSize: "3rem",
+    marginBottom: "1rem",
+    opacity: 0.6,
+  },
+  emptyStateText: {
+    fontSize: "1rem",
+    color: "var(--text-secondary)",
+    marginBottom: "1.5rem",
+    textAlign: "center",
   },
   header: {
     display: "flex",
@@ -1225,32 +1503,42 @@ const styles = {
     justifyContent: "center",
   },
   streakCard: {
-    backgroundColor: "var(--bg-primary)",
-    borderRadius: "1rem",
-    padding: "1.5rem",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: "1.25rem",
+    padding: "2rem",
     display: "flex",
     alignItems: "center",
-    gap: "1.5rem",
-    boxShadow: "0 4px 12px var(--shadow-color)",
-    border: "1px solid var(--border-color)",
-    transition: "all 0.3s ease",
-    maxWidth: "500px",
+    gap: "2rem",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    maxWidth: "600px",
     width: "100%",
+    backdropFilter: "blur(10px)",
+    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
   },
   streakIcon: {
-    fontSize: "2.5rem",
+    fontSize: "3rem",
     animation: "streakPulse 2s ease-in-out infinite",
+    filter: "drop-shadow(0 0 10px rgba(255, 69, 0, 0.5))",
+    background: "linear-gradient(45deg, #FF6B35, #F7931E)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
   },
   streakInfo: {
     flex: 1,
     textAlign: "center",
   },
   streakNumber: {
-    fontSize: "2.5rem",
-    fontWeight: 800,
-    color: "var(--text-primary)",
+    fontSize: "3rem",
+    fontWeight: 900,
+    background: "linear-gradient(135deg, #FF6B35, #F7931E, #FFD700)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
     lineHeight: 1,
-    transition: "color 0.3s ease",
+    filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
   },
   streakLabel: {
     fontSize: "1rem",
@@ -1332,7 +1620,7 @@ const styles = {
     backgroundColor: "var(--bg-primary)",
     borderRadius: "1rem",
     padding: "1.5rem",
-    marginBottom: "2rem",
+    marginBottom: "1rem",
     boxShadow: "0 4px 12px var(--shadow-color)",
     border: "1px solid var(--border-color)",
     transition: "all 0.3s ease",
@@ -1364,7 +1652,11 @@ const styles = {
   calendarGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(7, 1fr)",
-    gap: "0.5rem",
+    gap: "0.75rem",
+    padding: "1rem",
+    backgroundColor: "rgba(255, 255, 255, 0.02)",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255, 255, 255, 0.05)",
   },
   dayHeader: {
     padding: "0.75rem",
@@ -1378,14 +1670,23 @@ const styles = {
     height: "100px",
   },
   calendarDay: {
-    height: "100px",
-    border: "1px solid var(--border-color)",
-    borderRadius: "0.5rem",
-    padding: "0.5rem",
+    height: "120px",
+    minWidth: "70px",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderRadius: "0.75rem",
+    padding: "0.75rem",
     cursor: "pointer",
-    transition: "all 0.2s",
-    backgroundColor: "var(--bg-secondary)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
     position: "relative",
+    backdropFilter: "blur(5px)",
+    overflow: "hidden",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 8px 25px rgba(0, 0, 0, 0.15)",
+      borderColor: "rgba(59, 130, 246, 0.3)",
+      backgroundColor: "rgba(255, 255, 255, 0.05)",
+    },
   },
   today: {
     backgroundColor: "rgba(251, 191, 36, 0.15)",
@@ -1463,12 +1764,18 @@ const styles = {
     gap: "1rem",
   },
   sessionCard: {
-    backgroundColor: "var(--bg-secondary)",
-    borderRadius: "0.75rem",
-    padding: "1rem",
-    boxShadow: "0 2px 8px var(--shadow-color)",
-    border: "1px solid var(--border-color)",
-    transition: "all 0.3s ease",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: "1rem",
+    padding: "1.25rem",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    backdropFilter: "blur(10px)",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 8px 30px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(59, 130, 246, 0.2)",
+      borderColor: "rgba(59, 130, 246, 0.3)",
+    },
   },
   sessionHeader: {
     display: "flex",
@@ -1529,6 +1836,62 @@ const styles = {
     lineHeight: 1.5,
     margin: 0,
     transition: "color 0.3s ease",
+  },
+  sessionFocus: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    marginTop: "0.5rem",
+  },
+  focusLabel: {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    color: "var(--text-secondary)",
+    transition: "color 0.3s ease",
+  },
+  focusText: {
+    fontSize: "0.8rem",
+    color: "var(--text-primary)",
+    fontWeight: 500,
+    transition: "color 0.3s ease",
+  },
+  sessionDifficulty: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    marginTop: "0.25rem",
+  },
+  difficultyLabel: {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    color: "var(--text-secondary)",
+    transition: "color 0.3s ease",
+  },
+  difficultyBadge: {
+    padding: "0.2rem 0.5rem",
+    borderRadius: "0.375rem",
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    textTransform: "capitalize",
+  },
+  sessionPriority: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    marginTop: "0.25rem",
+  },
+  priorityLabel: {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    color: "var(--text-secondary)",
+    transition: "color 0.3s ease",
+  },
+  priorityBadge: {
+    padding: "0.2rem 0.5rem",
+    borderRadius: "0.375rem",
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    textTransform: "capitalize",
   },
   deleteButton: {
     backgroundColor: "transparent",
