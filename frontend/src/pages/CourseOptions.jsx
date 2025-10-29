@@ -409,32 +409,38 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
       </div>
 
       <div style={styles.grid}>
-        {hasMCQSection(course?.id) && (
-          <div style={styles.mcqCard}>
-            <h2 style={styles.mcqTitle}>Practice MCQs</h2>
-            <p style={styles.mcqDescription}>
-              Adaptive practice aligned with CED units
-            </p>
+        <div style={styles.practiceCardsRow}>
+          {hasMCQSection(course?.id) && (
+            <div style={styles.mcqCard}>
+              <div>
+                <h2 style={styles.mcqTitle}>Practice MCQs</h2>
+                <p style={styles.mcqDescription}>
+                  Adaptive practice aligned with CED units
+                </p>
+              </div>
+              <button
+                style={styles.mcqButton}
+                onClick={() => navigate(`/practice/${course.id}`)}
+              >
+                Start Practice
+              </button>
+            </div>
+          )}
+
+          <div style={styles.practiceTestCard}>
+            <div>
+              <h2 style={styles.practiceTestTitle}>Practice Test</h2>
+              <p style={styles.practiceTestDescription}>
+                Full-length practice test matching real AP exam format
+              </p>
+            </div>
             <button
-              style={styles.mcqButton}
-              onClick={() => navigate(`/practice/${course.id}`)}
+              style={styles.practiceTestButton}
+              onClick={() => navigate(`/practice-test/${course.id}`)}
             >
-              Start Practice
+              Generate Test
             </button>
           </div>
-        )}
-
-        <div style={styles.practiceTestCard}>
-          <h2 style={styles.practiceTestTitle}>Practice Test</h2>
-          <p style={styles.practiceTestDescription}>
-            Full-length practice test matching real AP exam format
-          </p>
-          <button
-            style={styles.practiceTestButton}
-            onClick={() => navigate(`/practice-test/${course.id}`)}
-          >
-            Generate Test
-          </button>
         </div>
 
         <div style={styles.card}>
@@ -577,28 +583,6 @@ export default function CourseOptions({ userProfile, onSelectCourse }) {
             </>
           )}
 
-          <div style={styles.rubricPanel}>
-            {isLoadingRubrics ? (
-              <p style={styles.helperText}>Loading rubric references…</p>
-            ) : availableRubrics.length ? (
-              <ul style={styles.rubricList}>
-                {availableRubrics.slice(0, 3).map((rubric) => (
-                  <li key={rubric.id} style={styles.rubricItem}>
-                    <strong>{rubric.title}</strong>
-                    <span style={styles.rubricTags}>
-                      {formatQuestionTypes(rubric.questionTypes)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : rubricError ? (
-              <p style={styles.error}>{rubricError}</p>
-            ) : (
-              <p style={styles.helperText}>
-                Add the course CED PDF so we can align to official rubrics.
-              </p>
-            )}
-          </div>
 
           {isGrading && (
             <div style={styles.progressBarContainer} aria-live="polite">
@@ -788,6 +772,11 @@ const styles = {
     flexDirection: "column",
     gap: "2rem",
   },
+  practiceCardsRow: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "2rem",
+  },
   card: {
     backgroundColor: "var(--bg-primary)",
     borderRadius: "1rem",
@@ -808,23 +797,26 @@ const styles = {
     flexDirection: "row",
     gap: "1rem",
     alignItems: "center",
-    justifyContent: "space-between",
     border: "1px solid var(--border-color)",
     transition: "all 0.3s ease",
   },
   cardTitle: {
-    fontSize: "1.25rem",
+    fontSize: "1.5rem",
     fontWeight: 700,
     color: "var(--text-primary)",
     margin: 0,
-    transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   },
   mcqTitle: {
-    fontSize: "1.1rem",
-    fontWeight: 600,
+    fontSize: "1.5rem",
+    fontWeight: 700,
     color: "var(--text-primary)",
     margin: 0,
-    transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   },
   mcqDescription: {
     fontSize: "0.9rem",
@@ -834,16 +826,18 @@ const styles = {
     transition: "color 0.3s ease",
   },
   mcqButton: {
-    backgroundColor: "#3B82F6",
-    color: "#FFFFFF",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+    color: "white",
     border: "none",
-    borderRadius: "0.5rem",
+    borderRadius: "0.75rem",
     padding: "0.75rem 1.5rem",
-    fontSize: "0.9rem",
-    fontWeight: 500,
+    fontSize: "1rem",
+    fontWeight: 600,
     cursor: "pointer",
-    transition: "background-color 0.2s",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 16px rgba(0, 120, 200, 0.3)",
     whiteSpace: "nowrap",
+    marginLeft: "auto",
   },
   practiceTestCard: {
     background: "var(--bg-primary)",
@@ -852,7 +846,9 @@ const styles = {
     boxShadow: "0 8px 24px var(--shadow-color), 0 0 0 1px var(--border-color)",
     border: "none",
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     gap: "1rem",
     transition: "all 0.3s ease",
     backdropFilter: "blur(10px)",
@@ -883,7 +879,7 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.3s ease",
     boxShadow: "0 4px 16px rgba(102, 126, 234, 0.3)",
-    alignSelf: "flex-start",
+    whiteSpace: "nowrap",
   },
   cardBody: {
     fontSize: "1rem",
