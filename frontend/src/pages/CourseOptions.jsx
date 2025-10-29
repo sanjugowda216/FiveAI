@@ -12,15 +12,15 @@ const MAX_UPLOAD_SIZE = 25 * 1024 * 1024; // 25 MB
 const DEFAULT_FRQ_TYPE = "general";
 
 const FRQ_TYPE_OPTIONS = [
-  { value: "general", label: "General FRQ / Essay", icon: "📝" },
-  { value: "dbq", label: "Document-Based Question (DBQ)", icon: "📄" },
-  { value: "leq", label: "Long Essay Question (LEQ)", icon: "📜" },
-  { value: "saq", label: "Short-Answer Question (SAQ)", icon: "✍️" },
-  { value: "argument-essay", label: "Argument Essay", icon: "💭" },
-  { value: "synthesis-essay", label: "Synthesis Essay", icon: "🔗" },
-  { value: "rhetorical-analysis", label: "Rhetorical Analysis", icon: "🎭" },
-  { value: "performance-task", label: "Performance Task", icon: "🎯" },
-  { value: "research-presentation", label: "Research Presentation", icon: "📊" },
+  { value: "general", label: "General FRQ / Essay", icon: "" },
+  { value: "dbq", label: "Document-Based Question (DBQ)", icon: "" },
+  { value: "leq", label: "Long Essay Question (LEQ)", icon: "" },
+  { value: "saq", label: "Short-Answer Question (SAQ)", icon: "" },
+  { value: "argument-essay", label: "Argument Essay", icon: "" },
+  { value: "synthesis-essay", label: "Synthesis Essay", icon: "" },
+  { value: "rhetorical-analysis", label: "Rhetorical Analysis", icon: "" },
+  { value: "performance-task", label: "Performance Task", icon: "" },
+  { value: "research-presentation", label: "Research Presentation", icon: "" },
 ];
 
 const fileToDataUrl = (file) =>

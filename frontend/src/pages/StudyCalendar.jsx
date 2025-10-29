@@ -1644,6 +1644,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "0.75rem",
+    marginTop: "1rem",
   },
   statusDot: {
     width: "14px",
