@@ -66,15 +66,27 @@ export default function Dashboard({
   });
   const [activeTipIndex, setActiveTipIndex] = useState(0);
 
-  // Load streak data from localStorage
+  // Load streak data from localStorage (only for logged-in users)
+  const isLoggedIn = preferredName || userEmail; // Simple check
+  
   useEffect(() => {
-    const savedStreakData = JSON.parse(localStorage.getItem('streakData') || '{}');
-    setStreakData({
-      currentStreak: savedStreakData.currentStreak || 0,
-      longestStreak: savedStreakData.longestStreak || 0,
-      lastStudyDate: savedStreakData.lastStudyDate || null,
-    });
-  }, []);
+    // Only load streak data if user is logged in
+    if (isLoggedIn) {
+      const savedStreakData = JSON.parse(localStorage.getItem('streakData') || '{}');
+      setStreakData({
+        currentStreak: savedStreakData.currentStreak || 0,
+        longestStreak: savedStreakData.longestStreak || 0,
+        lastStudyDate: savedStreakData.lastStudyDate || null,
+      });
+    } else {
+      // Guests don't have streaks
+      setStreakData({
+        currentStreak: 0,
+        longestStreak: 0,
+        lastStudyDate: null,
+      });
+    }
+  }, [isLoggedIn]);
 
   const currentTip = studyTips[activeTipIndex];
   const nextTip = studyTips[(activeTipIndex + 1) % studyTips.length];

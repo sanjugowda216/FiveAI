@@ -343,6 +343,10 @@ const styles = {
     color: "var(--text-primary)",
     marginBottom: "0.5rem",
     transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
   },
   subtitle: {
     fontSize: "1.1rem",

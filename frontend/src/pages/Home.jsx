@@ -259,7 +259,7 @@ export default function Home() {
       color: "#022037",
     },
     heroGradient: {
-      background: "linear-gradient(90deg, #0078C8, #2aa3f2)",
+      background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
     },
