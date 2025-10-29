@@ -637,7 +637,8 @@ export default function Home() {
                 width: "160px",
                 height: "160px",
                 borderRadius: "50%",
-                objectFit: "cover"
+                objectFit: "cover",
+                objectPosition: "center 30%"
               }}
             />
             <div style={{ textAlign: "center" }}>
