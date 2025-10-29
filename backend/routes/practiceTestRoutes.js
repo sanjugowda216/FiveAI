@@ -6,11 +6,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const router = express.Router();
-const openai = new ChatOpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  modelName: "gpt-4o-mini",
-  temperature: 0.7,
-});
+
+// Initialize OpenAI only if API key is available
+let openai = null;
+if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_openai_api_key_here') {
+  try {
+    openai = new ChatOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      modelName: "gpt-4o-mini",
+      temperature: 0.7,
+    });
+  } catch (error) {
+    console.warn('Failed to initialize OpenAI in practiceTestRoutes:', error.message);
+  }
+}
 
 // In-memory cache for practice tests (one per course)
 const practiceTestCache = new Map();
