@@ -233,7 +233,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Firebase** - For authentication and database services
 - **React Community** - For the amazing React ecosystem
 
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 
@@ -248,3 +248,5 @@ This project was created for the Congressional App Challenge, demonstrating how 
 ---
 
 **Built with ❤️ for students, by students**
+
+Sanjana Gowda, Vaidehi Akbari, and Shely Jain
