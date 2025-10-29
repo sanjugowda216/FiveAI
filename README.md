@@ -1,8 +1,8 @@
-# FiveAI - AP Study Platform
+# High5 - AP Study Platform
 
-**FiveAI** is a comprehensive AP (Advanced Placement) study platform that leverages AI to provide personalized learning experiences for high school students preparing for AP exams. Built for the Congressional App Challenge, FiveAI combines official AP Course and Exam Description (CED) content with intelligent AI-powered features to help students excel in their AP courses.
+**High5** is a comprehensive AP (Advanced Placement) study platform that leverages AI to provide personalized learning experiences for high school students preparing for AP exams. Built for the Congressional App Challenge, High5 combines official AP Course and Exam Description (CED) content with intelligent AI-powered features to help students excel in their AP courses.
 
-<img src="frontend/public/logo.png" alt="FiveAI Logo" width="150" height="150">
+<img src="frontend/public/logo.png" alt="High5 Logo" width="150" height="150">
 
 ## Features
 
@@ -76,8 +76,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/FiveAI.git
-   cd FiveAI
+   git clone https://github.com/yourusername/High5.git
+   cd High5
    ```
 
 2. **Backend Setup**
@@ -136,7 +136,7 @@ const firebaseConfig = {
 ## Project Structure
 
 ```
-FiveAI/
+High5/
 ├── backend/
 │   ├── controllers/          # API route handlers
 │   ├── services/              # AI and business logic
@@ -185,7 +185,7 @@ FiveAI/
 
 ## Theme System
 
-FiveAI features a sophisticated theme system with:
+High5 features a sophisticated theme system with:
 - **System Preference Detection**: Automatically detects your OS theme
 - **Three Modes**: System, Light, and Dark themes
 - **Persistent Storage**: Remembers your preference across sessions
@@ -237,7 +237,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/yourusername/FiveAI/issues) page
+1. Check the [Issues](https://github.com/yourusername/High5/issues) page
 2. Create a new issue with detailed information
 3. Contact the development team
 
