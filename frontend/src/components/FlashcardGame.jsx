@@ -217,7 +217,7 @@ const styles = {
     backgroundColor: 'transparent',
     borderRadius: '1.5rem',
     minHeight: '80vh',
-    background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(35, 35, 35, 0.95) 100%)',
+    background: 'var(--bg-primary)',
     backdropFilter: 'blur(8px)',
     border: '1px solid rgba(59, 130, 255, 0.2)',
   },
