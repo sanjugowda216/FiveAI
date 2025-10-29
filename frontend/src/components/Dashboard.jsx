@@ -196,6 +196,10 @@ export default function Dashboard({
 
       {/* Study Tips Carousel */}
       <section style={styles.tipsSection}>
+        <div style={styles.tipsHeader}>
+          <h2 style={styles.tipsSectionTitle}>Study Tips</h2>
+          <div style={styles.tipsSectionBadge}>{activeTipIndex + 1}/{studyTips.length}</div>
+        </div>
         <div style={styles.tipsContainer}>
           {/* Main Card */}
           <div style={{
@@ -204,7 +208,6 @@ export default function Dashboard({
             transform: "scale(1)",
             zIndex: 10
           }}>
-            <div style={styles.tipNumberBadge}>{activeTipIndex + 1}/{studyTips.length}</div>
             <h3 style={styles.tipMainTitle}>{currentTip.title}</h3>
             <p style={styles.tipMainDescription}>{currentTip.description}</p>
             <div style={styles.tipsList}>
@@ -461,7 +464,34 @@ const styles = {
     gap: "2.5rem",
     transition: "all 0.3s ease",
     background: "linear-gradient(135deg, rgba(0, 120, 200, 0.04) 0%, var(--bg-secondary) 100%)",
-    maxWidth: "1000px",  },
+    maxWidth: "1000px",
+  },
+  tipsHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: "1rem",
+  },
+  tipsSectionTitle: {
+    margin: 0,
+    fontSize: "2rem",
+    fontWeight: 800,
+    color: "var(--text-primary)",
+    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+  },
+  tipsSectionBadge: {
+    display: "inline-block",
+    backgroundColor: "rgba(0, 120, 200, 0.15)",
+    color: "#0078C8",
+    padding: "0.75rem 1.5rem",
+    borderRadius: "20px",
+    fontSize: "1rem",
+    fontWeight: 700,
+    letterSpacing: "0.5px",
+  },
   tipsContainer: {
     position: "relative",
     height: "380px",
