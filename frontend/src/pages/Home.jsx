@@ -293,6 +293,7 @@ export default function Home() {
       fontSize: "32px",
       fontWeight: 800,
       marginBottom: "40px",
+      color: "#fff",
     },
     statsGrid: {
       display: "grid",
