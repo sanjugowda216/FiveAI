@@ -291,11 +291,15 @@ const styles = {
     marginBottom: "2rem",
   },
   title: {
-    fontSize: "2rem",
-    fontWeight: 700,
+    fontSize: "2.5rem",
+    fontWeight: 800,
     color: "var(--text-primary)",
     margin: 0,
     transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
   },
   subtitle: {
     fontSize: "1rem",

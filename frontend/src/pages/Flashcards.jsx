@@ -73,11 +73,11 @@ const styles = {
     marginBottom: '3rem',
   },
   title: {
-    fontSize: '3rem',
+    fontSize: '2.5rem',
     fontWeight: '800',
     color: 'var(--text-primary)',
     margin: '0 0 0.5rem 0',
-    background: 'linear-gradient(135deg, #0078C8 0%, #005fa3 100%)',
+    background: 'linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
   },

@@ -803,7 +803,7 @@ const styles = {
     margin: 0,
   },
   startButton: {
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)',
     color: 'white',
     border: 'none',
     borderRadius: '0.75rem',
