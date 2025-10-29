@@ -248,3 +248,5 @@ This project was created for the Congressional App Challenge, demonstrating how 
 ---
 
 **Built with ❤️ for students, by students**
+
+Sanjana Gowda, Vaidehi Akbari, and Shely Jain
