@@ -5,7 +5,7 @@
   height: 250px;
   margin: 0;
   cursor: pointer;
-  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(35, 35, 35, 0.95) 100%);
+  background: var(--bg-secondary);
 }
 
 .flashcard-inner {
