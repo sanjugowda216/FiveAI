@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { apCourses } from "../data/apCourses.js";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 
 export default function Stats({ stats, userProfile }) {
+  const navigate = useNavigate();
   const [courseStats, setCourseStats] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -160,9 +162,9 @@ export default function Stats({ stats, userProfile }) {
                 <strong>Login to view your stats!</strong> Your practice progress will be saved and synced across devices.
               </span>
               <div style={styles.guestBannerButtons}>
-                <a href="/login" style={styles.guestBannerButton}>
+                <button onClick={() => window.location.href = '/login'} style={styles.guestBannerButton}>
                   Login
-                </a>
+                </button>
                 <button onClick={() => { localStorage.setItem('isGuest', 'true'); window.location.href = '/dashboard'; }} style={styles.guestButton}>
                   Continue as Guest
                 </button>
@@ -195,9 +197,9 @@ export default function Stats({ stats, userProfile }) {
               <strong>Login to save your progress!</strong> Your stats are only saved locally while browsing as a guest.
             </span>
             <div style={styles.guestBannerButtons}>
-              <a href="/login" style={styles.guestBannerButton}>
+              <button onClick={() => window.location.href = '/login'} style={styles.guestBannerButton}>
                 Login
-              </a>
+              </button>
               <button onClick={() => { localStorage.setItem('isGuest', 'true'); window.location.href = '/dashboard'; }} style={styles.guestButton}>
                 Continue as Guest
               </button>
@@ -608,10 +610,11 @@ const styles = {
   guestBannerButton: {
     backgroundColor: "#F59E0B",
     color: "#fff",
+    border: "none",
     padding: "0.5rem 1.5rem",
     borderRadius: "0.5rem",
-    textDecoration: "none",
     fontWeight: 600,
+    cursor: "pointer",
     transition: "all 0.2s ease",
     whiteSpace: "nowrap",
   },

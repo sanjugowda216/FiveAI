@@ -482,7 +482,7 @@ function AppContent() {
           />
           <Route path="/stats" element={<Stats stats={userProfile?.stats} userProfile={userProfile} />} />
           <Route path="/calendar" element={<StudyCalendar />} />
-          <Route path="/community" element={<Community />} />
+          <Route path="/community" element={<Community userProfile={userProfile} />} />
           <Route path="/flashcards" element={<Flashcards userProfile={userProfile} />} />
           <Route path="/practice-test/:courseId" element={<PracticeTest userProfile={userProfile} />} />
           <Route path="/settings" element={<Settings userProfile={userProfile} />} />

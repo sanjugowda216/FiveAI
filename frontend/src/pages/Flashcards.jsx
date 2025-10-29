@@ -22,55 +22,60 @@ function Flashcards({ userProfile }) {
   // Check if user is authenticated
   if (!userProfile?.uid) {
     return (
-      <div style={styles.pageContainer}>
+      <section style={styles.wrapper}>
         <div style={styles.authContainer}>
           <div style={styles.authIcon}>🔐</div>
           <h1 style={styles.authTitle}>Authentication Required</h1>
           <p style={styles.authText}>Please log in to access your flashcards and start studying!</p>
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div style={styles.pageContainer}>
-      <div style={styles.contentWrapper}>
-        <div style={styles.header}>
-          <h1 style={styles.title}>Your Flashcards</h1>
-          <p style={styles.subtitle}>
-            {activeTab === 'manage' 
-              ? 'Create and manage your personal flashcard collection'
-              : 'Test your knowledge by studying your flashcards in interactive mode'}
-          </p>
-        </div>
-
-        <div style={styles.contentContainer}>
-          {activeTab === 'manage' ? (
-            <div style={styles.manageContainer}>
-              <FlashcardForm onCreated={handleCreated} userId={userProfile.uid} folders={folders} />
-              <FlashcardList refreshKey={refresh} userId={userProfile.uid} onFoldersChange={setFolders} />
-            </div>
-          ) : (
-            <FlashcardGame userId={userProfile.uid} />
-          )}
-        </div>
+    <section style={styles.wrapper}>
+      <div style={styles.header}>
+        <h1 style={styles.title}>Your Flashcards</h1>
+        <p style={styles.subtitle}>
+          {activeTab === 'manage' 
+            ? 'Create and manage your personal flashcard collection'
+            : 'Test your knowledge by studying your flashcards in interactive mode'}
+        </p>
       </div>
-    </div>
+
+      <div style={styles.contentContainer}>
+        {activeTab === 'manage' ? (
+          <div style={styles.manageContainer}>
+            <FlashcardForm onCreated={handleCreated} userId={userProfile.uid} folders={folders} />
+            <FlashcardList refreshKey={refresh} userId={userProfile.uid} onFoldersChange={setFolders} />
+          </div>
+        ) : (
+          <FlashcardGame userId={userProfile.uid} />
+        )}
+      </div>
+    </section>
   );
 }
 
 const styles = {
-  pageContainer: {
-    minHeight: '100vh',
-    backgroundColor: 'var(--bg-primary)',
-    padding: '2rem',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2rem',
+  wrapper: {
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    backgroundColor: "var(--bg-secondary)",
+    borderRadius: "1.5rem",
+    padding: "3rem 4rem",
+    boxShadow: "0 20px 40px var(--shadow-color), 0 0 0 1px var(--border-color)",
+    boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+    gap: "3rem",
+    color: "var(--text-primary)",
+    transition: "all 0.3s ease",
+    backdropFilter: "blur(10px)",
   },
   header: {
-    textAlign: 'left',
-    marginBottom: '3rem',
+    marginBottom: "2rem",
   },
   title: {
     fontSize: '2.5rem',
@@ -157,19 +162,6 @@ const styles = {
     color: 'var(--text-secondary)',
     margin: '0',
     maxWidth: '400px',
-  },
-  contentWrapper: {
-    backgroundColor: 'var(--bg-secondary)',
-    borderRadius: '1.5rem',
-    padding: '2rem',
-    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-    border: '1px solid var(--border-color)',
-    width: '100%',
-    maxWidth: '1800px',
-    margin: '0 auto',
-    minHeight: '75vh',
-    display: 'flex',
-    flexDirection: 'column',
   },
 };
 
