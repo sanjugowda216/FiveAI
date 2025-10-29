@@ -154,7 +154,7 @@ async function createStudyPlanPrompt({
   performanceData
 }) {
   const promptTemplate = new PromptTemplate({
-    template: `You are an expert AP exam tutor and study planner. Create a comprehensive, personalized study plan for the following AP courses.
+    template: `You are an expert AP exam tutor and study planner. Create a comprehensive, personalized study plan for the following AP courses with SPECIFIC, DETAILED guidance.
 
 STUDENT PROFILE:
 - Selected Courses: {selectedCourses}
@@ -169,26 +169,42 @@ COURSE CONTENT CONTEXT:
 EXAM DATES:
 {examDates}
 
-INSTRUCTIONS:
+CRITICAL INSTRUCTIONS FOR SPECIFIC STUDY GUIDANCE:
 1. Create a detailed weekly study plan that adapts to the time remaining until each exam
-2. Balance different study types: MCQ practice, FRQ practice, concept review, and mixed practice
-3. Consider the difficulty progression: start with foundational concepts, build to advanced topics
-4. Include specific focus areas based on course content and common exam topics
-5. Vary session types to maintain engagement and comprehensive preparation
-6. Account for different learning styles and study preferences
-7. Include realistic daily study time (15-120 minutes per session)
-8. Prioritize courses with earlier exam dates
-9. Include rest days and lighter study periods
-10. Provide specific, actionable study recommendations
+2. For each study session, provide SPECIFIC unit topics and concepts to focus on
+3. Include concrete examples of what to study (e.g., "Unit 3: Photosynthesis - focus on light-dependent reactions, Calvin cycle, and ATP synthesis")
+4. Specify exact MCQ topics (e.g., "Practice questions on Unit 4: Cell Communication - signal transduction pathways, ligand-receptor interactions")
+5. Detail FRQ practice areas (e.g., "FRQ practice on Unit 6: Gene Expression - transcription factors, operons, and gene regulation mechanisms")
+6. Balance different study types: MCQ practice, FRQ practice, concept review, and mixed practice
+7. Consider the difficulty progression: start with foundational concepts, build to advanced topics
+8. Include specific focus areas based on course content and common exam topics
+9. Vary session types to maintain engagement and comprehensive preparation
+10. Account for different learning styles and study preferences
+11. Include realistic daily study time (15-120 minutes per session)
+12. Prioritize courses with earlier exam dates
+13. Include rest days and lighter study periods
+14. Provide specific, actionable study recommendations with EXAMPLES
 
 STUDY PLAN REQUIREMENTS:
 - Generate sessions for each day leading up to the earliest exam
 - Include 2-5 study sessions per week per course
 - Mix session types: MCQ (40%), FRQ (30%), Review (20%), Mixed (10%)
 - Vary difficulty levels throughout the plan
-- Include specific focus topics for each session
-- Add motivational notes and study tips
+- Include SPECIFIC focus topics for each session with unit numbers and concept names
+- Add motivational notes and study tips with concrete examples
 - Consider spaced repetition for better retention
+- For each session, specify:
+  * Exact unit(s) to focus on
+  * Specific concepts within those units
+  * Example topics or question types
+  * Recommended resources or study methods
+  * Expected learning outcomes
+
+EXAMPLES OF SPECIFIC GUIDANCE:
+- Instead of "Study MCQ and do FRQ practice"
+- Use: "Unit 2: Cell Structure - Practice MCQ on organelle functions (mitochondria, chloroplasts, ribosomes) and FRQ on membrane transport mechanisms (diffusion, osmosis, active transport)"
+- Instead of "Review concepts"
+- Use: "Unit 5: Heredity - Review Mendelian genetics principles, Punnett squares, and practice problems on dihybrid crosses and probability calculations"
 
 FORMAT YOUR RESPONSE AS JSON using this exact structure:
 {format_instructions}`,
@@ -251,14 +267,17 @@ function generateFallbackStudyPlan(selectedCourses, examDates, currentDate) {
       const sessionTypes = ['mcq', 'frq', 'review', 'mixed'];
       const sessionType = sessionTypes[i % sessionTypes.length];
       
+      // Generate specific focus areas based on course and week
+      const specificFocus = generateSpecificFocus(courseId, weekNumber, sessionType, i, daysUntilExam);
+      
       sessions[dateKey].push({
         courseId,
         courseName: courseId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         duration: 60,
         type: sessionType,
-        focus: `Week ${weekNumber} - ${sessionType.toUpperCase()} Practice`,
+        focus: specificFocus.focus,
         difficulty: i < daysUntilExam / 3 ? 'beginner' : i < 2 * daysUntilExam / 3 ? 'intermediate' : 'advanced',
-        notes: `Study session ${Math.floor(i / daysBetweenSessions) + 1} for ${courseId}`,
+        notes: specificFocus.notes,
         priority: i < daysUntilExam / 2 ? 'high' : 'medium'
       });
     }
@@ -315,6 +334,129 @@ function calculateTotalStudyHours(dailySchedule) {
     return total + day.sessions.reduce((dayTotal, session) => dayTotal + session.duration, 0);
   }, 0);
   return Math.round(totalMinutes / 60 * 10) / 10; // Round to 1 decimal place
+}
+
+/**
+ * Generate specific focus areas for study sessions
+ */
+function generateSpecificFocus(courseId, weekNumber, sessionType, sessionIndex, daysUntilExam) {
+  const courseSpecificContent = {
+    'ap-biology': {
+      units: [
+        'Unit 1: Chemistry of Life - Water properties, macromolecules, enzymes',
+        'Unit 2: Cell Structure - Organelles, membrane transport, cell communication',
+        'Unit 3: Cellular Energetics - Photosynthesis, cellular respiration, ATP',
+        'Unit 4: Cell Communication - Signal transduction, cell cycle, regulation',
+        'Unit 5: Heredity - Mendelian genetics, meiosis, chromosomal inheritance',
+        'Unit 6: Gene Expression - DNA structure, transcription, translation',
+        'Unit 7: Natural Selection - Evolution, phylogeny, speciation',
+        'Unit 8: Ecology - Populations, communities, ecosystems'
+      ]
+    },
+    'ap-chemistry': {
+      units: [
+        'Unit 1: Atomic Structure - Electron configuration, periodic trends',
+        'Unit 2: Molecular Structure - Bonding, VSEPR, intermolecular forces',
+        'Unit 3: Intermolecular Forces - Properties, phase changes',
+        'Unit 4: Chemical Reactions - Stoichiometry, limiting reactants',
+        'Unit 5: Kinetics - Reaction rates, rate laws, mechanisms',
+        'Unit 6: Thermodynamics - Enthalpy, entropy, free energy',
+        'Unit 7: Equilibrium - Le Chatelier, Kc, Kp calculations',
+        'Unit 8: Acids and Bases - pH, buffers, titrations',
+        'Unit 9: Applications - Electrochemistry, organic chemistry'
+      ]
+    },
+    'ap-physics-1': {
+      units: [
+        'Unit 1: Kinematics - Motion in one and two dimensions',
+        'Unit 2: Dynamics - Newton\'s laws, forces, friction',
+        'Unit 3: Circular Motion - Centripetal force, angular velocity',
+        'Unit 4: Energy - Work, kinetic energy, potential energy',
+        'Unit 5: Momentum - Impulse, collisions, conservation',
+        'Unit 6: Simple Harmonic Motion - Springs, pendulums',
+        'Unit 7: Torque and Rotational Motion - Angular momentum',
+        'Unit 8: Electric Charge - Coulomb\'s law, electric fields',
+        'Unit 9: DC Circuits - Ohm\'s law, power, resistors',
+        'Unit 10: Mechanical Waves - Wave properties, interference'
+      ]
+    },
+    'ap-calculus-ab': {
+      units: [
+        'Unit 1: Limits and Continuity - Limit laws, continuity',
+        'Unit 2: Differentiation - Definition, rules, chain rule',
+        'Unit 3: Applications of Differentiation - Related rates, optimization',
+        'Unit 4: Integration - Antiderivatives, fundamental theorem',
+        'Unit 5: Applications of Integration - Area, volume, motion',
+        'Unit 6: Differential Equations - Separable equations',
+        'Unit 7: Applications of Differential Equations - Growth models',
+        'Unit 8: Applications of Integration - Arc length, surface area'
+      ]
+    },
+    'ap-statistics': {
+      units: [
+        'Unit 1: Exploring Data - Types of data, distributions',
+        'Unit 2: Sampling and Experimentation - Study design',
+        'Unit 3: Anticipating Patterns - Probability, random variables',
+        'Unit 4: Statistical Inference - Confidence intervals',
+        'Unit 5: Statistical Inference - Hypothesis testing',
+        'Unit 6: Regression - Linear regression, correlation',
+        'Unit 7: Inference for Categorical Data - Chi-square tests',
+        'Unit 8: Inference for Quantitative Data - t-tests'
+      ]
+    },
+    'ap-psychology': {
+      units: [
+        'Unit 1: Scientific Foundations - Research methods, ethics',
+        'Unit 2: Biological Bases - Brain structure, neurotransmitters',
+        'Unit 3: Sensation and Perception - Sensory systems, illusions',
+        'Unit 4: Learning - Classical conditioning, operant conditioning',
+        'Unit 5: Cognitive Psychology - Memory, problem solving',
+        'Unit 6: Developmental Psychology - Lifespan development',
+        'Unit 7: Motivation and Emotion - Theories, stress',
+        'Unit 8: Clinical Psychology - Disorders, treatments',
+        'Unit 9: Social Psychology - Attribution, conformity, prejudice'
+      ]
+    }
+  };
+
+  const courseContent = courseSpecificContent[courseId] || {
+    units: [
+      'Unit 1: Foundations and Fundamentals',
+      'Unit 2: Core Concepts and Principles',
+      'Unit 3: Advanced Applications',
+      'Unit 4: Integration and Synthesis',
+      'Unit 5: Review and Practice'
+    ]
+  };
+
+  const unitIndex = Math.min(Math.floor(sessionIndex / 3), courseContent.units.length - 1);
+  const selectedUnit = courseContent.units[unitIndex];
+  
+  const sessionTypeGuidance = {
+    'mcq': {
+      focus: `${selectedUnit} - Practice multiple choice questions on key concepts`,
+      notes: `Focus on understanding concepts through practice questions. Review explanations for incorrect answers.`
+    },
+    'frq': {
+      focus: `${selectedUnit} - Practice free response questions and essay writing`,
+      notes: `Practice writing clear, detailed responses. Focus on showing your work and explaining your reasoning.`
+    },
+    'review': {
+      focus: `${selectedUnit} - Comprehensive review of concepts and problem-solving`,
+      notes: `Review key concepts, formulas, and problem-solving strategies. Create summary notes.`
+    },
+    'mixed': {
+      focus: `${selectedUnit} - Mixed practice with both MCQ and FRQ questions`,
+      notes: `Combine multiple choice and free response practice. Focus on time management and accuracy.`
+    }
+  };
+
+  const guidance = sessionTypeGuidance[sessionType] || sessionTypeGuidance['mcq'];
+  
+  return {
+    focus: guidance.focus,
+    notes: guidance.notes
+  };
 }
 
 /**

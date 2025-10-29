@@ -4,12 +4,20 @@ import { getUnitContent, mapCourseIdToCedId } from '../services/cedParser.js';
 
 const router = express.Router();
 
-// Initialize OpenAI
-const openai = new ChatOpenAI({
-  modelName: "gpt-4o-mini",
-  temperature: 0.7,
-  maxTokens: 200, // Reduced for shorter answers
-});
+// Initialize OpenAI only if API key is available
+let openai = null;
+if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_openai_api_key_here') {
+  try {
+    openai = new ChatOpenAI({
+      modelName: "gpt-4o-mini",
+      temperature: 0.7,
+      maxTokens: 200, // Reduced for shorter answers
+      openAIApiKey: process.env.OPENAI_API_KEY
+    });
+  } catch (error) {
+    console.warn('Failed to initialize OpenAI:', error.message);
+  }
+}
 
 // Ask a question endpoint
 router.post('/ask', async (req, res) => {
@@ -39,6 +47,18 @@ router.post('/ask', async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Course or unit not found'
+      });
+    }
+
+    // Check if OpenAI is available
+    if (!openai) {
+      return res.json({
+        success: true,
+        answer: `I can see you're asking about "${question}" in ${course} Unit ${unit}. While I don't have AI assistance available right now, I can tell you that this unit covers: ${courseContent.title || 'course material'}. Please refer to your course materials or textbook for detailed information about this topic.`,
+        course,
+        unit,
+        question,
+        isFallback: true
       });
     }
 
