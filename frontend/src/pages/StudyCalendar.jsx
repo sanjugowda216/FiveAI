@@ -677,14 +677,14 @@ export default function StudyCalendar() {
               disabled={isGeneratingPlan}
               onMouseEnter={(e) => {
                 if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(168, 85, 247, 0.4), 0 0 20px rgba(168, 85, 247, 0.5), 0 0 30px rgba(168, 85, 247, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#7C3AED";
+                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#2563EB";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(168, 85, 247, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#A855F7";
+                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#3B82F6";
                 }
               }}
             >
@@ -715,14 +715,14 @@ export default function StudyCalendar() {
               disabled={isGeneratingPlan}
               onMouseEnter={(e) => {
                 if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(139, 92, 246, 0.4), 0 0 20px rgba(139, 92, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#7C3AED";
+                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#2563EB";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isGeneratingPlan) {
-                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(139, 92, 246, 0.3)";
-                  e.currentTarget.style.backgroundColor = "#8B5CF6";
+                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(59, 130, 246, 0.3)";
+                  e.currentTarget.style.backgroundColor = "#3B82F6";
                 }
               }}
             >
@@ -1140,7 +1140,7 @@ const styles = {
     fontWeight: 800,
     color: "var(--text-primary)",
     margin: 0,
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",
@@ -1175,7 +1175,7 @@ const styles = {
     gap: "0.5rem",
   },
   scheduleButton: {
-    backgroundColor: "#A855F7",
+    backgroundColor: "#3B82F6",
     color: "#FFFFFF",
     border: "none",
     borderRadius: "0.75rem",
@@ -1184,7 +1184,7 @@ const styles = {
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 4px 6px rgba(168, 85, 247, 0.3)",
+    boxShadow: "0 4px 6px rgba(59, 130, 246, 0.3)",
     display: "flex",
     alignItems: "center",
     gap: "0.5rem",
@@ -1205,7 +1205,7 @@ const styles = {
     gap: "0.5rem",
   },
   adaptiveButton: {
-    backgroundColor: "#8B5CF6",
+    backgroundColor: "#3B82F6",
     color: "#FFFFFF",
     border: "none",
     borderRadius: "0.75rem",
@@ -1214,7 +1214,7 @@ const styles = {
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 4px 6px rgba(139, 92, 246, 0.3)",
+    boxShadow: "0 4px 6px rgba(59, 130, 246, 0.3)",
     display: "flex",
     alignItems: "center",
     gap: "0.5rem",
@@ -1516,8 +1516,8 @@ const styles = {
     fontWeight: 600,
   },
   adaptiveBadge: {
-    backgroundColor: "rgba(139, 92, 246, 0.1)",
-    color: "#8B5CF6",
+    backgroundColor: "rgba(59, 130, 246, 0.1)",
+    color: "#3B82F6",
     padding: "0.25rem 0.5rem",
     borderRadius: "0.375rem",
     fontSize: "0.75rem",
@@ -1675,7 +1675,7 @@ const styles = {
     cursor: "pointer",
   },
   scheduleCreateButton: {
-    backgroundColor: "#A855F7",
+    backgroundColor: "#3B82F6",
     color: "#FFFFFF",
     border: "none",
     borderRadius: "0.5rem",
@@ -1684,6 +1684,6 @@ const styles = {
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 4px 6px rgba(168, 85, 247, 0.3)",
+    boxShadow: "0 4px 6px rgba(59, 130, 246, 0.3)",
   },
 };

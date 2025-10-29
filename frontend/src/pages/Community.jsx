@@ -351,7 +351,7 @@ const styles = {
     color: "var(--text-primary)",
     margin: 0,
     marginBottom: "0.5rem",
-    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",

@@ -858,7 +858,7 @@ const styles = {
     fontWeight: 700,
     color: "var(--text-primary)",
     margin: 0,
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
@@ -869,7 +869,7 @@ const styles = {
     lineHeight: 1.5,
   },
   practiceTestButton: {
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #0078C8 0%, #2aa3f2 100%)",
     color: "white",
     border: "none",
     borderRadius: "0.75rem",
