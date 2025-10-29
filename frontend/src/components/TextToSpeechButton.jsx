@@ -1,59 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useVoice } from '../context/ThemeContext';
 
 const TextToSpeechButton = ({ text, className = '', style = {} }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [bestVoice, setBestVoice] = useState(null);
+  const { selectedVoice } = useVoice();
 
   useEffect(() => {
-    // Load the best available voice
-    const loadBestVoice = () => {
-      if (window.speechSynthesis) {
-        const voices = window.speechSynthesis.getVoices();
-        
-        // Priority order for the smoothest voices
-        const voicePriority = [
-          'Microsoft David Desktop',      // Windows - Very smooth male
-          'Microsoft Zira Desktop',      // Windows - Very smooth female  
-          'Microsoft Mark Desktop',      // Windows - Deep male
-          'Alex',                        // Mac - High quality male
-          'Samantha',                    // Mac - Premium female
-          'Daniel',                      // Mac - British male
-          'Karen',                       // Mac - Australian female
-          'Moira',                       // Mac - Irish female
-          'Google US English',           // Chrome - Very smooth
-          'Microsoft Speech Platform',   // Windows alternative
-          'Microsoft Hazel Desktop',     // Windows - British female
-          'Microsoft Susan Desktop',     // Windows - Clear female
-        ];
-        
-        // Find the best available voice
-        let selectedVoice = null;
-        for (const voiceName of voicePriority) {
-          selectedVoice = voices.find(voice => 
-            voice.name.includes(voiceName) || 
-            voice.name === voiceName
-          );
-          if (selectedVoice) break;
-        }
-        
-        // Fallback to first available voice
-        if (!selectedVoice && voices.length > 0) {
-          selectedVoice = voices[0];
-        }
-        
-        setBestVoice(selectedVoice);
-      }
-    };
-
-    loadBestVoice();
-    
-    // Some browsers load voices asynchronously
-    if (window.speechSynthesis) {
-      window.speechSynthesis.onvoiceschanged = loadBestVoice;
-    }
-
-    // Clean up speech synthesis when component unmounts
     return () => {
       if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
@@ -68,28 +21,23 @@ const TextToSpeechButton = ({ text, className = '', style = {} }) => {
     }
 
     if (isPlaying && !isPaused) {
-      // Currently playing - pause it
       window.speechSynthesis.pause();
       setIsPaused(true);
     } else if (isPaused) {
-      // Currently paused - resume it
       window.speechSynthesis.resume();
       setIsPaused(false);
     } else {
-      // Not playing - start it
-      window.speechSynthesis.cancel(); // Cancel any existing speech
+      window.speechSynthesis.cancel();
       
       const utterance = new SpeechSynthesisUtterance(text);
       
-      // Use the best available voice
-      if (bestVoice) {
-        utterance.voice = bestVoice;
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
       }
       
-      // Optimized settings for smoothest speech
-      utterance.rate = 0.8;   // Slower for smoother delivery
-      utterance.pitch = 1.0;  // Natural pitch
-      utterance.volume = 0.9; // High volume
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
       
       utterance.onstart = () => {
         setIsPlaying(true);
@@ -112,11 +60,27 @@ const TextToSpeechButton = ({ text, className = '', style = {} }) => {
 
   const getButtonIcon = () => {
     if (isPlaying && !isPaused) {
-      return '⏸️'; // Pause icon
+      // Pause icon
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="4" width="4" height="16" rx="1" />
+          <rect x="14" y="4" width="4" height="16" rx="1" />
+        </svg>
+      );
     } else if (isPaused) {
-      return '▶️'; // Play icon
+      // Play icon
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      );
     } else {
-      return '🔊'; // Speaker icon
+      // Speaker icon
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.26 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+        </svg>
+      );
     }
   };
 
