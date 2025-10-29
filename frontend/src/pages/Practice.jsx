@@ -227,6 +227,7 @@ export default function Practice({
           canGoNext={currentQuestionIndex < questions.length - 1}
           canGoPrevious={currentQuestionIndex > 0}
           courseId={activeCourseId}
+          userProfile={userProfile}
         />
       </section>
     );
@@ -331,11 +332,14 @@ const styles = {
     marginBottom: "1.5rem",
   },
   title: {
-    fontSize: "2rem",
-    fontWeight: 700,
-    color: "var(--text-primary)",
+    fontSize: "2.5rem",
+    fontWeight: 800,
     marginBottom: "0.5rem",
     transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
   },
   subtitle: {
     fontSize: "1.1rem",

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apCourses } from "../data/apCourses.js";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Stats({ stats, userProfile }) {
   const [courseStats, setCourseStats] = useState({});
@@ -8,84 +10,81 @@ export default function Stats({ stats, userProfile }) {
   // Check if user is logged in
   const isLoggedIn = userProfile && userProfile.uid;
 
-  // Get real stats from localStorage and API
+  // Load stats from Firebase for logged-in users, show login message for guests
   useEffect(() => {
-    const loadRealStats = async () => {
-      const realStats = {};
-      
-      // Check localStorage for MCQ practice data
-      const mcqData = JSON.parse(localStorage.getItem('mcqStats') || '{}');
-      
-      // Check localStorage for FRQ submission data  
-      const frqData = JSON.parse(localStorage.getItem('frqSubmissions') || '{}');
-      
-      // Clean up any invalid entries (courses with 0 questions or bad data)
-      const validMcqData = {};
-      Object.keys(mcqData).forEach(courseId => {
-        const courseData = mcqData[courseId];
-        // Only keep courses that have actually been practiced (totalQuestions > 0 and valid data)
-        if (courseData && 
-            typeof courseData === 'object' &&
-            typeof courseData.totalQuestions === 'number' &&
-            typeof courseData.correct === 'number' &&
-            courseData.totalQuestions > 0) {  // MUST have at least 1 question answered
-          validMcqData[courseId] = courseData;
+    if (!isLoggedIn) {
+      setLoading(false);
+      return;
+    }
+    
+    // For logged-in users: listen to Firebase for real-time updates
+    let unsubscribe;
+    
+    const setupStatsListener = async () => {
+      try {
+        const userRef = doc(db, 'users', userProfile.uid);
+        
+        // Set up real-time listener
+        unsubscribe = onSnapshot(userRef, (userSnap) => {
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            const userStats = userData.stats || {};
+            
+            const realStats = {};
+            
+            // Process Firebase stats
+            Object.keys(userStats).forEach(courseId => {
+              const courseData = userStats[courseId];
+              
+              // Only show courses with actual practice
+              if (courseData && 
+                  typeof courseData === 'object' &&
+                  courseData.totalQuestions > 0) {
+                const course = apCourses.find(c => c.id === courseId);
+                if (course) {
+                  realStats[courseId] = {
+                    courseName: course.name,
+                    subject: course.subject,
+                    lastPracticed: courseData.lastPracticed || new Date(0).toISOString(),
+                    mcqStats: {
+                      totalQuestions: courseData.totalQuestions || 0,
+                      correct: courseData.correct || 0,
+                      averageScore: courseData.totalQuestions > 0 
+                        ? Math.round((courseData.correct / courseData.totalQuestions) * 100 * 10) / 10
+                        : 0,
+                      recentScores: (courseData.recentScores && Array.isArray(courseData.recentScores)) 
+                        ? courseData.recentScores 
+                        : [],
+                      sessions: (courseData.sessions && Array.isArray(courseData.sessions)) 
+                        ? courseData.sessions 
+                        : []
+                    },
+                    frqStats: null // FRQ stats would come from separate Firebase collection if needed
+                  };
+                }
+              }
+            });
+            
+            setCourseStats(realStats);
+            console.log('📊 Stats loaded from Firebase:', Object.keys(realStats).length, 'courses');
+          }
+          setLoading(false);
+        });
+        } catch (error) {
+          console.error('❌ Error setting up stats listener:', error);
+          setLoading(false);
         }
-      });
-      
-      // Clean up localStorage if needed (only for guests, not logged-in users)
-      if (!isLoggedIn && Object.keys(mcqData).length !== Object.keys(validMcqData).length) {
-        localStorage.setItem('mcqStats', JSON.stringify(validMcqData));
-        console.log('Cleaned up invalid stats entries');
-      }
-      
-      // Process each course to see if there's any activity
-      apCourses.forEach(course => {
-        const courseId = course.id;
-        
-        // Check MCQ data - must have at least 1 question answered
-        const hasMcqData = validMcqData[courseId] && validMcqData[courseId].totalQuestions > 0;
-        
-        // Check FRQ data - must be an array with actual submissions
-        const hasFrqData = frqData[courseId] && 
-          Array.isArray(frqData[courseId]) && 
-          frqData[courseId].length > 0 &&
-          frqData[courseId].some(sub => sub && typeof sub === 'object');
-        
-        // Only add course if there's actual activity
-        if (hasMcqData || hasFrqData) {
-          realStats[courseId] = {
-            courseName: course.name,
-            subject: course.subject,
-            mcqStats: hasMcqData ? {
-              totalQuestions: validMcqData[courseId].totalQuestions || 0,
-              correct: validMcqData[courseId].correct || 0,
-              averageScore: validMcqData[courseId].totalQuestions > 0 
-                ? Math.round((validMcqData[courseId].correct / validMcqData[courseId].totalQuestions) * 100 * 10) / 10
-                : 0,
-              recentScores: (validMcqData[courseId].recentScores && Array.isArray(validMcqData[courseId].recentScores)) ? validMcqData[courseId].recentScores : [],
-              sessions: (validMcqData[courseId].sessions && Array.isArray(validMcqData[courseId].sessions)) ? validMcqData[courseId].sessions : []
-            } : null,
-            frqStats: hasFrqData ? {
-              totalSubmissions: frqData[courseId].length,
-              submissions: frqData[courseId],
-              averageScore: frqData[courseId].length > 0 
-                ? Math.round(frqData[courseId].reduce((sum, sub) => sum + (sub.grade?.overallScore || 0), 0) / frqData[courseId].length * 10) / 10
-                : 0,
-              maxScore: 7
-            } : null
-          };
-        }
-      });
-      
-      setTimeout(() => {
-        setCourseStats(realStats);
-        setLoading(false);
-      }, 500);
     };
     
-    loadRealStats();
-  }, []);
+    setupStatsListener();
+    
+    // Cleanup listener on unmount
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [isLoggedIn, userProfile?.uid]);
 
   const calculatePredictedScore = (courseId) => {
     const stats = courseStats[courseId];
@@ -141,7 +140,15 @@ export default function Stats({ stats, userProfile }) {
     );
   }
 
-  const coursesWithStats = Object.keys(courseStats);
+  // Sort courses by most recently practiced (newest first)
+  const coursesWithStats = Object.keys(courseStats).sort((a, b) => {
+    const statsA = courseStats[a];
+    const statsB = courseStats[b];
+    const timeA = statsA.lastPracticed || new Date(0).toISOString();
+    const timeB = statsB.lastPracticed || new Date(0).toISOString();
+    // Sort descending (newest first)
+    return new Date(timeB).getTime() - new Date(timeA).getTime();
+  });
   
   if (coursesWithStats.length === 0) {
     return (
@@ -150,7 +157,7 @@ export default function Stats({ stats, userProfile }) {
           <div style={styles.guestBanner}>
             <div style={styles.guestBannerContent}>
               <span style={styles.guestBannerText}>
-                <strong>Login to save your progress!</strong> Your stats are only saved locally while browsing as a guest.
+                <strong>Login to view your stats!</strong> Your practice progress will be saved and synced across devices.
               </span>
               <div style={styles.guestBannerButtons}>
                 <a href="/login" style={styles.guestBannerButton}>
@@ -336,6 +343,10 @@ const styles = {
     color: "var(--text-primary)",
     marginBottom: "0.5rem",
     transition: "color 0.3s ease",
+    background: "linear-gradient(135deg, var(--text-primary) 0%, #0078C8 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
   },
   subtitle: {
     fontSize: "1.1rem",
