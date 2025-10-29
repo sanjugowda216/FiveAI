@@ -72,6 +72,7 @@ export default function Dashboard({
   useEffect(() => {
     // Only load streak data if user is logged in
     if (isLoggedIn) {
+      // Try Firebase first, fallback to localStorage
       const savedStreakData = JSON.parse(localStorage.getItem('streakData') || '{}');
       setStreakData({
         currentStreak: savedStreakData.currentStreak || 0,
@@ -86,7 +87,7 @@ export default function Dashboard({
         lastStudyDate: null,
       });
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, preferredName, userEmail]);
 
   const currentTip = studyTips[activeTipIndex];
   const nextTip = studyTips[(activeTipIndex + 1) % studyTips.length];
