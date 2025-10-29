@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { useVoice } from "../context/ThemeContext";
 import { auth, db } from "../firebase";
 import { updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
@@ -7,6 +8,7 @@ import "./Settings.css";
 
 export default function Settings({ userProfile }) {
   const { resolvedTheme, toggleTheme, theme } = useTheme();
+  const { selectedVoice, availableVoices, changeVoice, getVoiceDescription } = useVoice();
   const [screenName, setScreenName] = useState(userProfile?.preferredName || "");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -14,8 +16,8 @@ export default function Settings({ userProfile }) {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
+  const [voiceMessage, setVoiceMessage] = useState("");
 
-  // Update screen name
   const handleUpdateScreenName = async (e) => {
     e.preventDefault();
     if (!screenName.trim()) {
@@ -28,12 +30,10 @@ export default function Settings({ userProfile }) {
     try {
       const user = auth.currentUser;
       if (user && userProfile?.uid) {
-        // Update display name in Firebase Auth
         await updateProfile(user, {
           displayName: screenName,
         });
 
-        // Update in Firestore
         await updateDoc(doc(db, "users", userProfile.uid), {
           preferredName: screenName,
         });
@@ -50,7 +50,6 @@ export default function Settings({ userProfile }) {
     }
   };
 
-  // Change password
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
@@ -76,14 +75,12 @@ export default function Settings({ userProfile }) {
     try {
       const user = auth.currentUser;
       if (user && user.email) {
-        // Reauthenticate user
         const credential = EmailAuthProvider.credential(
           user.email,
           currentPassword
         );
         await reauthenticateWithCredential(user, credential);
 
-        // Update password
         await updatePassword(user, newPassword);
 
         setMessage("Password changed successfully!");
@@ -105,6 +102,28 @@ export default function Settings({ userProfile }) {
     }
   };
 
+  const handleVoiceChange = (e) => {
+    const voiceName = e.target.value;
+    changeVoice(voiceName);
+    setVoiceMessage("Voice updated successfully!");
+    setTimeout(() => setVoiceMessage(""), 3000);
+  };
+
+  const handlePlayVoiceSample = () => {
+    if (!window.speechSynthesis || !selectedVoice) {
+      alert('Text-to-speech is not supported in this browser.');
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance("Yo, check out this voice! It sounds amazing!");
+    utterance.voice = selectedVoice;
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    window.speechSynthesis.speak(utterance);
+  };
+
   return (
     <section style={styles.wrapper}>
       <header style={styles.header}>
@@ -122,7 +141,6 @@ export default function Settings({ userProfile }) {
       )}
 
       <div style={styles.settingsGrid}>
-        {/* Screen Name Section */}
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}>Screen Name</h2>
           <form onSubmit={handleUpdateScreenName}>
@@ -146,7 +164,6 @@ export default function Settings({ userProfile }) {
           </form>
         </div>
 
-        {/* Password Section */}
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}>Change Password</h2>
           <form onSubmit={handleChangePassword}>
@@ -189,7 +206,43 @@ export default function Settings({ userProfile }) {
           </form>
         </div>
 
-        {/* Theme Section */}
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>Text-to-Speech Voice</h2>
+          {voiceMessage && (
+            <div style={{
+              ...styles.voiceMessage,
+              ...styles.messageSuccess,
+            }}>
+              {voiceMessage}
+            </div>
+          )}
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Select Voice</label>
+            <select
+              value={selectedVoice?.name || ""}
+              onChange={handleVoiceChange}
+              style={styles.select}
+            >
+              {availableVoices.map((voice) => (
+                <option key={voice.name} value={voice.name}>
+                  {getVoiceDescription(voice.name)}
+                </option>
+              ))}
+            </select>
+            <p style={styles.helperText}>
+              {selectedVoice && `Now reading as: ${getVoiceDescription(selectedVoice.name)}`}
+            </p>
+          </div>
+          <button
+            onClick={handlePlayVoiceSample}
+            style={{
+              ...styles.button,
+            }}
+          >
+            Test Voice
+          </button>
+        </div>
+
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}>Appearance</h2>
           <div style={styles.themeContainer}>
@@ -372,5 +425,29 @@ const styles = {
     backgroundColor: "#0078C8",
     color: "#FFFFFF",
     borderColor: "#0078C8",
+  },
+  voiceMessage: {
+    padding: "0.75rem",
+    borderRadius: "0.5rem",
+    marginBottom: "1.25rem",
+    fontSize: "0.9rem",
+    fontWeight: 500,
+  },
+  select: {
+    width: "100%",
+    padding: "0.75rem",
+    border: "1px solid var(--input-border)",
+    borderRadius: "0.5rem",
+    backgroundColor: "var(--input-bg)",
+    color: "var(--input-text)",
+    fontSize: "1rem",
+    boxSizing: "border-box",
+    appearance: "none",
+    backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTcgMTBsNSA1IDUtNS01eiIvPjwvc3ZnPg==')",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "right 0.75rem center",
+    backgroundSize: "1.5em",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease",
   },
 };

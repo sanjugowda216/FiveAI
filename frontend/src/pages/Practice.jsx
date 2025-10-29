@@ -239,9 +239,9 @@ export default function Practice({
         <p style={styles.subtitle}>
           Choose a unit to practice with AI-generated questions for <strong>{courseName}</strong>.
           {userProfile?.uid ? (
-            <span style={styles.authInfo}> You'll get 12 questions per unit (signed in)</span>
+            <span style={styles.authInfo}> You'll get 12 questions per unit.</span>
           ) : (
-            <span style={styles.guestInfo}> You'll get 6 questions per unit (guest mode)</span>
+            <span style={styles.guestInfo}> You'll get 6 questions per unit.</span>
           )}
         </p>
       </div>

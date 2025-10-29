@@ -24,6 +24,7 @@ import {
   sanitizeFavoriteCourseIds,
 } from "./data/apCourses";
 import { ThemeProvider } from "./context/ThemeContext";
+import { VoiceProvider } from "./context/ThemeContext";
 import "./App.css";
 
 const DEFAULT_STATS = { totalQuestions: 0, correct: 0, streak: 0 };
@@ -495,7 +496,9 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <VoiceProvider>
+        <AppContent />
+      </VoiceProvider>
     </ThemeProvider>
   );
 }
