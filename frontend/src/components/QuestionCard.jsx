@@ -143,16 +143,51 @@ export default function QuestionCard({
             userStats[courseId].recentScores = userStats[courseId].recentScores.slice(-20);
           }
           
+          // Update streak (track practice session for streak calculation)
+          const today = new Date().toISOString().split('T')[0];
+          if (!userData.streakData) {
+            userData.streakData = {
+              currentStreak: 0,
+              longestStreak: 0,
+              lastPracticeDate: null,
+              practiceDays: {}
+            };
+          }
+          
+          // Mark today as practiced (15+ minutes if user answers 10+ questions)
+          if (userStats[courseId].totalQuestions >= 10) {
+            userData.streakData.practiceDays[today] = true;
+            userData.streakData.lastPracticeDate = today;
+            
+            // Calculate streak
+            let streak = 0;
+            let currentDate = new Date();
+            for (let i = 0; i < 100; i++) {
+              const dateKey = currentDate.toISOString().split('T')[0];
+              if (userData.streakData.practiceDays[dateKey]) {
+                streak++;
+                currentDate.setDate(currentDate.getDate() - 1);
+              } else {
+                break;
+              }
+            }
+            
+            userData.streakData.currentStreak = streak;
+            userData.streakData.longestStreak = Math.max(streak, userData.streakData.longestStreak || 0);
+          }
+          
           // Write back to Firebase
           await updateDoc(userRef, {
-            stats: userStats
+            stats: userStats,
+            streakData: userData.streakData
           });
           
           console.log('✅ Stats updated to Firebase:', {
             courseId,
             totalQuestions: userStats[courseId].totalQuestions,
             correct: userStats[courseId].correct,
-            isCorrect
+            isCorrect,
+            streak: userData.streakData.currentStreak
           });
         } catch (firebaseError) {
           console.error('Error updating Firebase stats:', firebaseError);
