@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apCourses } from '../data/apCourses.js';
 import MultiSelectDropdown from '../components/MultiSelectDropdown';
 import { generateAIStudyPlan, generateAdaptiveStudyPlan } from '../utils/api.js';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 // Custom MultiSelectDropdown component to match the template
 const CustomMultiSelectDropdown = ({ options, selectedValues, onChange, placeholder, disabled }) => {
@@ -45,6 +46,9 @@ const CustomMultiSelectDropdown = ({ options, selectedValues, onChange, placehol
 };
 
 export default function StudyCalendar() {
+  // Theme context
+  const { resolvedTheme } = useTheme();
+  
   // State management
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -107,6 +111,46 @@ export default function StudyCalendar() {
     'ap-studio-art-2d': '#E8DAEF',
     'ap-studio-art-3d': '#D5F4E6',
     'ap-us-government-and-politics': '#FDEBD0'
+  };
+
+  // Function to get session color based on theme
+  const getSessionColor = (courseId) => {
+    const baseColor = courseColors[courseId] || '#6B7280';
+    
+    if (resolvedTheme === 'light') {
+      // For light mode, make colors darker and more saturated
+      const colorMap = {
+        '#FF6B6B': '#E53E3E', // Red
+        '#4ECDC4': '#38B2AC', // Teal
+        '#45B7D1': '#3182CE', // Blue
+        '#96CEB4': '#68D391', // Green
+        '#FFEAA7': '#F6E05E', // Yellow
+        '#DDA0DD': '#B794F6', // Purple
+        '#98D8C8': '#68D391', // Light Green
+        '#F7DC6F': '#F6E05E', // Light Yellow
+        '#BB8FCE': '#9F7AEA', // Light Purple
+        '#85C1E9': '#63B3ED', // Light Blue
+        '#F8C471': '#F6E05E', // Orange
+        '#82E0AA': '#68D391', // Light Green
+        '#F1948A': '#FC8181', // Light Red
+        '#D7BDE2': '#B794F6', // Light Purple
+        '#F9E79F': '#F6E05E', // Light Yellow
+        '#AED6F1': '#90CDF4', // Light Blue
+        '#A9DFBF': '#68D391', // Light Green
+        '#FADBD8': '#FED7D7', // Light Pink
+        '#D5DBDB': '#A0AEC0', // Light Gray
+        '#D2B4DE': '#B794F6', // Light Purple
+        '#FCF3CF': '#F6E05E', // Light Yellow
+        '#D1F2EB': '#9AE6B4', // Light Green
+        '#FAD7A0': '#F6E05E', // Light Orange
+        '#E8DAEF': '#D6BCFA', // Light Purple
+        '#D5F4E6': '#9AE6B4', // Light Green
+        '#FDEBD0': '#F6E05E'  // Light Orange
+      };
+      return colorMap[baseColor] || baseColor;
+    }
+    
+    return baseColor; // Dark mode uses original colors
   };
 
   // AP Exam dates for 2025 (typically in May)
@@ -1026,7 +1070,7 @@ export default function StudyCalendar() {
                           key={idx}
                           style={{
                             ...styles.sessionBar,
-                            backgroundColor: courseColors[session.courseId] || '#6B7280',
+                            backgroundColor: getSessionColor(session.courseId),
                             opacity: session.type === 'mcq' ? 0.8 : 0.6
                           }}
                           title={`${session.courseName} - ${session.type.toUpperCase()}`}
